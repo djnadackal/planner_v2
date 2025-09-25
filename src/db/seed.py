@@ -15,11 +15,22 @@ def seed_database():
     try:
         # Seed Categories
         categories = [
-            controller.Category(name="Hardware", parent_id=None),
-            controller.Category(name="Software", parent_id=None),
+            controller.Category(name="Assets", parent_id=None),
+            controller.Category(name="Property", parent_id=None),
             controller.Category(
-                name="Networking", parent_id=1
+                name="First House", parent_id=2
+            ),  # Child of Property
+            controller.Category(
+                name="Backyard", parent_id=3
+            ),  # Child of First House
+            controller.Category(
+                name="Master Bathroom", parent_id=3
+            ),  # Child of First House
+            controller.Category(name="Electronics", parent_id=None),
+            controller.Category(
+                name="Vehicles", parent_id=1
             ),  # Child of Hardware
+            controller.Category(name="Financial", parent_id=None),
         ]
         category_ids = []
         for cat in categories:
@@ -27,25 +38,43 @@ def seed_database():
             category_ids.append(cat_id)
             print(f"Created category: {cat.name} (ID: {cat_id})")
 
+        def getCategoryId(name):
+            for i, cat in enumerate(categories):
+                if cat.name == name:
+                    return category_ids[i]
+            return None
+
         # Seed Things
         things = [
             controller.Thing(
+                name="Pool",
+                category_id=getCategoryId("Backyard"),
+                description="Outdoor swimming pool",
+                docs_link="http://docs.pool.com",
+            ),
+            controller.Thing(
+                name="Garden",
+                category_id=getCategoryId("Backyard"),
+                description="Vegetable garden",
+                docs_link="http://docs.garden.com",
+            ),
+            controller.Thing(
                 name="Laptop",
-                category_id=category_ids[0],
-                description="High-performance laptop",
+                category_id=getCategoryId("Electronics"),
+                description="Personal mac laptop",
                 docs_link="http://docs.laptop.com",
             ),
             controller.Thing(
-                name="Database",
-                category_id=category_ids[1],
-                description="SQL database system",
-                docs_link="http://docs.db.com",
+                name="Truck",
+                category_id=getCategoryId("Vehicles"),
+                description="Pickup truck",
+                docs_link="http://docs.truck.com",
             ),
             controller.Thing(
-                name="Router",
-                category_id=category_ids[2],
-                description="Wireless router",
-                docs_link="http://docs.router.com",
+                name="Couch",
+                category_id=None,
+                description="Living room couch",
+                docs_link="http://docs.couch.com",
             ),
         ]
         thing_ids = []
