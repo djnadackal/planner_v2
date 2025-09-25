@@ -47,7 +47,7 @@ async def list_tickets(filters: db.TicketFilter = Query()):
     """
     List tickets with optional filters (fuzzy search on description).
     """
-    return db.TicketManager.list(filters)
+    return db.TicketManager.list_tickets(filters)
 
 
 @router.delete("/{ticket_id}")

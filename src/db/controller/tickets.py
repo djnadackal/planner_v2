@@ -1,13 +1,14 @@
-import sqlite3
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
-from ..util import get_db_connection
+
+from ..core import Database, ExceptionPackage
 
 
 # Pydantic model for Ticket
 class Ticket(BaseModel):
     id: Optional[int] = None
+    title: Optional[str] = None
     thing_id: Optional[int] = None
     category_id: Optional[int] = None
     description: str
@@ -22,117 +23,65 @@ class Ticket(BaseModel):
 
 # Pydantic model for Ticket filter
 class TicketFilter(BaseModel):
-    description: Optional[str] = None
     thing_id: Optional[int] = None
     category_id: Optional[int] = None
     open: Optional[bool] = None
+    search: Optional[str] = None
+    created_after: Optional[datetime] = None
+    created_before: Optional[datetime] = None
+    updated_after: Optional[datetime] = None
+    updated_before: Optional[datetime] = None
+    completed_after: Optional[datetime] = None
+    completed_before: Optional[datetime] = None
 
 
 # Manager class for CRUD operations
 class TicketManager:
     @staticmethod
     def create(ticket: Ticket) -> int:
-        """
-        Create a new ticket.
-        Pseudocode:
-        1. Connect to database via util
-        2. Insert ticket (thing_id, category_id, description, open)
-        3. Return new ticket ID
-        4. Handle foreign key constraints
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    "INSERT INTO tickets (thing_id, category_id, description, open) VALUES (?, ?, ?, ?)",
-                    (
-                        ticket.thing_id,
-                        ticket.category_id,
-                        ticket.description,
-                        ticket.open,
-                    ),
-                )
-                if not cursor.lastrowid:
-                    raise ValueError("Failed to create ticket")
-                return cursor.lastrowid
-            except sqlite3.IntegrityError as e:
-                if "FOREIGN KEY constraint failed" in str(e):
-                    raise ValueError(
-                        f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}"
-                    )
-                raise e
+        query = "INSERT INTO tickets (thing_id, category_id, description, open) VALUES (?, ?, ?, ?)"
+        params = (
+            ticket.thing_id,
+            ticket.category_id,
+            ticket.description,
+            ticket.open,
+        )
+        exception_package = ExceptionPackage(
+            foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}"
+        )
+        last_row_id = Database.run_create(query, params, exception_package)
+        return last_row_id
 
     @staticmethod
     def update(ticket: Ticket) -> None:
-        """
-        Update an existing ticket.
-        Pseudocode:
-        1. Connect to database via util
-        2. Update thing_id, category_id, description, open, updated_at, completed_at
-        3. Set updated_at to current timestamp
-        4. Handle missing ID or constraints
-        """
         if ticket.id is None:
             raise ValueError("Ticket ID is required for update")
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    "UPDATE tickets SET thing_id = ?, category_id = ?, description = ?, open = ?, updated_at = CURRENT_TIMESTAMP, completed_at = ? WHERE id = ?",
-                    (
-                        ticket.thing_id,
-                        ticket.category_id,
-                        ticket.description,
-                        ticket.open,
-                        ticket.completed_at,
-                        ticket.id,
-                    ),
-                )
-                if cursor.rowcount == 0:
-                    raise ValueError(
-                        f"Ticket with ID {ticket.id} not found"
-                    )
-            except sqlite3.IntegrityError as e:
-                if "FOREIGN KEY constraint failed" in str(e):
-                    raise ValueError(
-                        f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}"
-                    )
-                raise e
+        query = "UPDATE tickets SET thing_id = ?, category_id = ?, description = ?, open = ?, updated_at = CURRENT_TIMESTAMP, completed_at = ? WHERE id = ?"
+        params = (
+            ticket.thing_id,
+            ticket.category_id,
+            ticket.description,
+            ticket.open,
+            ticket.completed_at,
+            ticket.id,
+        )
+        exception_package = ExceptionPackage(
+            foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}",
+            not_found_error=f"Ticket with ID {ticket.id} not found",
+        )
+        Database.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(ticket_id: int) -> Optional[Ticket]:
-        """
-        Get a ticket by ID.
-        Pseudocode:
-        1. Connect to database via util
-        2. Select ticket by ID
-        3. Return Ticket model or None if not found
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "SELECT id, thing_id, category_id, description, created_at, open, updated_at, completed_at FROM tickets WHERE id = ?",
-                (ticket_id,),
-            )
-            row = cursor.fetchone()
-            return Ticket(**row) if row else None
+        query = "SELECT id, thing_id, category_id, description, created_at, open, updated_at, completed_at FROM tickets WHERE id = ?"
+        return Database.run_get_by_id(query, ticket_id, Ticket)
 
     @staticmethod
-    def list(
+    def list_tickets(
         filters: Optional[TicketFilter] = None,
     ) -> List[Ticket]:
-        """
-        List tickets with mandatory fuzzy search on description and optional filters.
-        Pseudocode:
-        1. Connect to database via util
-        2. Build query with mandatory description LIKE clause
-        3. Add thing_id, category_id, open filters if provided
-        4. Execute query and return list of Ticket models
-        """
-        query = "SELECT id, thing_id, category_id, description, created_at, open, updated_at, completed_at FROM tickets WHERE description LIKE ?"
-        params = [
-            f"%{filters.description if filters and filters.description else ''}%"
-        ]
+        query = "SELECT id, thing_id, category_id, description, created_at, open, updated_at, completed_at FROM tickets WHERE 1=1"
+        params = []
 
         if filters:
             if filters.thing_id is not None:
@@ -144,33 +93,34 @@ class TicketManager:
             if filters.open is not None:
                 query += " AND open = ?"
                 params.append(str(filters.open).upper())
-
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
-            return [Ticket(**row) for row in rows]
+            if filters.search is not None:
+                query += " AND (description LIKE ? OR title LIKE ?)"
+                search_param = f"%{filters.search}%"
+                params.extend([search_param, search_param])
+            if filters.created_after is not None:
+                query += " AND created_at >= ?"
+                params.append(filters.created_after.isoformat())
+            if filters.created_before is not None:
+                query += " AND created_at <= ?"
+                params.append(filters.created_before.isoformat())
+            if filters.updated_after is not None:
+                query += " AND updated_at >= ?"
+                params.append(filters.updated_after.isoformat())
+            if filters.updated_before is not None:
+                query += " AND updated_at <= ?"
+                params.append(filters.updated_before.isoformat())
+            if filters.completed_after is not None:
+                query += " AND completed_at >= ?"
+                params.append(filters.completed_after.isoformat())
+            if filters.completed_before is not None:
+                query += " AND completed_at <= ?"
+                params.append(filters.completed_before.isoformat())
+        return Database.run_list(query, tuple(params), Ticket)
 
     @staticmethod
     def delete(ticket_id: int) -> None:
-        """
-        Delete a ticket by ID.
-        Pseudocode:
-        1. Connect to database via util
-        2. Delete ticket by ID
-        3. Handle missing ID or foreign key constraints
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    "DELETE FROM tickets WHERE id = ?", (ticket_id,)
-                )
-                if cursor.rowcount == 0:
-                    raise ValueError(
-                        f"Ticket with ID {ticket_id} not found"
-                    )
-            except sqlite3.IntegrityError:
-                raise ValueError(
-                    f"Cannot delete ticket ID {ticket_id}: it is referenced by other records"
-                )
+        query = "DELETE FROM tickets WHERE id = ?"
+        exception_package = ExceptionPackage(
+            not_found_error=f"Ticket with ID {ticket_id} not found"
+        )
+        return Database.run_delete(query, ticket_id, exception_package)

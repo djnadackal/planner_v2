@@ -1,8 +1,7 @@
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE IF NOT EXISTS thing_categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
-    parent_id INTEGER,
-    FOREIGN KEY(parent_id) REFERENCES categories(id)
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS things (
@@ -11,11 +10,20 @@ CREATE TABLE IF NOT EXISTS things (
     name TEXT NOT NULL UNIQUE,
     description TEXT,
     docs_link TEXT,
-    FOREIGN KEY(category_id) REFERENCES categories(id)
+    parent_id INTEGER,
+    FOREIGN KEY(category_id) REFERENCES categories(id),
+    FOREIGN KEY(parent_id) REFERENCES things(id)
+);
+
+CREATE TABLE IF NOT EXISTS ticket_categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
     thing_id INTEGER,
     category_id INTEGER,
     description TEXT NOT NULL,
@@ -24,7 +32,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     completed_at DATETIME,
     FOREIGN KEY(thing_id) REFERENCES things(id),
-    FOREIGN KEY(category_id) REFERENCES categories(id)
+    FOREIGN KEY(category_id) REFERENCES ticket_categories(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (

@@ -1,8 +1,8 @@
-import sqlite3
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
-from ..util import get_db_connection
+
+from ..core import Database, ExceptionPackage
 
 
 # Pydantic model for Action
@@ -26,118 +26,53 @@ class ActionFilter(BaseModel):
 class ActionManager:
     @staticmethod
     def create(action: Action) -> int:
-        """
-        Create a new action.
-        Pseudocode:
-        1. Connect to database via util
-        2. Insert action (ticket_id, action_type)
-        3. Return new action ID
-        4. Handle foreign key constraints
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    "INSERT INTO actions (ticket_id, action_type) VALUES (?, ?)",
-                    (action.ticket_id, action.action_type),
-                )
-                if not cursor.lastrowid:
-                    raise ValueError("Failed to create action")
-                return cursor.lastrowid
-            except sqlite3.IntegrityError as e:
-                if "FOREIGN KEY constraint failed" in str(e):
-                    raise ValueError(
-                        f"Invalid ticket_id: {action.ticket_id}"
-                    )
-                raise e
+        query = (
+            "INSERT INTO actions (ticket_id, action_type) VALUES (?, ?)"
+        )
+        params = (action.ticket_id, action.action_type)
+        exception_package = ExceptionPackage(
+            foreign_key_constraint_error=f"Invalid ticket_id: {action.ticket_id}"
+        )
+        last_row_id = Database.run_create(query, params, exception_package)
+        return last_row_id
 
     @staticmethod
     def update(action: Action) -> None:
-        """
-        Update an existing action.
-        Pseudocode:
-        1. Connect to database via util
-        2. Update ticket_id and action_type where id matches
-        3. Handle missing ID or constraints
-        """
         if action.id is None:
             raise ValueError("Action ID is required for update")
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            try:
-                cursor.execute(
-                    "UPDATE actions SET ticket_id = ?, action_type = ? WHERE id = ?",
-                    (action.ticket_id, action.action_type, action.id),
-                )
-                if cursor.rowcount == 0:
-                    raise ValueError(
-                        f"Action with ID {action.id} not found"
-                    )
-            except sqlite3.IntegrityError as e:
-                if "FOREIGN KEY constraint failed" in str(e):
-                    raise ValueError(
-                        f"Invalid ticket_id: {action.ticket_id}"
-                    )
-                raise e
+        query = "UPDATE actions SET ticket_id = ?, action_type = ? WHERE id = ?"
+        params = (action.ticket_id, action.action_type, action.id)
+        exception_package = ExceptionPackage(
+            foreign_key_constraint_error=f"Invalid ticket_id: {action.ticket_id}",
+            not_found_error=f"Action with ID {action.id} not found",
+        )
+        Database.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(action_id: int) -> Optional[Action]:
-        """
-        Get an action by ID.
-        Pseudocode:
-        1. Connect to database via util
-        2. Select action by ID
-        3. Return Action model or None if not found
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "SELECT id, ticket_id, action_type, performed_at FROM actions WHERE id = ?",
-                (action_id,),
-            )
-            row = cursor.fetchone()
-            return Action(**row) if row else None
+        query = "SELECT id, ticket_id, action_type, performed_at FROM actions WHERE id = ?"
+        return Database.run_get_by_id(query, action_id, Action)
 
     @staticmethod
     def list_actions(
         filters: Optional[ActionFilter] = None,
     ) -> List[Action]:
-        """
-        List actions with mandatory fuzzy search on action_type and optional ticket_id filter.
-        Pseudocode:
-        1. Connect to database via util
-        2. Build query with mandatory action_type LIKE clause
-        3. Add ticket_id filter if provided
-        4. Execute query and return list of Action models
-        """
         query = "SELECT id, ticket_id, action_type, performed_at FROM actions WHERE action_type LIKE ?"
         params = [
             f"%{filters.action_type if filters and filters.action_type else ''}%"
         ]
 
-        if filters and filters.ticket_id is not None:
-            query += " AND ticket_id = ?"
-            params.append(str(filters.ticket_id))
+        if filters:
+            if filters.ticket_id is not None:
+                query += " AND ticket_id = ?"
+                params.append(str(filters.ticket_id))
 
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
-            return [Action(**row) for row in rows]
+        return Database.run_list(query, tuple(params), Action)
 
     @staticmethod
     def delete(action_id: int) -> None:
-        """
-        Delete an action by ID.
-        Pseudocode:
-        1. Connect to database via util
-        2. Delete action by ID
-        3. Handle missing ID
-        """
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "DELETE FROM actions WHERE id = ?", (action_id,)
-            )
-            if cursor.rowcount == 0:
-                raise ValueError(f"Action with ID {action_id} not found")
+        query = "DELETE FROM actions WHERE id = ?"
+        exception_package = ExceptionPackage(
+            not_found_error=f"Action with ID {action_id} not found"
+        )
+        Database.run_delete(query, action_id, exception_package)
