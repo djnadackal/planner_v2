@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
-from ..core import Database, ExceptionPackage
+from ..core import DbCore, ExceptionPackage
 
 
 # Pydantic model for Thing
@@ -40,7 +40,7 @@ class ThingManager:
             unique_constraint_error=f"Thing name '{thing.name}' already exists",
             foreign_key_constraint_error=f"Invalid category_id: {thing.category_id}",
         )
-        return Database.run_create(query, params, exception_package)
+        return DbCore.run_create(query, params, exception_package)
 
     @staticmethod
     def update(thing: Thing) -> None:
@@ -59,12 +59,12 @@ class ThingManager:
             foreign_key_constraint_error=f"Invalid category_id: {thing.category_id}",
             not_found_error=f"Thing with ID {thing.id} not found",
         )
-        Database.run_update(query, params, exception_package)
+        DbCore.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(thing_id: int) -> Optional[Thing]:
         query = "SELECT id, category_id, name, description, docs_link FROM things WHERE id = ?"
-        return Database.run_get_by_id(query, thing_id, Thing)
+        return DbCore.run_get_by_id(query, thing_id, Thing)
 
     @staticmethod
     def list_things(filters: Optional[ThingFilter] = None) -> List[Thing]:
@@ -81,7 +81,7 @@ class ThingManager:
             query += " AND (name LIKE ? OR description LIKE ?)"
             search_param = f"%{filters.search}%"
             params.extend([search_param, search_param])
-        return Database.run_list(query, tuple(params), Thing)
+        return DbCore.run_list(query, tuple(params), Thing)
 
     @staticmethod
     def delete(thing_id: int) -> None:
@@ -90,4 +90,4 @@ class ThingManager:
             not_found_error=f"Thing with ID {thing_id} not found",
             foreign_key_constraint_error=f"Cannot delete thing ID {thing_id}: it is referenced by other records",
         )
-        Database.run_delete(query, thing_id, exception_package)
+        DbCore.run_delete(query, thing_id, exception_package)

@@ -6,8 +6,6 @@ import sqlite3
 
 from .get_connection import get_db_connection
 
-from ..util import get_schema, initialize_db
-
 
 class UniqueConstraintError(Exception):
     pass
@@ -27,7 +25,7 @@ class ExceptionPackage(BaseModel):
     not_found_error: Optional[str] = None
 
 
-class Database:
+class DbCore:
     __db_filepath__ = "data/database.db"
     __schema_filepath__ = "src/db/schema.sql"
 
@@ -46,13 +44,6 @@ class Database:
             cursor = conn.cursor()
             for statement in self.schema:
                 cursor.execute(statement)
-
-    initialize_db = staticmethod(
-        partial(
-            initialize_db,
-            ddl_statements=get_schema(schema_path=__schema_filepath__),
-        )
-    )
 
     @classmethod
     def run_create(

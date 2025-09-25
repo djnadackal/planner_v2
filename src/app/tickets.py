@@ -1,53 +1,54 @@
 from fastapi import APIRouter, HTTPException, Query, status
-from ..db import controller as db
+from ..db import controller
+from .ticket_categories import router as categories_router
 
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_ticket(ticket: db.Ticket):
+async def create_ticket(ticket: controller.Ticket):
     """
     Create a new ticket.
     Returns the ID of the created ticket.
     """
     try:
-        ticket_id = db.TicketManager.create(ticket)
+        ticket_id = controller.TicketManager.create(ticket)
         return {"id": ticket_id}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.put("/{ticket_id}")
-async def update_ticket(ticket_id: int, ticket: db.Ticket):
+async def update_ticket(ticket_id: int, ticket: controller.Ticket):
     """
     Update a ticket by ID.
     """
     ticket.id = ticket_id
     try:
-        db.TicketManager.update(ticket)
+        controller.TicketManager.update(ticket)
         return {"message": "Ticket updated"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{ticket_id}", response_model=db.Ticket)
+@router.get("/{ticket_id}", response_model=controller.Ticket)
 async def get_ticket(ticket_id: int):
     """
     Get a ticket by ID.
     """
-    ticket = db.TicketManager.get_by_id(ticket_id)
+    ticket = controller.TicketManager.get_by_id(ticket_id)
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket not found")
     return ticket
 
 
-@router.get("/", response_model=list[db.Ticket])
-async def list_tickets(filters: db.TicketFilter = Query()):
+@router.get("/", response_model=list[controller.Ticket])
+async def list_tickets(filters: controller.TicketFilter = Query()):
     """
     List tickets with optional filters (fuzzy search on description).
     """
-    return db.TicketManager.list_tickets(filters)
+    return controller.TicketManager.list_tickets(filters)
 
 
 @router.delete("/{ticket_id}")
@@ -56,7 +57,10 @@ async def delete_ticket(ticket_id: int):
     Delete a ticket by ID.
     """
     try:
-        db.TicketManager.delete(ticket_id)
+        controller.TicketManager.delete(ticket_id)
         return {"message": "Ticket deleted"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+router.include_router(categories_router, prefix="/categories")

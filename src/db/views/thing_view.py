@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import Query
 
 from ..controller import Thing, ThingFilter
-from ..core import Database
+from ..core import DbCore
 
 
 class ThingView(Thing):
@@ -34,4 +34,4 @@ class ThingViewManager:
                 query += " AND (t.name LIKE ? OR t.description LIKE ?)"
                 search_pattern = f"%{filters.search}%"
                 params.extend([search_pattern, search_pattern])
-        return Database.run_list(query, tuple(params), ThingView)
+        return DbCore.run_list(query, tuple(params), ThingView)

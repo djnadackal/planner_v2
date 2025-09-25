@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
-from ..core import Database, ExceptionPackage
+from ..core import DbCore, ExceptionPackage
 
 
 # Pydantic model for Ticket
@@ -49,7 +49,7 @@ class TicketManager:
         exception_package = ExceptionPackage(
             foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}"
         )
-        last_row_id = Database.run_create(query, params, exception_package)
+        last_row_id = DbCore.run_create(query, params, exception_package)
         return last_row_id
 
     @staticmethod
@@ -69,12 +69,12 @@ class TicketManager:
             foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}",
             not_found_error=f"Ticket with ID {ticket.id} not found",
         )
-        Database.run_update(query, params, exception_package)
+        DbCore.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(ticket_id: int) -> Optional[Ticket]:
         query = "SELECT id, thing_id, category_id, description, created_at, open, updated_at, completed_at FROM tickets WHERE id = ?"
-        return Database.run_get_by_id(query, ticket_id, Ticket)
+        return DbCore.run_get_by_id(query, ticket_id, Ticket)
 
     @staticmethod
     def list_tickets(
@@ -115,7 +115,7 @@ class TicketManager:
             if filters.completed_before is not None:
                 query += " AND completed_at <= ?"
                 params.append(filters.completed_before.isoformat())
-        return Database.run_list(query, tuple(params), Ticket)
+        return DbCore.run_list(query, tuple(params), Ticket)
 
     @staticmethod
     def delete(ticket_id: int) -> None:
@@ -123,4 +123,4 @@ class TicketManager:
         exception_package = ExceptionPackage(
             not_found_error=f"Ticket with ID {ticket_id} not found"
         )
-        return Database.run_delete(query, ticket_id, exception_package)
+        return DbCore.run_delete(query, ticket_id, exception_package)

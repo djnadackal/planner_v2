@@ -1,8 +1,12 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import TYPE_CHECKING, Optional, List
 from datetime import datetime
 
-from ..core import Database, ExceptionPackage
+from ..core import DbCore, ExceptionPackage
+
+
+if TYPE_CHECKING:
+    from .tickets import Ticket
 
 
 # Pydantic model for Action
@@ -33,7 +37,7 @@ class ActionManager:
         exception_package = ExceptionPackage(
             foreign_key_constraint_error=f"Invalid ticket_id: {action.ticket_id}"
         )
-        last_row_id = Database.run_create(query, params, exception_package)
+        last_row_id = DbCore.run_create(query, params, exception_package)
         return last_row_id
 
     @staticmethod
@@ -46,12 +50,12 @@ class ActionManager:
             foreign_key_constraint_error=f"Invalid ticket_id: {action.ticket_id}",
             not_found_error=f"Action with ID {action.id} not found",
         )
-        Database.run_update(query, params, exception_package)
+        DbCore.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(action_id: int) -> Optional[Action]:
         query = "SELECT id, ticket_id, action_type, performed_at FROM actions WHERE id = ?"
-        return Database.run_get_by_id(query, action_id, Action)
+        return DbCore.run_get_by_id(query, action_id, Action)
 
     @staticmethod
     def list_actions(
@@ -67,7 +71,7 @@ class ActionManager:
                 query += " AND ticket_id = ?"
                 params.append(str(filters.ticket_id))
 
-        return Database.run_list(query, tuple(params), Action)
+        return DbCore.run_list(query, tuple(params), Action)
 
     @staticmethod
     def delete(action_id: int) -> None:
@@ -75,4 +79,4 @@ class ActionManager:
         exception_package = ExceptionPackage(
             not_found_error=f"Action with ID {action_id} not found"
         )
-        Database.run_delete(query, action_id, exception_package)
+        DbCore.run_delete(query, action_id, exception_package)

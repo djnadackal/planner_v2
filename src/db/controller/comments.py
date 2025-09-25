@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
-from ..core import Database, ExceptionPackage
+from ..core import DbCore, ExceptionPackage
 
 
 # Pydantic model for Comment
@@ -31,7 +31,7 @@ class CommentManager:
         exception_package = ExceptionPackage(
             foreign_key_constraint_error=f"Invalid ticket_id: {comment.ticket_id}"
         )
-        last_row_id = Database.run_create(query, params, exception_package)
+        last_row_id = DbCore.run_create(query, params, exception_package)
         return last_row_id
 
     @staticmethod
@@ -43,12 +43,12 @@ class CommentManager:
         exception_package = ExceptionPackage(
             not_found_error=f"Comment with ID {comment.id} not found"
         )
-        Database.run_update(query, params, exception_package)
+        DbCore.run_update(query, params, exception_package)
 
     @staticmethod
     def get_by_id(comment_id: int) -> Optional[Comment]:
         query = "SELECT id, ticket_id, content, created_at FROM comments WHERE id = ?"
-        return Database.run_get_by_id(query, comment_id, Comment)
+        return DbCore.run_get_by_id(query, comment_id, Comment)
 
     @staticmethod
     def list_comments(
@@ -62,7 +62,7 @@ class CommentManager:
         if filters and filters.ticket_id is not None:
             query += " AND ticket_id = ?"
             params.append(str(filters.ticket_id))
-        return Database.run_list(query, tuple(params), Comment)
+        return DbCore.run_list(query, tuple(params), Comment)
 
     @staticmethod
     def delete(comment_id: int) -> None:
@@ -70,4 +70,4 @@ class CommentManager:
         exception_package = ExceptionPackage(
             not_found_error=f"Comment with ID {comment_id} not found"
         )
-        Database.run_delete(query, comment_id, exception_package)
+        DbCore.run_delete(query, comment_id, exception_package)
