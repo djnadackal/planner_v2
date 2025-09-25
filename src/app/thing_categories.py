@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, status
 from ..db import controller
 
 
-router = APIRouter(prefix="/categories", tags=["categories"])
+router = APIRouter(prefix="/categories", tags=["thing_categories"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

@@ -63,4 +63,4 @@ async def delete_ticket(ticket_id: int):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-router.include_router(categories_router, prefix="/categories")
+router.include_router(categories_router)
