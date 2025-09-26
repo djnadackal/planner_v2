@@ -85,20 +85,20 @@ class DbCore:
                 raise e
 
     @classmethod
-    def run_get_by_id(cls, query, object_id, model_class):
+    def run_get_by_id(cls, query, object_id, model_factory):
         with cls.get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(query, (object_id,))
             row = cursor.fetchone()
-            return model_class(**row) if row else None
+            return model_factory(**row) if row else None
 
     @classmethod
-    def run_list(cls, query, params, model_class):
+    def run_list(cls, query, params, model_factory):
         with cls.get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(query, params)
             rows = cursor.fetchall()
-            return [model_class(**row) for row in rows]
+            return [model_factory(**row) for row in rows]
 
     @classmethod
     def run_delete(cls, query, object_id, exception_package):

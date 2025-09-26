@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query
 from ..db import views
 
 
-router = APIRouter(prefix="/thingView", tags=["thingView"])
+router = APIRouter(prefix="/view", tags=["thingView"])
 
 
 @router.get("/", response_model=list[views.ThingView])

@@ -2,7 +2,7 @@ from typing import Optional
 
 from fastapi import Query
 
-from ..controller import Thing, ThingFilter
+from ..controller import Thing, ThingParams
 from ..core import DbCore
 
 
@@ -10,7 +10,7 @@ class ThingView(Thing):
     category_name: Optional[str] = None
 
 
-class ThingViewFilter(ThingFilter):
+class ThingViewFilter(ThingParams):
     search: Optional[str] = None
 
 
