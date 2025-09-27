@@ -1,8 +1,8 @@
 from .. import Database
 
 
-ThingCategory = Database.Controller.Objects.ThingCategory
-Thing = Database.Controller.Objects.Thing
+ThingCategory = Database.Controller.Tables.ThingCategory
+Thing = Database.Controller.Tables.Thing
 
 ThingCategoryManager = Database.Controller.Managers.ThingCategory
 ThingManager = Database.Controller.Managers.Thing

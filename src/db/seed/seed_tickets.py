@@ -2,9 +2,9 @@ from typing import Optional
 from .. import Database
 
 
-TicketCategory = Database.Controller.Objects.TicketCategory
-Thing = Database.Controller.Objects.Thing
-Ticket = Database.Controller.Objects.Ticket
+TicketCategory = Database.Controller.Tables.TicketCategory
+Thing = Database.Controller.Tables.Thing
+Ticket = Database.Controller.Tables.Ticket
 
 TicketCategoryManager = Database.Controller.Managers.TicketCategory
 TicketManager = Database.Controller.Managers.Ticket

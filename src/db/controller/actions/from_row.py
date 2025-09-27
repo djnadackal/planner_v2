@@ -1,0 +1,34 @@
+from .base import Action
+
+
+def from_row(**row) -> Action:
+    action = Action(
+        id=row["id"],
+        ticket_id=row["ticket_id"],
+        action_type_id=row["action_type_id"],
+        performed_at=row["performed_at"],
+    )
+    if "ticket_title" in row.keys():
+        from ..tickets import Ticket
+
+        action.ticket = Ticket(
+            id=row["ticket_id"],
+            title=row.get("ticket_title", None),
+            description=row.get("ticket_description", None),
+            open=row.get("ticket_open", None),
+            thing_id=row.get("ticket_thing_id", None),
+            category_id=row.get("ticket_category_id", None),
+            parent_id=row.get("ticket_parent_id", None),
+            created_at=row.get("ticket_created_at", None),
+            updated_at=row.get("ticket_updated_at", None),
+            completed_at=row.get("ticket_completed_at", None),
+        )
+    if "action_type_name" in row.keys():
+        from ..action_types import ActionType
+
+        action.action_type = ActionType(
+            id=row["action_type_id"],
+            name=row.get("action_type_name", None),
+            description=row.get("action_type_description", None),
+        )
+    return action

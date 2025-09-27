@@ -26,13 +26,15 @@ CREATE TABLE IF NOT EXISTS tickets (
     title TEXT NOT NULL,
     thing_id INTEGER,
     category_id INTEGER,
+    parent_id INTEGER,
     description TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     open BOOLEAN DEFAULT 1,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     completed_at DATETIME,
     FOREIGN KEY(thing_id) REFERENCES things(id),
-    FOREIGN KEY(category_id) REFERENCES ticket_categories(id)
+    FOREIGN KEY(category_id) REFERENCES ticket_categories(id),
+    FOREIGN KEY(parent_id) REFERENCES tickets(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (

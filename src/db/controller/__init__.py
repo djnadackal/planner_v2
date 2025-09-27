@@ -2,7 +2,7 @@ from .category_base import CategoryFilter
 from .thing_categories import ThingCategory, ThingCategoryManager
 from .ticket_categories import TicketCategory, TicketCategoryManager
 from .action_types import ActionType, ActionTypeManager
-from .actions import Action, ActionManager, ActionParams
+from .actions import Action, ActionParams
 from .comments import Comment, CommentManager, CommentFilter
 from .things import Thing, ThingManager, ThingParams
 from .tickets import Ticket, TicketManager, TicketParams
@@ -14,7 +14,7 @@ Action.model_rebuild()
 
 
 class Controller:
-    class Objects:
+    class Tables:
         Thing = Thing
         ThingCategory = ThingCategory
         Ticket = Ticket
@@ -29,7 +29,6 @@ class Controller:
         Ticket = TicketManager
         TicketCategory = TicketCategoryManager
         Comment = CommentManager
-        Action = ActionManager
         ActionType = ActionTypeManager
 
     class Params:

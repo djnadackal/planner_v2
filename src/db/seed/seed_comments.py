@@ -1,7 +1,7 @@
 from .. import Database
 
 
-Comment = Database.Controller.Objects.Comment
+Comment = Database.Controller.Tables.Comment
 CommentManager = Database.Controller.Managers.Comment
 
 

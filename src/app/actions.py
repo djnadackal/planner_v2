@@ -1,53 +1,53 @@
 from fastapi import APIRouter, HTTPException, Query, status
-from ..db import controller
+from ..db import Controller
 
 
 router = APIRouter(prefix="/actions", tags=["actions"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_action(action: controller.Action):
+async def create_action(action: Controller.Tables.Action):
     """
     Create a new action.
     Returns the ID of the created action.
     """
     try:
-        action_id = controller.ActionManager.create(action)
+        action_id = Controller.Tables.Action.create(action)
         return {"id": action_id}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.put("/{action_id}")
-async def update_action(action_id: int, action: controller.Action):
+async def update_action(action_id: int, action: Controller.Tables.Action):
     """
     Update an action by ID.
     """
     action.id = action_id
     try:
-        controller.ActionManager.update(action)
+        Controller.Tables.Action.update(action)
         return {"message": "Action updated"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{action_id}", response_model=controller.Action)
+@router.get("/{action_id}", response_model=Controller.Tables.Action)
 async def get_action(action_id: int):
     """
     Get an action by ID.
     """
-    action = controller.ActionManager.get_by_id(action_id)
+    action = Controller.Tables.Action.get_by_id(action_id)
     if not action:
         raise HTTPException(status_code=404, detail="Action not found")
     return action
 
 
-@router.get("/", response_model=list[controller.Action])
-async def list_actions(filters: controller.ActionParams = Query()):
+@router.get("/", response_model=list[Controller.Tables.Action])
+async def list_actions(filters: Controller.Params.Action = Query()):
     """
     List actions with optional filters (fuzzy search on action_type).
     """
-    return controller.ActionManager.list_actions(filters)
+    return Controller.Tables.Action.read(filters)
 
 
 @router.delete("/{action_id}")
@@ -56,7 +56,7 @@ async def delete_action(action_id: int):
     Delete an action by ID.
     """
     try:
-        controller.ActionManager.delete(action_id)
+        Controller.Tables.Action.delete(action_id)
         return {"message": "Action deleted"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
