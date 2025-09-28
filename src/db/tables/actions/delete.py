@@ -5,6 +5,8 @@ from ...core import DbCore, ExceptionPackage
 
 logger = logging.getLogger(__name__)
 
+DbCore.logger = logger
+
 
 def delete(action_id: int) -> None:
     logger.info(f"Deleting action with ID: {action_id}")

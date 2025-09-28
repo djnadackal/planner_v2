@@ -1,7 +1,4 @@
-from functools import wraps
-import logging
-
-from ...core import DbCore
+from ..util import as_staticmethod
 
 from .base import Action
 from .create import create
@@ -11,27 +8,6 @@ from .update import update
 from .delete import delete
 from .from_row import from_row
 from .params import ActionParams
-
-
-logger = logging.getLogger(__name__)
-
-DbCore.logger = logger
-
-
-def as_staticmethod(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
-
-    return staticmethod(wrapper)
-
-
-def as_classmethod(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
-
-    return classmethod(wrapper)
 
 
 # attach CRUD functions to Action class

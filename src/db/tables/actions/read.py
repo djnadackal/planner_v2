@@ -9,6 +9,8 @@ from .params import ActionParams
 
 logger = logging.getLogger(__name__)
 
+DbCore.logger = logger
+
 
 def read_actions(
     query_params: Optional[ActionParams] = None,

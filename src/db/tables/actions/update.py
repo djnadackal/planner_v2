@@ -7,6 +7,8 @@ from .base import Action
 
 logger = logging.getLogger(__name__)
 
+DbCore.logger = logger
+
 
 def update(action: Action) -> None:
     logger.info(f"Updating action: {action}")

@@ -8,6 +8,8 @@ from .base import Action
 
 logger = logging.getLogger(__name__)
 
+DbCore.logger = logger
+
 
 def get_by_id(action_id: int) -> Optional[Action]:
     logger.info(f"Getting action by ID: {action_id}")

@@ -1,13 +1,10 @@
 from typing import Optional
-from .. import Database
+from .. import Controller
 
 
-TicketCategory = Database.Controller.Tables.TicketCategory
-Thing = Database.Controller.Tables.Thing
-Ticket = Database.Controller.Tables.Ticket
-
-TicketCategoryManager = Database.Controller.Managers.TicketCategory
-TicketManager = Database.Controller.Managers.Ticket
+TicketCategory = Controller.Tables.TicketCategory
+Thing = Controller.Tables.Thing
+Ticket = Controller.Tables.Ticket
 
 
 def seed_tickets(thing_id_lookup):
@@ -22,7 +19,7 @@ def seed_tickets(thing_id_lookup):
 
     ticket_category_id_lookup = {}
     for cat in ticket_categories:
-        cat_id = TicketCategoryManager.create(cat)
+        cat_id = TicketCategory.create(cat)
         ticket_category_id_lookup[cat.name] = cat_id
         print(f"Created ticket category: {cat.name} (ID: {cat_id})")
 
@@ -50,7 +47,7 @@ def seed_tickets(thing_id_lookup):
             open=open,
             parent_id=parent_id,
         )
-        ticket_id = TicketManager.create(ticket)
+        ticket_id = Ticket.create(ticket)
         ticket_id_lookup[ticket.title] = ticket_id
         print(f"Created ticket: {ticket.title} (ID: {ticket_id})")
         return ticket_id

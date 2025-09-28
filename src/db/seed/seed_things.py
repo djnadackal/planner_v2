@@ -1,11 +1,8 @@
-from .. import Database
+from .. import Controller
 
 
-ThingCategory = Database.Controller.Tables.ThingCategory
-Thing = Database.Controller.Tables.Thing
-
-ThingCategoryManager = Database.Controller.Managers.ThingCategory
-ThingManager = Database.Controller.Managers.Thing
+ThingCategory = Controller.Tables.ThingCategory
+Thing = Controller.Tables.Thing
 
 
 def seed_things():
@@ -20,7 +17,7 @@ def seed_things():
     ]
     thing_category_id_lookup = {}
     for cat in thing_categories:
-        cat_id = ThingCategoryManager.create(cat)
+        cat_id = ThingCategory.create(cat)
         thing_category_id_lookup[cat.name] = cat_id
         print(f"Created category: {cat.name} (ID: {cat_id})")
 
@@ -36,7 +33,7 @@ def seed_things():
             docs_link=docs_link,
             parent_id=parent_id,
         )
-        thing_id = ThingManager.create(thing)
+        thing_id = Thing.create(thing)
         thing_id_lookup[thing.name] = thing_id
         print(f"Created thing: {thing.name} (ID: {thing_id})")
         return thing_id

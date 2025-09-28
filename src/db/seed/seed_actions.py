@@ -1,10 +1,9 @@
 from typing import Optional
 
-from .. import Database
+from .. import Controller
 
-Action = Database.Controller.Tables.Action
-ActionType = Database.Controller.Tables.ActionType
-ActionTypeManager = Database.Controller.Managers.ActionType
+Action = Controller.Tables.Action
+ActionType = Controller.Tables.ActionType
 
 
 def seed_actions(ticket_id_lookup):
@@ -12,7 +11,7 @@ def seed_actions(ticket_id_lookup):
 
     def add_action_type(name: str, description: Optional[str] = None):
         action_type = ActionType(name=name, description=description)
-        action_type_id = ActionTypeManager.create(action_type)
+        action_type_id = ActionType.create(action_type)
         action_type_lookup[name] = action_type_id
         print(f"Created action type: {name} (ID: {action_type_id})")
         return action_type_id

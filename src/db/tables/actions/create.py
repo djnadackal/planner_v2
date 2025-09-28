@@ -7,6 +7,8 @@ from .base import Action
 
 logger = logging.getLogger(__name__)
 
+DbCore.logger = logger
+
 
 def create(action: Action) -> int:
     logger.info(f"Creating action {action}")
