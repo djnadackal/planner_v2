@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Flex } from 'antd';
 import ThingTree from './thingTree';
 import IssueTable from './ticketTable';
 
 const HomeView = () => {
   const [selectedThingIds, setSelectedThingIds] = useState([]);
-  useEffect(() => {
-    console.log('Selected thing IDs changed:', selectedThingIds);
-  }, [selectedThingIds]);
 
   return (<>
     <Flex

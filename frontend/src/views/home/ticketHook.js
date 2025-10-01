@@ -17,7 +17,6 @@ const issueHook = (thingIds) => {
     include.forEach(i => url.searchParams.append('include', i));
     url.searchParams.append("parent_id", 0);
     url.searchParams.append("open", "true");
-    console.log("Fetching issues from URL:", url.toString());
     try {
       setLoading(true);
       const response = await fetch(url);
