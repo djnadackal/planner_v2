@@ -18,9 +18,11 @@ def get_by_id(thing_id: int) -> Optional[Thing]:
     query = (
         "SELECT"
         " t.id, t.category_id, t.name, t.description, t.docs_link,"
-        " c.name AS category_name, c.description AS category_description"
+        " c.name AS category_name, c.description AS category_description,"
+        " p.id AS parent_id, p.name AS parent_name, p.description AS parent_description, p.docs_link AS parent_docs_link"
         " FROM things t"
         " LEFT JOIN thing_categories c ON t.category_id = c.id"
+        " LEFT JOIN things p ON t.parent_id = p.id"
         " WHERE t.id = ?"
     )
     thing = core.run_get_by_id(query, thing_id, Thing.from_row)

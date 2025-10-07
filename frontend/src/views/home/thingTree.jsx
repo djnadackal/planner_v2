@@ -5,10 +5,14 @@ import NewThingModal from './newThingModel';
 import useUpdateThing from './updateThing';
 
 
-const ThingTree = ({ checkedThingIds, setCheckedThingIds }) => {
+const ThingTree = ({
+  checkedThingIds,
+  setCheckedThingIds,
+  selectedThingId,
+  setSelectedThingId
+}) => {
   const [keysChanged, setKeysChanged] = useState(false);
   const [createThingModalOpen, setCreateThingModalOpen] = useState(false);
-  const [selectedKey, setSelectedKey] = useState(null);
   const {
     data: treeData,
     allIds,
@@ -58,8 +62,9 @@ const ThingTree = ({ checkedThingIds, setCheckedThingIds }) => {
 
   const onSelect = (selectedKeys) => {
     console.log('Selected: ', selectedKeys);
-    console.log("setting to selectedKey", selectedKeys[selectedKeys.length - 1]);
-    setSelectedKey(selectedKeys[selectedKeys.length - 1]);
+    const newSelectedThingId = selectedKeys[selectedKeys.length - 1]
+    console.log("setting to selectedKey", newSelectedThingId);
+    setSelectedThingId(newSelectedThingId);
   }
 
   return (<>
@@ -92,7 +97,7 @@ const ThingTree = ({ checkedThingIds, setCheckedThingIds }) => {
         checkedKeys={checkedThingIds}
         onCheck={onCheck}
         defaultExpandAll={true}
-        selectedKeys={selectedKey !== null ? [selectedKey] : []}
+        selectedKeys={selectedThingId !== null ? [selectedThingId] : []}
         onSelect={onSelect}
         multiple
         error={treeDataError}

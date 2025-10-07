@@ -1,21 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "antd";
 import issueHook from "./ticketHook"
 
 
+const IssueTable = ({ checkedThingIds, selectedThingId }) => {
+  const { data, loading, error, refetch } = issueHook(checkedThingIds);
 
-const IssueTable = ({ selectedThingIds }) => {
-  const { data, loading, error, refetch } = issueHook(selectedThingIds);
+  const [tableMode, setTableMode] = useState("full");
+
+  console.log("Selected Thing ID in IssueTable:", selectedThingId);
+  useEffect(() => {
+    if (!selectedThingId) {
+      console.log('Checked Thing IDs changed in IssueTable:', checkedThingIds);
+      setTableMode("full");
+      refetch(checkedThingIds)
+    }
+  }, [checkedThingIds, selectedThingId])
 
   useEffect(() => {
-    console.log('Selected Thing IDs changed in IssueTable:', selectedThingIds);
-    refetch(selectedThingIds)
-  }, [selectedThingIds])
+    console.log("effect triggered")
+    if (selectedThingId) {
+      console.log('Selected Thing ID changed in IssueTable:', selectedThingId);
+      setTableMode("compact");
+      refetch([selectedThingId])
+    } else {
+      setTableMode("full");
+      refetch(checkedThingIds)
+    }
+  }, [selectedThingId])
 
   return (
     <Table
+      title={() => `Issues (${data ? data.length : 0})`}
       dataSource={data ? data : []}
-      columns={columns}
+      columns={getColumns(tableMode)}
       loading={loading}
       error={error}
       rowKey="id" />
@@ -23,32 +41,38 @@ const IssueTable = ({ selectedThingIds }) => {
 }
 
 
-const columns = [
-  {
-    title: 'Title',
-    dataIndex: 'title',
-    key: 'title',
-  },
-  {
-    title: 'Thing',
-    dataIndex: ['thing', 'name'],
-    key: 'thing_name',
-  },
-  {
-    title: 'Category',
-    dataIndex: ['category', 'name'],
-    key: 'category_name',
-  },
-  {
+const getColumns = (mode = "full") => {
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Thing',
+      dataIndex: ['thing', 'name'],
+      key: 'thing_name',
+    },
+    {
+      title: 'Category',
+      dataIndex: ['category', 'name'],
+      key: 'category_name',
+    },
+  ]
+  if (mode === "compact") return columns;
+  const createdColumn = {
     title: 'Created',
     dataIndex: 'created_at',
     key: 'created_at',
-  },
-  {
+  }
+  const updatedColumn = {
     title: 'Updated',
     dataIndex: 'updated_at',
     key: 'updated_at',
   }
-]
+  columns.push(createdColumn);
+  columns.push(updatedColumn);
+  return columns;
+}
 
 export default IssueTable;

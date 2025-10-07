@@ -11,7 +11,10 @@ def from_row(cls, **row) -> "Thing":
         docs_link=row["docs_link"],
         parent_id=row.get("parent_id"),
     )
-    if "category_name" in row.keys():
+    if (
+        "category_name" in row.keys()
+        and row.get("category_name") is not None
+    ):
         from ..categories import ThingCategory
 
         thing.category = ThingCategory(
@@ -19,7 +22,7 @@ def from_row(cls, **row) -> "Thing":
             name=row.get("category_name", ""),
             description=row.get("category_description", ""),
         )
-    if "parent_name" in row.keys() and row.get("parent_id") is not None:
+    if "parent_name" in row.keys() and row.get("parent_name") is not None:
         thing.parent = Thing(
             id=row.get("parent_id"),
             name=row.get("parent_name", ""),
