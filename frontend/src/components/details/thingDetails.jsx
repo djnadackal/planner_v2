@@ -1,7 +1,7 @@
 import { Button, Descriptions, Flex, Input } from "antd"
 import { useEffect, useState } from "react";
-import useUpdateThing from "../api/useUpdateThing";
-import ThingDropdown from "./thingDropdown";
+import ThingDropdown from "../inputs/thingDropdown";
+import api from "../../api/";
 
 
 const ThingDetails = ({ thing, loading, error, refreshThing }) => {
@@ -18,7 +18,7 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
     loading: updateLoading,
     error: updateError,
     updateThing
-  } = useUpdateThing();
+  } = api.useUpdateThing();
 
   // when going to view mode, reset unsaved changes
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Input, message, Modal } from 'antd';
-import useCreateThing from '../api/useCreateThing';
+import api from '../api';
 
 
 const NewThingModal = ({ open, setOpen, onSubmit }) => {
   const [newThingName, setNewThingName] = useState('');
-  const { createThing } = useCreateThing();
+  const { createThing } = api.useCreateThing();
   const clearNewThingForm = () => {
     setNewThingName('');
     setOpen(false);

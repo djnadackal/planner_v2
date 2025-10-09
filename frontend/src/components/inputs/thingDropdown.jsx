@@ -1,16 +1,19 @@
 import { Select } from "antd";
 import { useEffect } from "react";
-import useFetchThings from "../api/useFetchThings";
+import api from "../../api/";
 
 const ThingDropdown = ({ selectedThingId, setSelectedThingId, filters }) => {
-  const { data, loading, error, refetch } = useFetchThings(filters);
+  const { data, loading, error, refetch } = api.useFetchThings(filters);
+
   const handleChange = (value) => {
     console.log("value selected in ThingDropdown:", value);
     setSelectedThingId(value);
   };
+
   useEffect(() => {
     refetch(filters);
   }, [filters]);
+
   return (
     <Select
       showSearch

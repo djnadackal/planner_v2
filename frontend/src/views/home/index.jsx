@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Flex } from 'antd';
-import ThingTree from '../../components/thingTree';
-import TicketTable from './ticketTable';
-import ThingDetails from '../../components/thingDetails.jsx';
-import ChilrenTable from './childrenTable';
-import useFetchThing from "../../api/useFetchThing";
-import useFetchTicket from '../../api/useFetchTicket';
+import api from '../../api/';
+
+import components from '../../components/';
+
+const {
+  ThingTree,
+  tables: { TicketTable, ChilrenTable },
+  details: { ThingDetails }
+} = components;
 
 const HomeView = () => {
   const [checkedThingIds, setCheckedThingIds] = useState([]);
@@ -16,13 +19,13 @@ const HomeView = () => {
     loading: thingLoading,
     error: thingError,
     getThing
-  } = useFetchThing();
+  } = api.useFetchThing();
   const {
     data: ticketData,
     loading: ticketLoading,
     error: ticketError,
     getTicket
-  } = useFetchTicket();
+  } = api.useFetchTicket();
 
   console.log("selectedThingId in HomeView:", selectedThingId);
 

@@ -7,7 +7,7 @@ import useFetchTickets from "./useFetchTickets";
 import useUpdateThing from "./useUpdateThing";
 import useUpdateTicket from "./useUpdateTicket";
 
-export default {
+const api = {
   useCreateThing,
   useFetchThing,
   useFetchThingTree,
@@ -17,3 +17,5 @@ export default {
   useUpdateThing,
   useUpdateTicket,
 };
+
+export default api;

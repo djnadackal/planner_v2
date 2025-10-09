@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Flex, Tree } from 'antd';
-import useFetchThingTree from '../api/useFetchThingTree';
 import NewThingModal from '../components/newThingModel';
-import useUpdateThing from '../api/useUpdateThing';
+import api from '../api/';
 
 
 const ThingTree = ({
@@ -20,11 +19,11 @@ const ThingTree = ({
     loading: treeDataLoading,
     error: treeDataError,
     refetch: treeDataRefetch
-  } = useFetchThingTree();
+  } = api.useFetchThingTree();
 
   const {
     updateThing
-  } = useUpdateThing();
+  } = api.useUpdateThing();
 
   useEffect(() => {
     if (allIds.length > 0 && checkedThingIds.length === 0 && !keysChanged) {

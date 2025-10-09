@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Table } from "antd";
-import { useFetchTickets } from "../../api/";
+import api from "../../api/";
 
 
 const TicketTable = ({ checkedThingIds, selectedThingId }) => {
-  const { data, loading, error, refetch } = useFetchTickets(checkedThingIds);
+  const { data, loading, error, refetch } = api.useFetchTickets(checkedThingIds);
 
   const [tableMode, setTableMode] = useState("full");
 
