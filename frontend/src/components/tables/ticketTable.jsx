@@ -8,19 +8,15 @@ const TicketTable = ({ checkedThingIds, selectedThingId }) => {
 
   const [tableMode, setTableMode] = useState("full");
 
-  console.log("Selected Thing ID in TicketTable:", selectedThingId);
   useEffect(() => {
     if (!selectedThingId) {
-      console.log('Checked Thing IDs changed in TicketTable:', checkedThingIds);
       setTableMode("full");
       refetch(checkedThingIds)
     }
   }, [checkedThingIds, selectedThingId])
 
   useEffect(() => {
-    console.log("effect triggered")
     if (selectedThingId) {
-      console.log('Selected Thing ID changed in TicketTable:', selectedThingId);
       setTableMode("compact");
       refetch([selectedThingId])
     } else {

@@ -22,7 +22,6 @@ const ThingDropdown = ({ selectedThingId, setSelectedThingId, filters }) => {
       optionFilterProp="children"
       error={error}
       onChange={handleChange}
-      loading={loading}
       value={selectedThingId}
       allowClear
       filterOption={(input, option) =>

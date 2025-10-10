@@ -3,7 +3,6 @@ import { Flex } from 'antd';
 import api from '../../api/';
 
 import components from '../../components/';
-import { useLocation, useNavigate } from "react-router-dom";
 
 const {
   ThingTree,
@@ -11,30 +10,33 @@ const {
   details: { ThingDetails }
 } = components;
 
-const HomeView = () => {
+const ThingView = () => {
   const [checkedThingIds, setCheckedThingIds] = useState([]);
   const [selectedThingId, setSelectedThingId] = useState(null);
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
   const {
     data: thingData,
     loading: thingLoading,
     error: thingError,
     getThing
   } = api.useFetchThing();
-  const navigate = useNavigate();
-
-  const selectThing = (thingId) => {
-    setSelectedThingId(thingId);
-    if (thingId) {
-      navigate(`/things/${thingId}`);
-    } else {
-      navigate(`/`);
-    }
-  }
+  const {
+    data: ticketData,
+    loading: ticketLoading,
+    error: ticketError,
+    getTicket
+  } = api.useFetchTicket();
 
 
   const fetchThing = () => {
     if (selectedThingId) {
       getThing(selectedThingId);
+    }
+  }
+
+  const fetchTicket = () => {
+    if (selectedTicketId) {
+      getTicket(selectedTicketId);
     }
   }
 
@@ -50,8 +52,18 @@ const HomeView = () => {
         checkedThingIds={checkedThingIds}
         setCheckedThingIds={setCheckedThingIds}
         selectedThingId={selectedThingId}
-        setSelectedThingId={selectThing} />
+        setSelectedThingId={setSelectedThingId} />
       <Flex gap="10px" style={{ height: '100%' }} wrap>
+        {selectedThingId && <>
+          <ThingDetails
+            thing={thingData}
+            loading={thingLoading}
+            error={thingError}
+            refreshThing={fetchThing} />
+          <ChilrenTable
+            selectedThingId={selectedThingId}
+            setSelectedThingId={setSelectedThingId} />
+        </>}
         <TicketTable
           checkedThingIds={checkedThingIds}
           selectedThingId={selectedThingId} />
@@ -61,4 +73,4 @@ const HomeView = () => {
 }
 
 
-export default HomeView;
+export default ThingView;

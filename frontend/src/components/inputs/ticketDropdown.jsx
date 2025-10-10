@@ -18,7 +18,6 @@ const TicketDropdown = ({ selectedTicketId, setSelectedTicketId, filters }) => {
       optionFilterProp="children"
       error={error}
       onChange={handleChange}
-      loading={loading}
       value={selectedTicketId}
       allowClear
       filterOption={(input, option) =>

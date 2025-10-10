@@ -12,6 +12,8 @@ const ThingTree = ({
 }) => {
   const [keysChanged, setKeysChanged] = useState(false);
   const [createThingModalOpen, setCreateThingModalOpen] = useState(false);
+  const [expandedKeys, setExpandedKeys] = useState([]);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   const {
     data: treeData,
@@ -35,6 +37,13 @@ const ThingTree = ({
     setKeysChanged(true);
     setCheckedThingIds(checkedKeys);
   };
+
+  useEffect(() => {
+    if (!treeDataLoading && initialLoad) {
+      setExpandedKeys(allIds);
+      setInitialLoad(false);
+    }
+  }, [treeDataLoading]);
 
   const onDrop = async (info) => {
     const { dragNode, node: dropNode, dropToGap } = info;
@@ -99,12 +108,12 @@ const ThingTree = ({
         onDrop={onDrop}
         checkedKeys={checkedThingIds}
         onCheck={onCheck}
-        defaultExpandAll={true}
+        expandedKeys={expandedKeys}
+        onExpand={setExpandedKeys}
         selectedKeys={selectedThingId !== null ? [selectedThingId] : []}
         onSelect={onSelect}
         multiple
         error={treeDataError}
-        loading={treeDataLoading}
         treeData={treeData}
         style={{
           flexGrow: 1,

@@ -22,7 +22,6 @@ const TicketDetails = ({ ticket, loading, error, refreshThing: refreshTicket }) 
   // when going to view mode, reset unsaved changes
   useEffect(() => {
     if (mode === "view") {
-      console.log("Resetting unsaved changes");
       // Reset unsaved changes when switching back to view mode
       resetChanges();
     }
@@ -42,7 +41,6 @@ const TicketDetails = ({ ticket, loading, error, refreshThing: refreshTicket }) 
       <Descriptions
         title="Ticket Details"
         column={1}
-        loading={loading}
         error={error}
         extra={
           <ModeButton
@@ -96,7 +94,6 @@ const TicketDetails = ({ ticket, loading, error, refreshThing: refreshTicket }) 
         {mode === "edit" &&
           <Button
             type="primary"
-            loading={updateLoading}
             onClick={() => {
               const updatedThing = {
                 id: ticket.id,
@@ -124,7 +121,6 @@ const ModeButton = ({ mode, setMode }) => {
       setMode("view");
     }
   }
-  console.log("mode in ModeButton:", mode);
   return (
     <Button type="primary" onClick={onClick}>
       {mode === "view" ? "Edit" : "Cancel"}
@@ -139,8 +135,6 @@ const detailsHooks = (thing) => {
   const isChanged = (field) => {
     return unsavedChanges[field] !== undefined;
   }
-
-  console.log("mode is ", mode);
 
   const changeHandler = (field) => {
     if (field === "open") {

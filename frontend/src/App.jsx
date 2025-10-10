@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Flex, Layout, Typography } from 'antd';
 
 const { Header, Content } = Layout;
+import NavBar from './components/navBar';
 import HomeView from './views/home'
-import NavBar from './components/navbar';
+import ThingView from './views/things';
 
 const App = () => {
 
@@ -21,6 +22,8 @@ const App = () => {
           <Content style={{ padding: '0px' }}>
             <Routes>
               <Route path="/" element={<HomeView />} />
+              <Route path="/things" element={<ThingView />} />
+              <Route path="/things/:thingId" element={<ThingView />} />
             </Routes>
           </Content>
         </Layout>
