@@ -18,10 +18,10 @@ const items = [
 
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const item = items.find((i) => i.href === location.pathname);
   const [selectedKey, setSelectedKey] = useState(item ? item.key : 'home');
-  const navigate = useNavigate();
 
   // Effect to update highlight on location change
   useEffect(() => {

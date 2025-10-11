@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const GET_TICKET_URL = "/api/tickets";
 
-const useFetchTicket = () => {
+const useFetchTicket = (ticketId = undefined) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -31,6 +31,13 @@ const useFetchTicket = () => {
       setLoading(false);
     }
   };
+
+  // If ticketId is provided, fetch the ticket immediately
+  useEffect(() => {
+    if (ticketId !== undefined) {
+      getTicket(ticketId);
+    }
+  }, [ticketId]);
 
   return { data, loading, error, getTicket: getTicket };
 };

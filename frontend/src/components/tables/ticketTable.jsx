@@ -1,28 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Table } from "antd";
 import api from "../../api/";
 
 
-const TicketTable = ({ checkedThingIds, selectedThingId }) => {
+const TicketTable = ({ checkedThingIds, selectedThingId, tableMode, onRow, selectedTicketId }) => {
+  // initialize query params for consistency throughout component
   const queryParams = {
     thing_ids: selectedThingId || checkedThingIds,
     include: ["thing", "category"]
   }
-  const { data, loading, error, refetch } = api.useFetchTickets(queryParams);
+  // initialize state
+  const { data, loading, error, refetch } = api.useFetchTickets(queryParams, { lazy: true });
 
+  // set default table mode
+  if (!tableMode) tableMode = "full"; // other option is "compact"
+
+  //helper function
   const doRefetch = () => {
     refetch(queryParams);
   }
 
-
-  console.log("Ticket data: ", data);
-
-  const [tableMode, setTableMode] = useState("full");
-
+  // on mount and when checkedThingIds or selectedThingId changes, refetch data
   useEffect(() => {
-    if (!selectedThingId) {
-      setTableMode("full");
-    }
     doRefetch();
   }, [checkedThingIds, selectedThingId])
 
@@ -34,6 +33,7 @@ const TicketTable = ({ checkedThingIds, selectedThingId }) => {
       columns={getColumns(tableMode)}
       loading={loading}
       error={error}
+      onRow={onRow}
       rowKey="id" />
   )
 }

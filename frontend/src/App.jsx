@@ -24,6 +24,7 @@ const App = () => {
               <Route path="/" element={<HomeView />} />
               <Route path="/things" element={<ThingView />} />
               <Route path="/things/:thingId" element={<ThingView />} />
+              <Route path="/things/:thingId/tickets/:ticketId" element={<ThingView />} />
             </Routes>
           </Content>
         </Layout>

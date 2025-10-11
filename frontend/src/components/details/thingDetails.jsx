@@ -1,4 +1,4 @@
-import { Button, Descriptions, Flex, Input } from "antd"
+import { Button, Card, Descriptions, Flex, Input } from "antd"
 import { useEffect, useState } from "react";
 import ThingDropdown from "../inputs/thingDropdown";
 import api from "../../api/";
@@ -10,117 +10,101 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
     setMode,
     changeHandler,
     getValue,
-    resetChanges
+    resetChanges,
+    updateData,
+    updateLoading,
+    updateError,
+    updateThing
+
   } = detailsHooks(thing);
 
-  const {
-    data: updateData,
-    loading: updateLoading,
-    error: updateError,
-    updateThing
-  } = api.useUpdateThing();
-
-  // when going to view mode, reset unsaved changes
-  useEffect(() => {
-    if (mode === "view") {
-      // Reset unsaved changes when switching back to view mode
-      resetChanges();
-    }
-  }, [mode])
-
-  // when updateData is available, refresh the thing details
-  useEffect(() => {
-    if (updateData) {
-      console.log("Thing updated:", updateData);
-      refreshThing();
-      setMode("view");
-    }
-  }, [updateLoading])
-
   return (
-    <Flex vertical>
-      <Descriptions
-        title="Thing Details"
-        column={1}
-        error={error}
-        extra={
-          <ModeButton
-            mode={mode}
-            setMode={setMode} />
-        }
-        style={{
-          marginTop: '10px',
-          padding: '10px',
-          width: '250px',
-        }}
-        size="small">
-        <Descriptions.Item label="Name">
-          {mode === "view" ?
-            thing?.name :
-            <Input
-              value={getValue("name")}
-              onChange={changeHandler("name")} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="Docs Link">
-          {mode === "view" ?
-            (thing?.docs_link ?
-              <a
-                href={thing?.docs_link}
-                target="_blank"
-                rel="noopener noreferrer">
-                {thing?.docs_link}
-              </a> :
-              'No link') :
-            <Input
-              value={getValue("docs_link")}
-              onChange={changeHandler("docs_link")} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="category">
-          {mode === "view" ?
-            (thing?.category ? thing.category.name : 'No category') :
-            <Input
-              value={getValue("category")}
-              onChange={changeHandler("category")} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="Parent">
-          {mode === "view" ?
-            (thing?.parent ? thing.parent.name : 'No parent') :
-            <ThingDropdown
-              selectedThingId={getValue("parent")}
-              setSelectedThingId={(value) => {
-                const e = { target: { value } };
-                changeHandler("parent")(e);
-              }} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="Description">
-          {mode === "view" ?
-            (thing?.description ? thing.description : 'No description') :
-            <Input.TextArea
-              value={getValue("description")}
-              onChange={changeHandler("description")}
-              autoSize={{ minRows: 3, maxRows: 5 }} />}
-        </Descriptions.Item>
-      </Descriptions>
-      <Flex justify="end">
-        {mode === "edit" &&
-          <Button
-            type="primary"
-            onClick={() => {
-              const updatedThing = {
-                id: thing.id,
-                name: getValue("name"),
-                docs_link: getValue("docs_link"),
-                category: getValue("category"),
-                parent: getValue("parent"),
-                description: getValue("description"),
-              };
-              console.log("Updating thing with data:", updatedThing);
-              updateThing(updatedThing);
-            }}>
-            Save
-          </Button>}
+    <Card
+      title="Thing Details"
+      extra={
+        <ModeButton
+          mode={mode}
+          setMode={setMode} />
+      }
+      style={{
+        marginTop: '10px',
+        padding: '10px',
+        width: '250px',
+      }}
+    >
+      <Flex vertical>
+        <Descriptions
+          column={1}
+          error={error}
+          size="small">
+          <Descriptions.Item label="Name">
+            {mode === "view" ?
+              thing?.name :
+              <Input
+                value={getValue("name")}
+                onChange={changeHandler("name")} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="Docs Link">
+            {mode === "view" ?
+              (thing?.docs_link ?
+                <a
+                  href={thing?.docs_link}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  {thing?.docs_link}
+                </a> :
+                'No link') :
+              <Input
+                value={getValue("docs_link")}
+                onChange={changeHandler("docs_link")} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="category">
+            {mode === "view" ?
+              (thing?.category ? thing.category.name : 'No category') :
+              <Input
+                value={getValue("category")}
+                onChange={changeHandler("category")} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="Parent">
+            {mode === "view" ?
+              (thing?.parent ? thing.parent.name : 'No parent') :
+              <ThingDropdown
+                selectedThingId={getValue("parent")}
+                setSelectedThingId={(value) => {
+                  const e = { target: { value } };
+                  changeHandler("parent")(e);
+                }} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="Description">
+            {mode === "view" ?
+              (thing?.description ? thing.description : 'No description') :
+              <Input.TextArea
+                value={getValue("description")}
+                onChange={changeHandler("description")}
+                autoSize={{ minRows: 3, maxRows: 5 }} />}
+          </Descriptions.Item>
+        </Descriptions>
+        <Flex justify="end">
+          {mode === "edit" &&
+            <Button
+              type="primary"
+              onClick={() => {
+                const updatedThing = {
+                  id: thing.id,
+                  name: getValue("name"),
+                  docs_link: getValue("docs_link"),
+                  category: getValue("category"),
+                  parent: getValue("parent"),
+                  description: getValue("description"),
+                };
+                console.log("Updating thing with data:", updatedThing);
+                updateThing(updatedThing);
+              }}>
+              Save
+            </Button>}
+        </Flex>
       </Flex>
-    </Flex>
+    </Card>
   )
 }
 
@@ -157,6 +141,13 @@ const detailsHooks = (thing) => {
     }
   }
 
+  const {
+    data: updateData,
+    loading: updateLoading,
+    error: updateError,
+    updateThing
+  } = api.useUpdateThing();
+
   const getValue = (field) => {
     return isChanged(field) ? unsavedChanges[field] : thing ? thing[field] : '';
   }
@@ -164,7 +155,35 @@ const detailsHooks = (thing) => {
   const resetChanges = () => {
     setUnsavedChanges({});
   }
-  return { mode, setMode, changeHandler, getValue, resetChanges };
+
+  // when going to view mode, reset unsaved changes
+  useEffect(() => {
+    if (mode === "view") {
+      // Reset unsaved changes when switching back to view mode
+      resetChanges();
+    }
+  }, [mode])
+
+  // when updateData is available, refresh the thing details
+  useEffect(() => {
+    if (updateData) {
+      console.log("Thing updated:", updateData);
+      refreshThing();
+      setMode("view");
+    }
+  }, [updateLoading])
+
+  return {
+    mode,
+    setMode,
+    changeHandler,
+    getValue,
+    resetChanges,
+    updateData,
+    updateLoading,
+    updateError,
+    updateThing
+  };
 }
 
 export default ThingDetails;

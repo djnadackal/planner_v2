@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // url
 const THING_GET_URL = "/api/things";
 
-const useFetchThing = () => {
+const useFetchThing = (thingId = undefined) => {
   // initialize state
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,14 @@ const useFetchThing = () => {
       setLoading(false);
     }
   };
+
+  // if thingId is provided, fetch immediately
+  useEffect(() => {
+    if (thingId !== undefined) {
+      getThing(thingId);
+    }
+  }, []);
+
   // return state and the fetch function
   return { data, loading, error, getThing };
 };

@@ -3,7 +3,10 @@ import useFetchState from "../util/useFetchState";
 
 const TICKETS_URL = "/api/tickets/";
 
-const useFetchTickets = ({ parent_id, include, thing_ids } = {}) => {
+const useFetchTickets = (
+  { parent_id, include, thing_ids } = {},
+  { lazy = false } = {},
+) => {
   const { data, setData, loading, setLoading, error, setError, reset } =
     useFetchState(null);
 
@@ -54,7 +57,9 @@ const useFetchTickets = ({ parent_id, include, thing_ids } = {}) => {
   };
 
   useEffect(() => {
-    fetchData({ parent_id, include, thing_ids });
+    if (!lazy) {
+      fetchData({ parent_id, include, thing_ids });
+    }
   }, []);
 
   return { data, loading, error, refetch: fetchData };
