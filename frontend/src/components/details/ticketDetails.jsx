@@ -113,8 +113,10 @@ const TicketDetails = ({
                     open: true,
                     category_id: getValue("category_id"),
                     description: getValue("description"),
-                    thing_id: thingId
                   };
+                  if (thingId) {
+                    newTicket.thing_id = thingId;
+                  }
                   console.log("Creating ticket with data:", newTicket);
                   createTicket(newTicket);
                 }
@@ -214,6 +216,7 @@ const detailsHooks = (ticket = {}, refreshTicket = () => { }, addMode = false) =
 
   const resetChanges = () => {
     setUnsavedChanges({});
+    refreshTicket();
   }
   return {
     mode,

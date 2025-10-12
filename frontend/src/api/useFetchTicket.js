@@ -8,6 +8,7 @@ const useFetchTicket = (ticketId = undefined) => {
   const [error, setError] = useState(null);
 
   const getTicket = async (ticketId) => {
+    console.log("fetching ticket with id:", ticketId);
     setLoading(true);
     setError(null);
     try {
@@ -34,12 +35,12 @@ const useFetchTicket = (ticketId = undefined) => {
 
   // If ticketId is provided, fetch the ticket immediately
   useEffect(() => {
-    if (ticketId !== undefined) {
+    if (![undefined, null, ""].includes(ticketId)) {
       getTicket(ticketId);
     }
   }, [ticketId]);
 
-  return { data, loading, error, getTicket: getTicket };
+  return { data, loading, error, getTicket };
 };
 
 export default useFetchTicket;

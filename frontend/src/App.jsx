@@ -36,6 +36,7 @@ const App = () => {
           }}>
             <Routes>
               <Route path="/" element={<ThingView />} />
+              <Route path="/tickets/:ticketId" element={<ThingView />} />
               <Route path="/:thingId" element={<ThingView />} />
               <Route path="/:thingId/tickets/:ticketId" element={<ThingView />} />
             </Routes>

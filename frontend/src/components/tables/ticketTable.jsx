@@ -12,26 +12,8 @@ const TicketTable = ({
   beginAddTicket,
   scrollHeight
 }) => {
-  // initialize query params for consistency throughout component
-  const queryParams = {
-    thing_ids: String(selectedThingId) !== 'undefined' ? [selectedThingId] : checkedThingIds ? checkedThingIds : [],
-    include: ["thing", "category"]
-  }
-  // initialize state
-  const { data, loading, error, refetch } = api.useFetchTickets(queryParams, { lazy: true });
 
-  // set default table mode
-  if (!tableMode) tableMode = "full"; // other option is "compact"
-
-  //helper function
-  const doRefetch = () => {
-    refetch(queryParams);
-  }
-
-  // on mount and when checkedThingIds or selectedThingId changes, refetch data
-  useEffect(() => {
-    doRefetch();
-  }, [checkedThingIds, selectedThingId])
+  const { data, loading, error, doRefetch } = useTicketTableHooks(checkedThingIds, selectedThingId, tableMode);
 
   return (
     <Card
@@ -108,6 +90,31 @@ const getColumns = (mode = "full") => {
   columns.push(createdColumn);
   columns.push(updatedColumn);
   return columns;
+}
+
+const useTicketTableHooks = (checkedThingIds, selectedThingId, tableMode) => {
+  // initialize query params for consistency throughout component
+  const queryParams = {
+    thing_ids: selectedThingId ? [selectedThingId] : checkedThingIds ? checkedThingIds : [],
+    include: ["thing", "category"]
+  }
+  console.log("fetching with queryParams:", queryParams);
+  // initialize state
+  const { data, loading, error, refetch } = api.useFetchTickets(queryParams, { lazy: true });
+
+  // set default table mode
+  if (!tableMode) tableMode = "full"; // other option is "compact"
+
+  //helper function
+  const doRefetch = () => {
+    refetch(queryParams);
+  }
+
+  // on mount and when checkedThingIds or selectedThingId changes, refetch data
+  useEffect(() => {
+    doRefetch();
+  }, [checkedThingIds, selectedThingId])
+  return { data, loading, error, doRefetch };
 }
 
 export default TicketTable;
