@@ -1,4 +1,7 @@
 import useCreateThing from "./useCreateThing";
+import useFetchActions from "./useFetchActions";
+import useFetchActionTypes from "./useFetchActionTypes";
+import useFetchComments from "./useFetchComments";
 import useFetchThing from "./useFetchThing";
 import useFetchThingTree from "./useFetchThingTree";
 import useFetchThings from "./useFetchThings";
@@ -11,6 +14,9 @@ import useUpdateTicket from "./useUpdateTicket";
 
 const api = {
   useCreateThing,
+  useFetchActions,
+  useFetchActionTypes,
+  useFetchComments,
   useFetchThing,
   useFetchThingTree,
   useFetchThings,

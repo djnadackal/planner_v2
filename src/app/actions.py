@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, Query, status
 
 from ..db import Controller
 
+from .action_types import router as action_types_router
+
 
 Action = Controller.Tables.Action
 ActionParams = Controller.Params.Action
@@ -65,3 +67,6 @@ async def delete_action(action_id: int):
         return {"message": "Action deleted"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+router.include_router(action_types_router)

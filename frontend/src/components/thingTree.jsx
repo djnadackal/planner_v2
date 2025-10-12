@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Flex, Tree } from 'antd';
 import NewThingModal from '../components/newThingModel';
 import api from '../api/';
+import { useParams } from 'react-router-dom';
 
 
 const ThingTree = ({
@@ -15,6 +16,7 @@ const ThingTree = ({
   const [createThingModalOpen, setCreateThingModalOpen] = useState(false);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [initialLoad, setInitialLoad] = useState(true);
+  const { thingId } = useParams();
 
   const {
     data: treeData,
@@ -79,6 +81,8 @@ const ThingTree = ({
     setSelectedThingId(newSelectedThingId);
   }
 
+  console.log("thing id from params:", thingId);
+
   return (<>
     <Flex
       vertical
@@ -111,7 +115,7 @@ const ThingTree = ({
         onCheck={onCheck}
         expandedKeys={expandedKeys}
         onExpand={setExpandedKeys}
-        selectedKeys={selectedThingId !== null ? [selectedThingId] : []}
+        selectedKeys={thingId !== null ? [Number(thingId)] : []}
         onSelect={onSelect}
         multiple
         error={treeDataError}

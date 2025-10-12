@@ -24,6 +24,8 @@
 - [ ] make it so that the thing tree starts with everything checked and expanded
 - [ ] make it so that the table responds to the checking of the tree
 - [ ] fix the way that dbcore attaches the logger
+- [ ] thing not highlighting on the tree
+- [ ] selected ticket not highlighting on the table
 
 
 ## USAGE
@@ -38,3 +40,10 @@
 - [ ] ugh there should be a frontend too. I guess try to make it with a react project
   - [ ] keep it no more complicated than topperud-todos
   - [ ] should be able to see a list of all things, and click each to see its tickets
+
+
+## FUTURE
+
+ - [ ] add pictures
+ - [ ] make ios app
+
