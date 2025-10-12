@@ -2,6 +2,7 @@ import { Button, Card, Descriptions, Flex, Input } from "antd"
 import { useEffect, useState } from "react";
 import ThingDropdown from "../inputs/thingDropdown";
 import api from "../../api/";
+import ThingCategoryDropdown from "../inputs/thingCategoryDropdown";
 
 
 const ThingDetails = ({ thing, loading, error, refreshThing }) => {
@@ -60,19 +61,22 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
           </Descriptions.Item>
           <Descriptions.Item label="category">
             {mode === "view" ?
-              (thing?.category ? thing.category.name : 'No category') :
-              <Input
-                value={getValue("category")}
-                onChange={changeHandler("category")} />}
+              (thing?.category ? thing.category.name : 'Uncategorized') :
+              <ThingCategoryDropdown
+                selectedThingCategoryId={getValue("category_id")}
+                setSelectedThingCategoryId={(value) => {
+                  const e = { target: { value } };
+                  changeHandler("category_id")(e);
+                }} />}
           </Descriptions.Item>
           <Descriptions.Item label="Parent">
             {mode === "view" ?
               (thing?.parent ? thing.parent.name : 'No parent') :
               <ThingDropdown
-                selectedThingId={getValue("parent")}
+                selectedThingId={getValue("parent_id")}
                 setSelectedThingId={(value) => {
                   const e = { target: { value } };
-                  changeHandler("parent")(e);
+                  changeHandler("parent_id")(e);
                 }} />}
           </Descriptions.Item>
           <Descriptions.Item label="Description">

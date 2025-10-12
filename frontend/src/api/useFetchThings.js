@@ -7,7 +7,7 @@ const useFetchThings = ({ parent_id, include } = {}) => {
   const { data, setData, loading, setLoading, error, setError, reset } =
     useFetchState(null);
 
-  const fetchData = async ({ parent_id, include }) => {
+  const fetchData = async ({ parent_id, include } = {}) => {
     // reset state
     reset();
     // build url

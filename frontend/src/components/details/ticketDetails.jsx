@@ -1,6 +1,8 @@
 import { Button, Card, Checkbox, Descriptions, Flex, Input } from "antd"
 import { useEffect, useState } from "react";
 import api from "../../api/";
+import TicketCategoryDropdown from "../inputs/ticketCategoryDropdown";
+import TicketDropdown from "../inputs/ticketDropdown";
 
 
 const TicketDetails = ({ ticket, loading, error, refreshTicket }) => {
@@ -28,7 +30,8 @@ const TicketDetails = ({ ticket, loading, error, refreshTicket }) => {
       style={{
         marginTop: '10px',
         padding: '10px',
-        width: '250px',
+        width: '350px',
+        marginBottom: '10px',
       }}
     >
       <Flex vertical>
@@ -52,17 +55,23 @@ const TicketDetails = ({ ticket, loading, error, refreshTicket }) => {
           </Descriptions.Item>
           <Descriptions.Item label="category">
             {mode === "view" ?
-              (ticket?.category ? ticket.category.name : 'No category') :
-              <Input
-                value={getValue("category")}
-                onChange={changeHandler("category")} />}
+              (ticket?.category ? ticket.category.name : 'Uncategorized') :
+              <TicketCategoryDropdown
+                selectedTicketCategoryId={getValue("category_id")}
+                setSelectedTicketCategoryId={(value) => {
+                  const e = { target: { value } };
+                  changeHandler("category_id")(e);
+                }} />}
           </Descriptions.Item>
           <Descriptions.Item label="Parent">
             {mode === "view" ?
               (ticket?.parent ? ticket.parent.name : 'No parent') :
-              <Input
-                value={getValue("parent")}
-                onChange={changeHandler("parent")} />}
+              <TicketDropdown
+                selectedTicketId={getValue("parent_id")}
+                setSelectedTicketId={(value) => {
+                  const e = { target: { value } };
+                  changeHandler("parent_id")(e);
+                }} />}
           </Descriptions.Item>
           <Descriptions.Item label="Description">
             {mode === "view" ?
