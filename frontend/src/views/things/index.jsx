@@ -79,6 +79,7 @@ const ThingView = () => {
             ticket={beginAddTicket ? {} : ticketData}
             loading={ticketLoading}
             error={ticketError}
+            thingId={thingId}
             refreshTicket={fetchTicket} />}
         </Flex>
         {ticketId && <Flex
@@ -139,8 +140,12 @@ const useThingViewHooks = () => {
   }
 
   useEffect(() => {
-    fetchThing();
-  }, [selectedThingId]);
+    if (thingId) fetchThing();
+  }, [selectedThingId, thingId]);
+
+  useEffect(() => {
+    if (ticketId) fetchTicket()
+  }, [selectedTicketId, ticketId])
 
   // Effect to handle route params
   useEffect(() => {

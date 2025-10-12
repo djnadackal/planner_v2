@@ -11,6 +11,7 @@ const TicketDetails = ({
   error,
   refreshTicket,
   addMode = false,
+  thingId
 }) => {
   const {
     mode,
@@ -44,7 +45,7 @@ const TicketDetails = ({
         marginBottom: '10px',
       }}
     >
-      <Flex vertical>
+      <Flex vertical gap="10px">
         <Descriptions
           column={1}
           error={error}
@@ -93,20 +94,30 @@ const TicketDetails = ({
           </Descriptions.Item>
         </Descriptions>
         <Flex justify="end">
-          {mode === "edit" &&
+          {mode !== "view" &&
             <Button
               type="primary"
               onClick={() => {
-                const updatedThing = {
-                  id: ticket.id,
-                  name: getValue("name"),
-                  docs_link: getValue("docs_link"),
-                  category: getValue("category"),
-                  parent: getValue("parent"),
-                  description: getValue("description"),
-                };
-                console.log("Updating thing with data:", updatedThing);
-                updateThing(updatedThing);
+                if (mode === 'edit') {
+                  const updatedTicket = {
+                    id: ticket.id,
+                    title: getValue("title"),
+                    category_id: getValue("category_id"),
+                    description: getValue("description"),
+                  };
+                  console.log("Updating thing with data:", updatedTicket);
+                  updateThing(updatedTicket);
+                } else if (mode === 'add') {
+                  const newTicket = {
+                    title: getValue("title"),
+                    open: true,
+                    category_id: getValue("category_id"),
+                    description: getValue("description"),
+                    thing_id: thingId
+                  };
+                  console.log("Creating ticket with data:", newTicket);
+                  createTicket(newTicket);
+                }
               }}>
               Save
             </Button>}

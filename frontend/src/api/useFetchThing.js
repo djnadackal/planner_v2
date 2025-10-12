@@ -44,7 +44,7 @@ const useFetchThing = (thingId = undefined) => {
 
   // if thingId is provided, fetch immediately
   useEffect(() => {
-    if (thingId !== undefined) {
+    if (String(thingId) !== "undefined") {
       getThing(thingId);
     }
   }, []);
