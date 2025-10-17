@@ -19,7 +19,7 @@ def from_row(cls, **row) -> Ticket:
 
         ticket.thing = Thing(
             id=row["thing_id"],
-            name=row.get("thing_name", ""),
+            name=row.get("thing_name") or "No Thing",
             description=row.get("thing_description", None),
             docs_link=row.get("thing_docs_link", None),
             parent_id=row.get("thing_parent_id", None),

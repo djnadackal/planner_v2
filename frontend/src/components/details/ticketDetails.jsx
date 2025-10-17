@@ -153,7 +153,7 @@ const detailsHooks = (ticket = {}, refreshTicket = () => { }, addMode = false) =
     data: updateData,
     loading: updateLoading,
     error: updateError,
-    updateThing
+    updateTicket
   } = api.useUpdateTicket();
 
   const {
@@ -227,7 +227,7 @@ const detailsHooks = (ticket = {}, refreshTicket = () => { }, addMode = false) =
     updateData,
     updateLoading,
     updateError,
-    updateThing,
+    updateThing: updateTicket,
     createData,
     createLoading,
     createError,
