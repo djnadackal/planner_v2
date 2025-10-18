@@ -47,6 +47,7 @@ async def update_thing(thing_id: int, thing: Thing):
     """
     logger.info(f"Updating Thing ID {thing_id} with data: {thing}")
     thing.id = thing_id
+    print(f"Updating Thing: {thing}")
     try:
         thing.update()
         return {"message": "Thing updated", "thing": thing.model_dump()}

@@ -10,6 +10,7 @@ const useUpdateThing = () => {
   const updateThing = async (thing) => {
     setLoading(true);
     setError(null);
+    console.log("Updating thing with data:", thing);
     try {
       const response = await fetch(THING_UPDATE_URL + "/" + thing.id, {
         method: "PUT",

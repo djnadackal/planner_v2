@@ -17,7 +17,9 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
     updateError,
     updateThing
 
-  } = detailsHooks(thing);
+  } = detailsHooks(thing, refreshThing);
+
+  console.log("Category id:", getValue("category_id"));
 
   return (
     <Card
@@ -66,6 +68,7 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
                 selectedThingCategoryId={getValue("category_id")}
                 setSelectedThingCategoryId={(value) => {
                   const e = { target: { value } };
+                  console.log('Setting category_id to', value);
                   changeHandler("category_id")(e);
                 }} />}
           </Descriptions.Item>
@@ -97,7 +100,7 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
                   id: thing.id,
                   name: getValue("name"),
                   docs_link: getValue("docs_link"),
-                  category: getValue("category"),
+                  category_id: getValue("category_id"),
                   parent: getValue("parent"),
                   description: getValue("description"),
                 };
@@ -127,7 +130,7 @@ const ModeButton = ({ mode, setMode }) => {
   )
 }
 
-const detailsHooks = (thing) => {
+const detailsHooks = (thing, refreshThing) => {
   const [mode, setMode] = useState("view"); // "view" or "edit"
   const [unsavedChanges, setUnsavedChanges] = useState({});
 

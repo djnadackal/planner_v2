@@ -45,7 +45,7 @@ const ThingView = () => {
         setCheckedThingIds={setCheckedThingIds}
         selectedThingId={selectedThingId}
         setSelectedThingId={selectThing} />
-      <Flex gap="10px" style={{ height: '100%', minHeight: 0 }} wrap>
+      <Flex gap="10px" style={{ height: '100%', minHeight: 0, overflowX: 'auto' }}>
         {selectedThingId && <>
           <Flex vertical gap="10px">
             <ThingDetails
