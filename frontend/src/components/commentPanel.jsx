@@ -16,7 +16,7 @@ const CommentPanel = ({ ticketId }) => {
   const [newCommentText, setNewCommentText] = useState("");
 
   return (
-    <Card title="Comments" style={{ height: '325px' }}>
+    <Card title="Comments" style={{ height: '325px', width: '500px' }}>
       <Flex vertical justify="space-between">
         <Flex vertical style={{ overflowY: 'auto', flex: 1 }}>
           <Table

@@ -126,7 +126,6 @@ const useThingViewHooks = () => {
     error: ticketError,
     getTicket
   } = useApi.ticket.fetchOne(selectedTicketId);
-  console.log("ticketData:", ticketData)
 
   // helpers for fetching data
   const fetchThing = () => {
@@ -135,7 +134,6 @@ const useThingViewHooks = () => {
     }
   }
   const fetchTicket = () => {
-    console.log("fetch ticket called")
     if (selectedTicketId) {
       getTicket(selectedTicketId);
     }
@@ -181,11 +179,21 @@ const useThingViewHooks = () => {
   const navToTicket = (record) => {
     return {
       onClick: () => {
-        setSelectedTicketId(record.id)
-        if (thingId) {
-          navigate(`/${thingId}/tickets/${record.id}`)
+        if (record.id !== selectedTicketId) {
+          setSelectedTicketId(record.id)
+          if (thingId) {
+            navigate(`/${thingId}/tickets/${record.id}`)
+          } else {
+            navigate(`/tickets/${record.id}`)
+          }
         } else {
-          navigate(`/tickets/${record.id}`)
+          // Clicking the same ticket deselects it
+          setSelectedTicketId(null);
+          if (thingId) {
+            navigate(`/${thingId}`);
+          } else {
+            navigate(`/`);
+          }
         }
       }
     }

@@ -12,7 +12,6 @@ const ThingTree = ({
   setSelectedThingId,
   rorderable
 }) => {
-  const [keysChanged, setKeysChanged] = useState(false);
   const [createThingModalOpen, setCreateThingModalOpen] = useState(false);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [initialLoad, setInitialLoad] = useState(true);
@@ -31,7 +30,6 @@ const ThingTree = ({
   } = useApi.thing.update();
 
   const onCheck = (checkedKeys) => {
-    setKeysChanged(true);
     setCheckedThingIds(checkedKeys);
   };
 
@@ -91,7 +89,6 @@ const ThingTree = ({
             onClick={() => {
               setCheckedThingIds([]);
               setSelectedThingId(null);
-              setKeysChanged(true);
             }}>
             Clear Selection
           </Button>

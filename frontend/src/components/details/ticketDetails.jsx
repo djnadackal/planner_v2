@@ -137,7 +137,6 @@ const ModeButton = ({ mode, setMode }) => {
       setMode("view");
     }
   }
-  console.log("mode in ModeButton:", mode);
   return (
     <Button type="primary" onClick={onClick}>
       {mode === "view" ? "Edit" : "Cancel"}
@@ -171,17 +170,14 @@ const detailsHooks = (ticket = {}, refreshTicket = () => { }, addMode = false) =
     }
   }, [mode])
 
-  console.log("addMode in detailsHooks:", addMode);
 
   useEffect(() => {
-    console.log("effect triggering")
     setMode(addMode ? "add" : "view");
   }, [addMode])
 
   // when updateData is available, refresh the ticket details
   useEffect(() => {
     if (updateData) {
-      console.log("Ticket updated:", updateData);
       refreshTicket();
       setMode("view");
     }

@@ -1,10 +1,11 @@
 from .base import Action
 
 
-def from_row(**row) -> Action:
-    action = Action(
+def from_row(cls, **row) -> Action:
+    action = cls(
         id=row["id"],
         ticket_id=row["ticket_id"],
+        action_text=row["action_text"],
         action_type_id=row["action_type_id"],
         performed_at=row["performed_at"],
     )
@@ -24,7 +25,7 @@ def from_row(**row) -> Action:
             completed_at=row.get("ticket_completed_at", None),
         )
     if "action_type_name" in row.keys():
-        from ..action_types import ActionType
+        from ..categories import ActionType
 
         action.action_type = ActionType(
             id=row["action_type_id"],

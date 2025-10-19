@@ -26,15 +26,12 @@ const useFetchTickets = (
 
     // set the thing_ids param if provided
     if (thing_ids) {
-      console.log("thing_ids param provided:", thing_ids);
       if (Array.isArray(thing_ids)) {
         thing_ids.forEach((id) => url.searchParams.append("thing_ids", id));
       } else {
         url.searchParams.append("thing_ids", thing_ids);
       }
     }
-
-    console.log("Built URL:", url.toString());
 
     return url;
   };

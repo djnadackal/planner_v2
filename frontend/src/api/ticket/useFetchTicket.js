@@ -8,7 +8,6 @@ const useFetchTicket = (ticketId = undefined) => {
   const [error, setError] = useState(null);
 
   const getTicket = async (ticketId) => {
-    console.log("fetching ticket with id:", ticketId);
     setLoading(true);
     setError(null);
     try {
@@ -22,7 +21,6 @@ const useFetchTicket = (ticketId = undefined) => {
         throw new Error(`HTTP error on get ticket! status: ${response.status}`);
       }
       const result = await response.json();
-      console.log("Fetched ticket:", result);
       setData(result);
       return result;
     } catch (err) {

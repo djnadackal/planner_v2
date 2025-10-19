@@ -1,9 +1,8 @@
 import { Select } from "antd";
-import { useEffect } from "react";
 import useApi from "../../api/";
 
 const ActionTypeDropdown = ({ selectedActionTypeId, setSelectedActionTypeId }) => {
-  const { data, loading, error, refetch } = useApi.action.fetchMany();
+  const { data, loading, error, refetch } = useApi.action.fetchTypes();
 
   const handleChange = (value) => {
     console.log("value selected in ActionTepeDropdown:", value);
@@ -13,7 +12,7 @@ const ActionTypeDropdown = ({ selectedActionTypeId, setSelectedActionTypeId }) =
   return (
     <Select
       showSearch
-      style={{ width: 200 }}
+      style={{ width: 150 }}
       placeholder="Select a type"
       optionFilterProp="children"
       error={error}
@@ -23,9 +22,9 @@ const ActionTypeDropdown = ({ selectedActionTypeId, setSelectedActionTypeId }) =
       filterOption={(input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
       }
-      options={data ? data.map(ticketCategory => ({
-        label: ticketCategory.name,
-        value: ticketCategory.id
+      options={data ? data.map(actionType => ({
+        label: actionType.name,
+        value: actionType.id
       })) : []}
     />
   );

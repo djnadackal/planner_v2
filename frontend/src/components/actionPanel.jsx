@@ -6,12 +6,19 @@ import { formatDate } from "../util/formatting";
 
 
 const ActionPanel = ({ ticketId }) => {
-  const { data, loading, error, refetch } = useApi.action.fetchMany({ ticket_id: ticketId });
+  const { data, loading, error, refetch } = useApi.action.fetchMany({ ticket_id: ticketId, include: 'action_type' });
+  const {
+    data: createData,
+    loading: createLoading,
+    error: createError,
+    create: createAction
+  } = useApi.action.create();
+
   const [newActionText, setNewActionText] = useState("");
   const [newActionTypeId, setNewActionTypeId] = useState(null);
 
   return (
-    <Card title="Actions" style={{ height: '325px' }}>
+    <Card title="Actions" style={{ height: '325px', width: '500px' }}>
       <Flex vertical justify="space-between">
         <Flex vertical style={{ overflowY: 'auto', flex: 1 }}>
           <Table
@@ -22,19 +29,19 @@ const ActionPanel = ({ ticketId }) => {
             columns={[
               {
                 title: 'Time',
-                dataIndex: 'created_at',
-                key: 'created_at',
+                dataIndex: 'performed_at',
+                key: 'performed_at',
                 render: formatDate
               },
               {
                 title: 'Type',
-                dataIndex: 'type',
-                key: 'type',
+                dataIndex: ['action_type', 'name'],
+                key: 'action_type',
               },
               {
                 title: 'Action',
-                dataIndex: 'content',
-                key: 'content',
+                dataIndex: 'action_text',
+                key: 'action_text',
               },
             ]}
             pagination={false} />
@@ -52,7 +59,7 @@ const ActionPanel = ({ ticketId }) => {
               style={{ marginTop: '10px' }}
               onClick={async () => {
                 if (newActionText.trim() === "") return;
-                await useApi.action.create({ ticket_id: ticketId, content: newActionText });
+                await createAction({ ticket_id: ticketId, action_text: newActionText, action_type_id: newActionTypeId });
                 setNewActionText("");
                 refetch({ ticket_id: ticketId });
               }} >
