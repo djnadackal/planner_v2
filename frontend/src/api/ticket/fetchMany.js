@@ -9,7 +9,7 @@ const useFetchTickets = (
   { lazy = false } = {},
 ) => {
   const urlBuilder = (url, params) => {
-    const { parent_id, include, thing_ids } = params;
+    const { parent_id, include, thing_ids, open } = params;
     if (parent_id !== undefined) {
       url.searchParams.append("parent_id", parent_id);
     }
@@ -31,6 +31,11 @@ const useFetchTickets = (
       } else {
         url.searchParams.append("thing_ids", thing_ids);
       }
+    }
+
+    // set the filter for open tickets only
+    if (open !== undefined) {
+      url.searchParams.append("open", open);
     }
 
     return url;

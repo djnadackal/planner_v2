@@ -104,6 +104,7 @@ const TicketDetails = ({
                     title: getValue("title"),
                     category_id: getValue("category_id"),
                     description: getValue("description"),
+                    open: getValue("open"),
                   };
                   console.log("Updating thing with data:", updatedTicket);
                   updateThing(updatedTicket);
