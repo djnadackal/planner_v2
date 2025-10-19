@@ -30,12 +30,6 @@ const ThingTree = ({
     updateThing
   } = useApi.thing.update();
 
-  useEffect(() => {
-    if (allIds?.length > 0 && checkedThingIds?.length === 0 && !keysChanged) {
-      setCheckedThingIds(allIds);
-    }
-  }, [allIds]);
-
   const onCheck = (checkedKeys) => {
     setKeysChanged(true);
     setCheckedThingIds(checkedKeys);

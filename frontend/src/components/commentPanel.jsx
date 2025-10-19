@@ -6,6 +6,13 @@ import { formatDate } from "../util/formatting";
 
 const CommentPanel = ({ ticketId }) => {
   const { data, loading, error, refetch } = useApi.comment.fetchMany({ ticket_id: ticketId });
+  const {
+    data: createData,
+    loading: createLoading,
+    error: createError,
+    create: createComment
+  } = useApi.comment.create();
+
   const [newCommentText, setNewCommentText] = useState("");
 
   return (
@@ -44,7 +51,7 @@ const CommentPanel = ({ ticketId }) => {
             style={{ marginTop: '10px' }}
             onClick={async () => {
               if (newCommentText.trim() === "") return;
-              await useApi.comment.create({ ticket_id: ticketId, content: newCommentText });
+              await createComment({ ticket_id: ticketId, content: newCommentText });
               setNewCommentText("");
               refetch({ ticket_id: ticketId });
             }} >

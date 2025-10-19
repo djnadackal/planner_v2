@@ -98,7 +98,6 @@ const useTicketTableHooks = (checkedThingIds, selectedThingId, tableMode) => {
     thing_ids: selectedThingId ? [selectedThingId] : checkedThingIds ? checkedThingIds : [],
     include: ["thing", "category"]
   }
-  console.log("fetching with queryParams:", queryParams);
   // initialize state
   const { data, loading, error, refetch } = useApi.ticket.fetchMany(queryParams, { lazy: true });
 

@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import useFetchState from "../../util/useFetchState";
+import apiUtils from "../util";
+
+const { useFetch } = apiUtils;
 
 const TICKETS_URL = "/api/tickets/";
 
@@ -7,15 +8,8 @@ const useFetchTickets = (
   { parent_id, include, thing_ids } = {},
   { lazy = false } = {},
 ) => {
-  const { data, setData, loading, setLoading, error, setError, reset } =
-    useFetchState(null);
-
-  const fetchData = async ({ parent_id, include, thing_ids } = {}) => {
-    // reset state
-    reset();
-    // build url
-    const url = new URL(TICKETS_URL, window.location.origin);
-    // set the parent_id param if provided
+  const urlBuilder = (url, params) => {
+    const { parent_id, include, thing_ids } = params;
     if (parent_id !== undefined) {
       url.searchParams.append("parent_id", parent_id);
     }
@@ -32,6 +26,7 @@ const useFetchTickets = (
 
     // set the thing_ids param if provided
     if (thing_ids) {
+      console.log("thing_ids param provided:", thing_ids);
       if (Array.isArray(thing_ids)) {
         thing_ids.forEach((id) => url.searchParams.append("thing_ids", id));
       } else {
@@ -39,28 +34,17 @@ const useFetchTickets = (
       }
     }
 
-    // fetch data, manage state
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(
-          `HTTP error on fetch tree view! status: ${response.status}`,
-        );
-      }
-      const result = await response.json();
-      setData(result);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    console.log("Built URL:", url.toString());
+
+    return url;
   };
 
-  useEffect(() => {
-    if (!lazy) {
-      fetchData({ parent_id, include, thing_ids });
-    }
-  }, []);
+  const { data, loading, error, fetchData } = useFetch(
+    TICKETS_URL,
+    urlBuilder,
+    { parent_id, include, thing_ids },
+    { lazy },
+  );
 
   return { data, loading, error, refetch: fetchData };
 };
