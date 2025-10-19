@@ -1,44 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const TICKET_CREATE_URL = "/api/tickets";
-
-const useCreateTicket = () => {
+const useFetchOne = (url, itemId = undefined, { lazy = false } = {}) => {
   // initialize state
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // fetch function
-  const createTicket = async ({
-    title,
-    description,
-    thing_id,
-    category_id,
-    parent_id,
-  }) => {
+  const fetchOne = async (itemId) => {
     // reset state
     setLoading(true);
     setError(null);
     try {
       // actual fetch
-      const response = await fetch(TICKET_CREATE_URL, {
-        method: "POST",
+      const response = await fetch(url + "/" + itemId, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title,
-          description,
-          thing_id,
-          category_id,
-          parent_id,
-        }),
       });
       // handle non-2xx status
       if (!response.ok) {
-        throw new Error(
-          `HTTP error on create ticket! status: ${response.status}`,
-        );
+        throw new Error(`HTTP error on fetch one! status: ${response.status}`);
       }
       // parse JSON response
       const result = await response.json();
@@ -55,8 +38,16 @@ const useCreateTicket = () => {
       setLoading(false);
     }
   };
+
+  // if thingId is provided, fetch immediately
+  useEffect(() => {
+    if (itemId && !lazy) {
+      fetchOne(itemId);
+    }
+  }, []);
+
   // return state and the fetch function
-  return { data, loading, error, createTicket };
+  return { data, loading, error, fetchOne };
 };
 
-export default useCreateTicket;
+export default useFetchOne;

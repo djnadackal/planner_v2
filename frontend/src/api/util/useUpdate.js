@@ -1,30 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// url
-const THING_GET_URL = "/api/things";
-
-const useFetchThing = (thingId = undefined) => {
+const useUpdate = (url) => {
   // initialize state
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // fetch function
-  const getThing = async (thingId) => {
+  const update = async (data) => {
     // reset state
     setLoading(true);
     setError(null);
     try {
       // actual fetch
-      const response = await fetch(THING_GET_URL + "/" + thingId, {
-        method: "GET",
+      const response = await fetch(url + "/" + data.id, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
       });
       // handle non-2xx status
       if (!response.ok) {
-        throw new Error(`HTTP error on get thing! status: ${response.status}`);
+        throw new Error(`HTTP error on update! status: ${response.status}`);
       }
       // parse JSON response
       const result = await response.json();
@@ -41,16 +39,8 @@ const useFetchThing = (thingId = undefined) => {
       setLoading(false);
     }
   };
-
-  // if thingId is provided, fetch immediately
-  useEffect(() => {
-    if (thingId) {
-      getThing(thingId);
-    }
-  }, []);
-
   // return state and the fetch function
-  return { data, loading, error, getThing };
+  return { data, loading, error, update };
 };
 
-export default useFetchThing;
+export default useUpdate;

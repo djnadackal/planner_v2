@@ -22,9 +22,7 @@ const useCreate = (url) => {
       });
       // handle non-2xx status
       if (!response.ok) {
-        throw new Error(
-          `HTTP error on create ticket! status: ${response.status}`,
-        );
+        throw new Error(`HTTP error on create! status: ${response.status}`);
       }
       // parse JSON response
       const result = await response.json();

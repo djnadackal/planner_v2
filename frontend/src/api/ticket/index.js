@@ -1,8 +1,8 @@
-import useCreateTicket from "./useCreateTicket";
-import useFetchTicket from "./useFetchTicket";
-import useFetchTickets from "./useFetchTickets";
-import useFetchTicketCategories from "./useFetchTicketCategories";
-import useUpdateTicket from "./useUpdateTicket";
+import useCreateTicket from "./create";
+import useFetchTicket from "./fetchOne";
+import useFetchTickets from "./fetchMany";
+import useFetchTicketCategories from "./fetchCategories";
+import useUpdateTicket from "./update";
 
 const ticketApi = {
   create: useCreateTicket,

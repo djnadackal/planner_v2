@@ -1,6 +1,6 @@
-import useCreateAction from "./useCreateAction";
-import useFetchActions from "./useFetchActions";
-import useFetchActionTypes from "./useFetchActionTypes";
+import useCreateAction from "./create";
+import useFetchActions from "./fetchMany";
+import useFetchActionTypes from "./fetchTypes";
 
 const actionApi = {
   create: useCreateAction,

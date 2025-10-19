@@ -1,4 +1,4 @@
-import apiUtils from "../util/";
+import apiUtils from "../util";
 
 const { useFetch } = apiUtils;
 
@@ -32,8 +32,6 @@ const useFetchActions = (
     { ticket_id, include },
     { lazy },
   );
-
-  console.log("fetched actions data:", data);
 
   return { data, loading, error, refetch: fetchData };
 };

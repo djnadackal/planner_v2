@@ -1,5 +1,5 @@
-import useFetchComments from "./useFetchComments";
-import useCreateComment from "./useCreateComment";
+import useFetchComments from "./fetchMany";
+import useCreateComment from "./create";
 
 const commentsApi = {
   create: useCreateComment,

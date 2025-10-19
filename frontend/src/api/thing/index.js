@@ -1,9 +1,9 @@
-import useCreateThing from "./useCreateThing";
-import useFetchThing from "./useFetchThing";
-import useFetchThingTree from "./useFetchThingTree";
-import useFetchThings from "./useFetchThings";
-import useFetchThingCategories from "./useFetchThingCategories";
-import useUpdateThing from "./useUpdateThing";
+import useCreateThing from "./create";
+import useFetchThing from "./fetchOne";
+import useFetchThingTree from "./fetchTree";
+import useFetchThings from "./fetchMany";
+import useFetchThingCategories from "./fetchCategories";
+import useUpdateThing from "./update";
 
 const thingApi = {
   create: useCreateThing,
