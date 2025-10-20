@@ -19,6 +19,8 @@ setattr(Ticket, "from_row", as_classmethod(from_row))
 setattr(Ticket, "get_by_id", as_staticmethod(get_by_id))
 setattr(Ticket, "read", as_staticmethod(read))
 setattr(Ticket, "delete", as_staticmethod(delete))
+Ticket.__params_class__ = TicketParams
+Ticket.__table_name__ = "tickets"
 
 
 __all__ = ["Ticket", "TicketParams"]

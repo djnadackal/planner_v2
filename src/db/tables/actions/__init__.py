@@ -17,6 +17,8 @@ setattr(Action, "read", as_staticmethod(read_actions))
 setattr(Action, "update", update)
 setattr(Action, "delete", as_staticmethod(delete))
 setattr(Action, "from_row", as_classmethod(from_row))
+Action.__params_class__ = ActionParams
+Action.__table_name__ = "actions"
 
 
 __all__ = ["Action", "ActionParams"]

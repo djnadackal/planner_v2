@@ -4,6 +4,9 @@ from pydantic import BaseModel
 
 
 class TableModel(BaseModel):
+    __table_name__: str = ""  # to be set in subclasses
+    __params_class__: Optional[BaseModel] = None  # to be set in subclasses
+
     def create(self) -> int:
         raise NotImplementedError("Create method not implemented")
 

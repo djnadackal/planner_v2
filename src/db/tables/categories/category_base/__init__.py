@@ -22,6 +22,7 @@ setattr(Category, "update", as_classmethod(update))
 setattr(Category, "get_by_id", as_classmethod(get_by_id))
 setattr(Category, "read", as_classmethod(read))
 setattr(Category, "delete", as_classmethod(delete))
+Category.__params_class__ = CategoryParams
 
 
 __all__ = ["Category", "CategoryParams"]

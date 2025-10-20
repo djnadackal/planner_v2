@@ -20,6 +20,8 @@ setattr(Thing, "get_by_id", as_staticmethod(get_by_id))
 setattr(Thing, "read", as_staticmethod(read))
 setattr(Thing, "delete", as_staticmethod(delete))
 setattr(Thing, "from_row", as_classmethod(from_row))
+Thing.__params_class__ = ThingParams
+Thing.__table_name__ = "things"
 
 
 __all__ = ["Thing", "ThingParams"]

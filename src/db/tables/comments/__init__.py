@@ -14,6 +14,8 @@ setattr(Comment, "get_by_id", as_staticmethod(get_by_id))
 setattr(Comment, "read", as_staticmethod(read))
 setattr(Comment, "update", update)
 setattr(Comment, "delete", as_staticmethod(delete))
+Comment.__params_class__ = CommentParams
+Comment.__table_name__ = "comments"
 
 
 __all__ = ["Comment", "CommentParams"]

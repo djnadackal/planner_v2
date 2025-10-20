@@ -8,7 +8,6 @@ from ...table_model import TableModel
 
 class Category(TableModel):
     # config
-    __table_name__ = "categories"
     __category_model__ = "Category"
     __logger__ = logging.getLogger(__name__)
     # fields
