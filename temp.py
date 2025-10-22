@@ -1,7 +1,16 @@
 import src
 
 Ticket = src.Controller.Tables.Ticket
+TicketParams = src.Controller.Params.Ticket
+QueryBuilder = src.Controller.QueryBuilder
 
-t = Ticket.get_by_id(8)
+params = TicketParams(
+    thing_ids=[1, 2, 3],
+    category_id=5,
+    open=True,
+)
 
-print(t)
+builder = QueryBuilder(Ticket, params)
+builder.build_full()
+print(builder.query)
+print(builder.args)

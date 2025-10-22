@@ -1,33 +1,48 @@
-from typing import TYPE_CHECKING
+from typing import Optional, Type
 import logging
+
+from .query_params import QueryParams
+from .table_model import TableModel
 
 
 logger = logging.getLogger(__name__)
 
 
-if TYPE_CHECKING:
-    from .table_model import TableModel
-
-
 class QueryBuilder:
     """A class initialized with a table model that dynamically builds SQL queries."""
 
-    def __init__(self, table_model: TableModel):
+    def __init__(
+        self,
+        table_model: Type[TableModel],
+        query_params: Optional[QueryParams] = None,
+    ):
         self.table_model = table_model
+        self.query_params = query_params
         self.select: list[str] = []
         self.join: list[str] = []
         self.where: list[str] = []
+        self.pagination: str = ""
+        self.args: list = []
+
+    def build_full(self) -> None:
+        """Builds the SQL query components."""
+        self.add_full_select()
+        self.add_join()
+        self.add_where()
 
     @property
     def query(self) -> str:
         """Constructs the full SQL query."""
         query = "SELECT "
         query += ", ".join(self.select) if self.select else "*"
-        query += f" FROM {self.table_model.__table_name__} "
+        query += f" FROM {self.table_model.__table_name__}"
         if self.join:
             query += " ".join(self.join) + " "
         if self.where:
-            query += "WHERE " + " AND ".join(self.where)
+            query += " WHERE " + " AND ".join(self.where)
+        if self.pagination:
+            query += self.pagination
+        query += ";"
         return query.strip()
 
     @property
@@ -40,10 +55,14 @@ class QueryBuilder:
             query += "WHERE " + " AND ".join(self.where)
         return query.strip()
 
-    def add_full_select(self, include: list[str] = []) -> None:
+    def add_full_select(self) -> None:
         """Adds all columns from the main table and optionally from related tables."""
+        if self.query_params:
+            include = getattr(self.query_params, "include", [])
+        else:
+            include = []
         # add the main table columns as table_name.field_name
-        for field_name in self.table_model.orm_fields.keys():
+        for field_name in self.table_model.get_column_fields().keys():
             self.select.append(
                 f"{self.table_model.__table_name__}.{field_name}"
             )
@@ -65,32 +84,36 @@ class QueryBuilder:
             # get the table model from that field
             related_model = relationship_field.table_model
             # get the keys and append them to the select
-            for field_name in related_model.orm_fields.keys():
+            for field_name in related_model.get_orm_fields().keys():
                 self.select.append(
                     f"{related_model.__table_name__}.{field_name} AS {related_model.__table_name__}_{field_name}"
                 )
 
-    def add_join(self, include: list[TableModel] = []) -> None:
+    def add_join(self) -> None:
         """Adds JOIN clauses for related tables."""
+        if self.query_params:
+            include = getattr(self.query_params, "include", [])
+        else:
+            include = []
         # get foreign key columns and relationship fields
-        foreign_key_fields = self.table_model.foreign_key_fields
-        relationship_fields = self.table_model.relationship_fields
+        foreign_key_fields = self.table_model.get_foreign_key_fields()
+        relationship_fields = self.table_model.get_relationship_fields()
         # loop through include and add joins
-        for model_str in include:
+        for include_str in include:
             # children will be handled separately
-            if model_str == "children":
+            if include_str == "children":
                 continue
             # get the relationship field that corresponds to this include
-            relationship_field = relationship_fields.get(model_str)
+            relationship_field = relationship_fields.get(include_str)
             if not relationship_field:
                 raise ValueError(
-                    f"Include '{model_str}' not found in relationship fields for {self.table_model.__table_name__}"
+                    f"Include '{include_str}' not found in relationship fields for {self.table_model.__table_name__}"
                 )
             # get the foreign key field that corresponds to this include
-            foreign_key_field = foreign_key_fields.get(f"{model_str}_id")
+            foreign_key_field = foreign_key_fields.get(f"{include_str}_id")
             if not foreign_key_field:
                 raise ValueError(
-                    f"Foreign key field for include '{model_str}' not found in {self.table_model.__table_name__}"
+                    f"Foreign key field for include '{include_str}' not found in {self.table_model.__table_name__}"
                 )
             # get the table model from that field
             related_model = relationship_field.table_model
@@ -102,7 +125,41 @@ class QueryBuilder:
             )
             self.join.append(join_clause)
 
-    def add_where(self, conditions: list[str] = []) -> None:
+    def add_where(self) -> None:
         """Adds WHERE conditions to the query."""
-        for condition in conditions:
-            self.where.append(condition)
+        if not self.query_params:
+            return
+        # get the filterable fields from the params
+        filter_params = self.query_params.get_filter_params()
+        # loop through them and add to where clause
+        # as well as the args
+        for field_name, filter_param in filter_params.items():
+            value = getattr(self.query_params, field_name)
+            if value is None:
+                continue
+            if isinstance(value, list):
+                placeholders = ", ".join("?" * len(value))
+                where_clause = filter_param.json_schema_extra[
+                    "where_clause"
+                ].format(placeholders)
+                self.where.append(where_clause)
+                self.args.extend(value)
+            else:
+                self.where.append(
+                    filter_param.json_schema_extra["where_clause"]
+                )
+                args = [value] * filter_param.json_schema_extra.get(
+                    "repeat_arg", 1
+                )
+                self.args.extend(args)
+
+    def add_pagination(self) -> None:
+        """Adds pagination to the query."""
+        if not self.query_params:
+            return
+        page_number = getattr(self.query_params, "page_number", None)
+        page_size = getattr(self.query_params, "page_size", None)
+        if page_number is not None and page_size is not None:
+            offset = (page_number - 1) * page_size
+            pagination_clause = f" LIMIT {page_size} OFFSET {offset}"
+            self.pagination = pagination_clause

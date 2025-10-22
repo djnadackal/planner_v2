@@ -20,9 +20,9 @@ class Ticket(TableModel):
     updated_at: Optional[datetime] = ColumnField(None)
     completed_at: Optional[datetime] = ColumnField(None)
 
-    thing_id: Optional[int] = ForeignKeyField(on="id")
-    category_id: Optional[int] = ForeignKeyField(on="id")
-    parent_id: Optional[int] = ForeignKeyField(on="id")
+    thing_id: Optional[int] = ForeignKeyField(None, on="id")
+    category_id: Optional[int] = ForeignKeyField(None, on="id")
+    parent_id: Optional[int] = ForeignKeyField(None, on="id")
 
     thing: Optional["Thing"] = RelationshipField(table_model="Thing")
     category: Optional["TicketCategory"] = RelationshipField(

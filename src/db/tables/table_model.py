@@ -1,15 +1,12 @@
 # base class for db tables
-from typing import TYPE_CHECKING, List, Optional
-from pydantic import BaseModel
-from src.db.tables.util import ColumnField, ForeignKeyField
-
-if TYPE_CHECKING:
-    from .util import RelationshipField
+from typing import Dict, List, Optional
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class TableModel(BaseModel):
     __table_name__: str = ""  # to be set in subclasses
     __params_class__: Optional[BaseModel] = None  # to be set in subclasses
+    model_config = ConfigDict(extra="allow")
 
     def create(self) -> int:
         raise NotImplementedError("Create method not implemented")
@@ -40,26 +37,29 @@ class TableModel(BaseModel):
             "Populate children method not implemented"
         )
 
-    @property
-    def orm_fields(self) -> dict[str, ColumnField]:
+    @classmethod
+    def get_column_fields(cls) -> Dict[str, Field]:
         return {
             field_name: field
-            for field_name, field in self.__fields__.items()
-            if field.field_info.extra.get("column_field", False)
+            for field_name, field in cls.__fields__.items()
+            if field.json_schema_extra
+            and field.json_schema_extra.get("colunn_field", False)
         }
 
-    @property
-    def foreign_key_fields(self) -> dict[str, ForeignKeyField]
+    @classmethod
+    def get_foreign_key_fields(cls) -> Dict[str, Field]:
         return {
             field_name: field
-            for field_name, field in self.__fields__.items()
-            if field.field_info.extra.get("foreign_key_field", False)
+            for field_name, field in cls.__fields__.items()
+            if field.json_schema_extra
+            and field.json_schema_extra.get("foreign_key_field", False)
         }
 
-    @property
-    def relationship_fields(self) -> dict[str, RelationshipField]:
+    @classmethod
+    def get_relationship_fields(cls) -> Dict[str, Field]:
         return {
             field_name: field
-            for field_name, field in self.__fields__.items()
-            if field.field_info.extra.get("relationship_field", False)
+            for field_name, field in cls.__fields__.items()
+            if field.json_schema_extra
+            and field.json_schema_extra.get("relationship_field", False)
         }

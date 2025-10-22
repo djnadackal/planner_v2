@@ -1,6 +1,6 @@
 from functools import wraps
 from typing import TYPE_CHECKING, Any, Type, Union
-from pydantic import Field
+from pydantic import Field, BaseModel
 from pydantic.utils import import_string
 
 if TYPE_CHECKING:
@@ -23,69 +23,61 @@ def as_classmethod(func):
     return classmethod(wrapper)
 
 
-class ColumnField(Field):
+def ColumnField(default: Any, *args, **kwargs):
     """
-    A Pydantic Field subclass that indicates the field is intended for ORM use.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.extra["column_field"] = True
-
-
-class ForeignKeyField(ColumnField):
-    """
-    A Pydantic Field subclass that indicates the field is intended as a foreign key.
+    Returns A Pydantic Field subclass that indicates the field is intended for ORM use.
     """
 
-    def __init__(self, on: str, mandatory: bool = False, *args, **kwargs):
-        """
-        joins: The table to join with.
-        on: The field in the joined table to match.
-        """
-        super().__init__(
-            int | None if not mandatory else int, *args, **kwargs
-        )
-        self.on = on
-        self.extra["foreign_key_field"] = True
+    return Field(default=default, *args, **kwargs, column_field=True)
 
 
-class RelationshipField(Field):
-    def __init__(
-        self,
-        table_model: Union[str, Type[Any]],
-        as_list: bool = False,
+def ForeignKeyField(
+    default: Any,
+    on: str,
+    *args,
+    **kwargs,
+):
+    """
+    Returns A Pydantic Field subclass that indicates the field is intended as a foreign key.
+    """
+
+    return Field(
+        default=default,
         *args,
-        **kwargs
-    ):
-        """
-        A Pydantic Field subclass that indicates the field is a relationship to another TableModel.
-        """
-        super().__init__(
-            (
-                Union[table_model | None]
-                if not as_list
-                else list[table_model] | None
-            ),
-            *args,
-            **kwargs
-        )
-        self.extra["relationship_field"] = True
-        self._table_model = table_model
-
-    @property
-    def table_model(self) -> Type[Any]:
-        """Resolve table_model to the actual class."""
-        if isinstance(self.table_model, str):
-            return import_string(self.table_model)
-        return self.table_model
+        **kwargs,
+        foreign_key_field=True,
+        on=on,
+    )
 
 
-class FilterParam(Field):
+def RelationshipField(
+    table_model: Union[str, Type[Any]],
+    as_list: bool = False,
+    *args,
+    **kwargs,
+):
     """
-    A Pydantic Field subclass that indicates the field is intended for filtering queries.
+    Returns A Pydantic Field subclass that indicates the field is a relationship to another TableModel.
+    """
+    return Field(
+        default=None,
+        *args,
+        **kwargs,
+        relationship_field=True,
+        table_model=table_model,
+        as_list=as_list,
+    )
+
+
+def FilterParam(where_clause: str, repeat_arg: int = 1, *args, **kwargs):
+    """
+    Returns A Pydantic Field subclass that indicates the field is intended for filtering queries.
     """
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.extra["filter_param"] = True
+    return Field(
+        *args,
+        **kwargs,
+        filter_param=True,
+        where_clause=where_clause,
+        repeat_arg=repeat_arg,
+    )

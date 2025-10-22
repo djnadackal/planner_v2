@@ -9,6 +9,8 @@ from .comments import Comment, CommentParams
 from .things import Thing, ThingParams
 from .tickets import Ticket, TicketParams
 
+from .query_builder import QueryBuilder
+
 
 Thing.model_rebuild()
 Ticket.model_rebuild()
@@ -31,3 +33,5 @@ class Controller:
         Category = CategoryParams
         Comment = CommentParams
         Action = ActionParams
+
+    QueryBuilder = QueryBuilder
