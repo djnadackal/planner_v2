@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Table, Flex } from "antd";
+import { gray, grey } from "@ant-design/colors";
 import useApi from "../../api/";
+import "../../App.css";
 
 
 const TicketTable = ({
@@ -45,10 +47,12 @@ const TicketTable = ({
         columns={getColumns(tableMode)}
         scroll={{ y: scrollHeight ? scrollHeight : 600 }}
         rowClassName={(record) => {
+          console.log("setting row class for record", record)
           // if its selected, highlight it
-          if (record.id === selectedTicketId) return "table-row-selected";
+          if (record.id === selectedTicketId) return "selected-row";
           // if its closed, gray it out
-          if (!record.open) return "table-row-closed";
+          console.log("record.open is", record.open)
+          if (!record.open) return "grey-row"
         }}
         loading={loading}
         error={error}
@@ -129,6 +133,7 @@ const useTicketTableHooks = (checkedThingIds, selectedThingId, tableMode) => {
   // onclick for the show closed button
   const handleShowClosedToggle = () => {
     setShowClosed(!showClosed);
+    doRefetch();
   }
 
   // value for the showClosed button

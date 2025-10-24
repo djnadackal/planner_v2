@@ -1,0 +1,7 @@
+.grey-row {
+  background-color: #bdbdbd; /* Light grey background */
+}
+
+.selected-row {
+  background-color: #bef2f7; /* Light blue background for selected row */
+}
