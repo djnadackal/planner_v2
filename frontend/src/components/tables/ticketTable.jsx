@@ -47,11 +47,9 @@ const TicketTable = ({
         columns={getColumns(tableMode)}
         scroll={{ y: scrollHeight ? scrollHeight : 600 }}
         rowClassName={(record) => {
-          console.log("setting row class for record", record)
           // if its selected, highlight it
           if (record.id === selectedTicketId) return "selected-row";
           // if its closed, gray it out
-          console.log("record.open is", record.open)
           if (!record.open) return "grey-row"
         }}
         loading={loading}
@@ -114,6 +112,7 @@ const getColumns = (mode = "full") => {
 const useTicketTableHooks = (checkedThingIds, selectedThingId, tableMode) => {
   // initialize query params for consistency throughout component
   const [showClosed, setShowClosed] = useState(false);
+  const [showClosedToggleText, setShowToggleText] = useState("Show Closed");
   const queryParams = {
     thing_ids: selectedThingId ? [selectedThingId] : checkedThingIds ? checkedThingIds : [],
     include: ["thing", "category"],
@@ -132,17 +131,20 @@ const useTicketTableHooks = (checkedThingIds, selectedThingId, tableMode) => {
 
   // onclick for the show closed button
   const handleShowClosedToggle = () => {
-    setShowClosed(!showClosed);
-    doRefetch();
+    console.log("Setting showClosed to", !showClosed);
+    if (!showClosed) {
+      setShowToggleText("Hide Closed");
+      setShowClosed(true);
+    } else {
+      setShowToggleText("Show Closed");
+      setShowClosed(false);
+    }
   }
-
-  // value for the showClosed button
-  const showClosedToggleText = showClosed ? "Hide Closed" : "Show Closed"
 
   // on mount and when checkedThingIds or selectedThingId changes, refetch data
   useEffect(() => {
     doRefetch();
-  }, [checkedThingIds, selectedThingId])
+  }, [checkedThingIds, selectedThingId, showClosed]);
   return { data, loading, error, doRefetch, handleShowClosedToggle, showClosedToggleText };
 }
 
