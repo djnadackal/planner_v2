@@ -33,10 +33,8 @@ const ThingView = () => {
     beginAddTicket,
     setBeginAddTicket
   } = useThingViewHooks()
-  console.log("thing id:", thingId);
 
   const tickeTableBeginAddTicket = () => {
-    console.log("ThingView - tickeTableBeginAddTicket called");
     setBeginAddTicket(true);
   }
 
@@ -179,10 +177,7 @@ const useThingViewHooks = () => {
   const onRow = (record) => {
     return {
       onClick: () => {
-        console.log("TicketTable onRow clicked:", record);
-        console.log({ record, ticketId, thingId });
         if (record.id != ticketId) {
-          console.log("Clicked ticket is already selected, deselecting.");
           if (thingId) {
             navigate(`/${thingId}/tickets/${record.id}`)
           } else {

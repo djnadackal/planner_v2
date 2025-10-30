@@ -35,7 +35,6 @@ const useFetch = (
       if (result.data !== undefined) {
         setData(result.data);
         if (result.count !== undefined) {
-          console.log("setting count");
           setcount(result.count);
         }
       } else {

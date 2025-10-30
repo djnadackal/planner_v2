@@ -63,8 +63,8 @@ const TicketDetails = ({
             {mode === "view" ?
               (ticket?.category ? ticket.category.name : 'Uncategorized') :
               <TicketCategoryDropdown
-                selectedTicketCategoryId={getValue("category_id")}
-                setSelectedTicketCategoryId={(value) => {
+                selectedCategoryId={getValue("category_id")}
+                setSelectedCategoryId={(value) => {
                   const e = { target: { value } };
                   changeHandler("category_id")(e);
                 }} />}

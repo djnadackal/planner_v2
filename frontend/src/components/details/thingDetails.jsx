@@ -19,8 +19,6 @@ const ThingDetails = ({ thing, loading, error, refreshThing }) => {
 
   } = detailsHooks(thing, refreshThing);
 
-  console.log("Category id:", getValue("category_id"));
-
   return (
     <Card
       title="Thing"
