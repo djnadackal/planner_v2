@@ -2,6 +2,7 @@ import { Button, Card, Checkbox, Descriptions, Flex, Input } from "antd"
 import TicketCategoryDropdown from "../../inputs/ticketCategoryDropdown";
 import TicketDropdown from "../../inputs/ticketDropdown";
 import detailsHooks from "./hooks";
+import ThingDropdown from "../../inputs/thingDropdown";
 
 
 const TicketDetails = ({
@@ -69,16 +70,6 @@ const TicketDetails = ({
                   changeHandler("category_id")(e);
                 }} />}
           </Descriptions.Item>
-          {false && <Descriptions.Item label="Thing">
-            {mode === "view" ?
-              (ticket?.thing ? ticket.thing.name : (thing ? thing.name : 'No thing')) :
-              <TicketDropdown
-                selectedTicketId={getValue("thing_id")}
-                setSelectedTicketId={(value) => {
-                  const e = { target: { value } };
-                  changeHandler("thing_id")(e);
-                }} />}
-          </Descriptions.Item>}
           {false && <Descriptions.Item label="Parent">
             {mode === "view" ?
               (ticket?.parent ? ticket.parent.name : 'No parent') :
@@ -96,6 +87,18 @@ const TicketDetails = ({
                 value={getValue("description")}
                 onChange={changeHandler("description")}
                 autoSize={{ minRows: 3, maxRows: 5 }} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="Thing">
+            {mode === "view" ?
+              (ticket?.thing ? ticket.thing.name : (thing ? thing.name : 'No thing')) :
+              <ThingDropdown
+                selectedThingId={getValue("thing_id")}
+                setSelectedThingId={(value) => {
+                  const e = { target: { value } };
+                  changeHandler("thing_id")(e);
+                }}
+                filters={{ page_size: 10000 }}
+              />}
           </Descriptions.Item>
         </Descriptions>
         <Flex justify="end">
