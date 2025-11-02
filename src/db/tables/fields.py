@@ -76,8 +76,10 @@ def FilterParam(
     return Field(  # type: ignore
         *args,
         **kwargs,
-        filter_param=True,
-        where_clause=where_clause,
-        repeat_arg=repeat_arg,
+        json_schema_extra={
+            "filter_param": True,
+            "where_clause": where_clause,
+            "repeat_arg": repeat_arg,
+        },
         render_arg=render_arg,
     )
