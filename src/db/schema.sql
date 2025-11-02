@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     thing_id INTEGER,
     category_id INTEGER,
     parent_id INTEGER,
+    user_id INTEGER,
     description TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     open BOOLEAN DEFAULT 1,
@@ -34,7 +35,8 @@ CREATE TABLE IF NOT EXISTS tickets (
     completed_at DATETIME,
     FOREIGN KEY(thing_id) REFERENCES things(id),
     FOREIGN KEY(category_id) REFERENCES ticket_categories(id),
-    FOREIGN KEY(parent_id) REFERENCES tickets(id)
+    FOREIGN KEY(parent_id) REFERENCES tickets(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -59,4 +61,24 @@ CREATE TABLE IF NOT EXISTS actions (
     performed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(ticket_id) REFERENCES tickets(id),
     FOREIGN KEY(action_type_id) REFERENCES action_types(id)
+);
+
+CREATE TABLE IF NOT EXISTS milestones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT,
+    due_date DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS ticket_milestones (
+    ticket_id INTEGER,
+    milestone_id INTEGER,
+    PRIMARY KEY(ticket_id, milestone_id),
+    FOREIGN KEY(ticket_id) REFERENCES tickets(id),
+    FOREIGN KEY(milestone_id) REFERENCES milestones(id)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE
 );

@@ -1,5 +1,6 @@
 # This will be the core functionality of the database.
 import logging
+import os
 from typing import Any, Optional
 from functools import partial
 from pydantic import BaseModel
@@ -41,10 +42,12 @@ class DbCore:
         ]
 
     def __init__(self):
-        with self.get_db_connection() as conn:
-            cursor = conn.cursor()
-            for statement in self.schema:
-                cursor.execute(statement)
+        # Initialize the database schema
+        if not os.environ.get("DB_MIGRATION") == "true":
+            with self.get_db_connection() as conn:
+                cursor = conn.cursor()
+                for statement in self.schema:
+                    cursor.execute(statement)
         self.logger: logging.Logger = logging.getLogger(__name__)
 
     def log_error(self, message: str):
@@ -58,6 +61,15 @@ class DbCore:
     def log_debug(self, message: str):
         if self.logger:
             self.logger.debug(message)
+
+    def execute_sql(self, query: str, params: tuple = ()):
+        with self.get_db_connection() as conn:
+            cursor = conn.cursor()
+            self.log_debug(
+                f"Executing query: {query} with params: {params}"
+            )
+            cursor.execute(query, params)
+            return cursor.fetchall()
 
     def run_create(
         self,
