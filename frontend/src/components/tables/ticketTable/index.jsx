@@ -39,7 +39,7 @@ const TicketTable = ({
       title={`Tickets (${count ? count : 0})`}
       style={{
         marginTop: "10px",
-        width: tableMode === "compact" ? 500 : 800
+        width: tableMode === "compact" ? 400 : 800
       }}
       extra={beginAddTicket && <Flex gap="10px">
         {!selectedTicketId && <>

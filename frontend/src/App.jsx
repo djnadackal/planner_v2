@@ -7,6 +7,7 @@ import ThingView from './views/things';
 import MilestoneView from './views/milestones';
 import components from './components';
 import NavBar from './components/navBar';
+import TicketView from './views/tickets';
 
 const { PlannerTitle } = components;
 
@@ -34,7 +35,8 @@ const App = () => {
           }}>
             <Routes>
               <Route path="/" element={<ThingView />} />
-              <Route path="/tickets/:ticketId" element={<ThingView />} />
+              <Route path="/tickets/" element={<TicketView />} />
+              <Route path="/tickets/:ticketId" element={<TicketView />} />
               <Route path="/things/:thingId" element={<ThingView />} />
               <Route path="/things/:thingId/tickets/:ticketId" element={<ThingView />} />
               <Route path="/milestones" element={<MilestoneView />} />

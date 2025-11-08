@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query, status
+from pydantic import BaseModel
+
 from ..db import Controller
 from .ticket_categories import router as categories_router
 
@@ -6,6 +8,9 @@ from .ticket_categories import router as categories_router
 Ticket = Controller.Tables.Ticket
 TicketParams = Controller.Params.Ticket
 ReadTickets = Controller.Responses.ReadTickets
+Milestone = Controller.Tables.Milestone
+MilestoneParams = Controller.Params.Milestone
+MilestonesResponse = Controller.Responses.ReadMilestones
 
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
@@ -33,6 +38,44 @@ async def update_ticket(ticket_id: int, ticket: Ticket):
     try:
         Ticket.update(ticket)
         return {"message": "Ticket updated"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+class MutateMilestoneRequest(BaseModel):
+    milestone_id: int
+
+
+@router.post("/{ticket_id}/add_milestone", response_model=Milestone)
+async def add_milestone_to_ticket(
+    ticket_id: int, data: MutateMilestoneRequest
+):
+    """
+    Add a milestone to a ticket.
+    """
+    try:
+        milestone_id = data.milestone_id
+        milestone = Milestone.get_by_id(milestone_id)  # type: ignore
+        ticket = Ticket.get_by_id(ticket_id)
+        ticket.add_milestone(milestone_id)  # type: ignore
+        return milestone
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/{ticket_id}/remove_milestone", response_model=Milestone)
+async def remove_milestone_from_ticket(
+    ticket_id: int, data: MutateMilestoneRequest
+):
+    """
+    Remove a milestone from a ticket.
+    """
+    try:
+        milestone_id = data.milestone_id
+        milestone = Milestone.get_by_id(milestone_id)  # type: ignore
+        ticket = Ticket.get_by_id(ticket_id)
+        ticket.remove_milestone(milestone_id)  # type: ignore
+        return milestone
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

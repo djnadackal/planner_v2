@@ -9,6 +9,11 @@ const items = [
     href: '/'
   },
   {
+    label: 'Tickets',
+    key: 'tickets',
+    href: '/tickets'
+  },
+  {
     label: 'Milestones',
     key: 'milestones',
     href: '/milestones'
