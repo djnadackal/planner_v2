@@ -44,3 +44,5 @@ def add_users_and_milestones_tables():
         """
         conn.execute(add_user_id_to_tickets_sql)
         print("User ID column added to tickets table.")
+        conn.commit()
+        print("changes committed.")

@@ -25,4 +25,4 @@ if __name__ == "__main__":
 
     diff_check(post_migration_backup)
     # finally, copy the pre-migration backup back to the main database file
-    os.replace(pre_migration_backup, "data/database.db")
+    os.replace(post_migration_backup, "data/database.db")
