@@ -2,7 +2,9 @@ import { Select } from "antd";
 import { useEffect } from "react";
 import useApi from "../../api/";
 
-const MilestoneDropdown = ({ selectedMilestoneId, setSelectedMilestoneId, filters }) => {
+const MilestoneDropdown = (
+  { selectedMilestoneId, setSelectedMilestoneId, filters, placeholder = "Select Milestone" }
+) => {
   const { data, loading, error, fetchData } = useApi.milestone.fetchMany(filters);
 
   const handleChange = (value) => {
@@ -18,7 +20,8 @@ const MilestoneDropdown = ({ selectedMilestoneId, setSelectedMilestoneId, filter
     <Select
       showSearch
       style={{ width: "150px" }}
-      placeholder="Add"
+      placeholder={placeholder}
+      allowClear
       error={error}
       onChange={handleChange}
       value={selectedMilestoneId}

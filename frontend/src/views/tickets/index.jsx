@@ -33,26 +33,57 @@ const TicketView = () => {
   return (<>
     <Flex gap="10px" style={{ overflowY: 'hidden' }}>
       <Flex gap="10px" style={{ height: '100%', minHeight: 0, overflowX: 'auto' }}>
-        <Flex vertical>
-          <Flex style={{
-            height: ticketId || beginAddTicket ? '50%' : '100%',
-          }}>
-            <TicketTable
-              tableMode={ticketId ? "compact" : "full"}
-              selectedTicketId={ticketId}
-              beginAddTicket={() => setBeginAddTicket(true)}
-              scrollHeight={ticketId || beginAddTicket ? 110 : 400}
-              onRow={onRow} />
-          </Flex>
-          {(ticketId || beginAddTicket) && <TicketDetails
-            addMode={beginAddTicket}
-            setAddMode={setBeginAddTicket}
-            ticket={beginAddTicket ? {} : ticketData}
-            thing={thingData}
-            loading={ticketLoading}
-            error={ticketError}
-            refreshTicket={fetchTicket} />}
+        <Flex style={{
+          height: '100%',
+        }}>
+          <TicketTable
+            tableMode={ticketId ? "compact" : "full"}
+            selectedTicketId={ticketId}
+            beginAddTicket={() => setBeginAddTicket(true)}
+            scrollHeight={400}
+            onRow={onRow} />
         </Flex>
+        {(ticketId || beginAddTicket) &&
+          <Flex vertical>
+            <TicketDetails
+              addMode={beginAddTicket}
+              setAddMode={setBeginAddTicket}
+              ticket={beginAddTicket ? {} : ticketData}
+              thing={thingData}
+              loading={ticketLoading}
+              error={ticketError}
+              refreshTicket={fetchTicket} />
+            <Card
+              title="Milestones"
+              style={{ width: '300px', height: '100%' }}
+              extra={<MilestoneDropdown
+                setSelectedMilestoneId={(milestoneId) => addMilestone(ticketId, milestoneId)}
+                placeholder="Add" />}
+            >
+              <List
+                loading={milestonesLoading}
+                dataSource={milestonesData || []}
+                renderItem={(milestone) => (
+                  <List.Item
+                    style={{
+                      padding: '10px',
+                    }}
+                  >
+                    <Flex justify="space-between" style={{ width: '100%' }}>
+                      {milestone.name}
+                      <Button
+                        icon={<DeleteOutlined />}
+                        onClick={() => {
+                          removeMilestone(ticketId, milestone.id)
+                          refreshMilestones();
+                        }}
+                      />
+                    </Flex>
+                  </List.Item>
+                )}
+              />
+            </Card>
+          </Flex>}
         {ticketId && <>
           <Flex
             vertical
@@ -71,35 +102,6 @@ const TicketView = () => {
               <ActionPanel ticketId={ticketId} />
             </Flex>
           </Flex>
-          <Card
-            title="Milestones"
-            style={{ width: '300px', height: '100%' }}
-            extra={<MilestoneDropdown
-              setSelectedMilestoneId={(milestoneId) => addMilestone(ticketId, milestoneId)} />}
-          >
-            <List
-              loading={milestonesLoading}
-              dataSource={milestonesData || []}
-              renderItem={(milestone) => (
-                <List.Item
-                  style={{
-                    padding: '10px',
-                  }}
-                >
-                  <Flex justify="space-between" style={{ width: '100%' }}>
-                    {milestone.name}
-                    <Button
-                      icon={<DeleteOutlined />}
-                      onClick={() => {
-                        removeMilestone(ticketId, milestone.id)
-                        refreshMilestones();
-                      }}
-                    />
-                  </Flex>
-                </List.Item>
-              )}
-            />
-          </Card>
         </>}
       </Flex>
     </Flex>
@@ -178,18 +180,9 @@ const useTicketViewHooks = () => {
     return {
       onClick: () => {
         if (record.id != ticketId) {
-          if (thingId) {
-            navigate(`/${thingId}/tickets/${record.id}`)
-          } else {
-            navigate(`/tickets/${record.id}`)
-          }
+          navigate(`/tickets/${record.id}`)
         } else {
-          // Clicking the same ticket deselects it
-          if (thingId) {
-            navigate(`/${thingId}`);
-          } else {
-            navigate(`/`);
-          }
+          navigate(`/tickets/`);
         }
       }
     }

@@ -2,6 +2,7 @@ import { Button, Card, Table, Flex, Input } from "antd";
 import "../../../App.css";
 import useTicketTableHooks from "./hooks";
 import TicketCategoryDropdown from "../../inputs/ticketCategoryDropdown";
+import MilestoneDropdown from "../../inputs/milestoneDropdown";
 
 
 const TicketTable = ({
@@ -23,6 +24,8 @@ const TicketTable = ({
     onSearchChange,
     selectedTicketCategoryId,
     setSelectedTicketCategoryId,
+    selectedMilestoneId,
+    setSelectedMilestoneId,
     pagination,
     showClosedToggleText,
     handleShowClosedToggle,
@@ -39,7 +42,7 @@ const TicketTable = ({
       title={`Tickets (${count ? count : 0})`}
       style={{
         marginTop: "10px",
-        width: tableMode === "compact" ? 400 : 800
+        width: tableMode === "compact" ? 400 : 1100
       }}
       extra={beginAddTicket && <Flex gap="10px">
         {!selectedTicketId && <>
@@ -47,6 +50,9 @@ const TicketTable = ({
             placeholder="Search Tickets"
             value={search}
             onChange={onSearchChange} />
+          <MilestoneDropdown
+            selectedMilestoneId={selectedMilestoneId}
+            setSelectedMilestoneId={setSelectedMilestoneId} />
           <TicketCategoryDropdown
             selectedCategoryId={selectedTicketCategoryId}
             setSelectedCategoryId={setSelectedTicketCategoryId} />

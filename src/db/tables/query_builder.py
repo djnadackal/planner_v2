@@ -168,13 +168,14 @@ class QueryBuilder:
                     continue
             if value is None:
                 continue
-            if render_arg := filter_param.json_schema_extra.get(
-                "render_arg"
-            ):
+            if template := filter_param.json_schema_extra.get("template"):
                 logger.info(
                     f"Rendering arg for field {field_name}: {value}"
                 )
-                value = render_arg(value)
+                value = template.format(
+                    *[value]
+                    * filter_param.json_schema_extra.get("repeat_arg", 1)
+                )
             if isinstance(value, list):
                 placeholders = ", ".join("?" * len(value))
                 where_clause = filter_param.json_schema_extra[

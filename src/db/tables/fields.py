@@ -65,9 +65,8 @@ def RelationshipField(
 def FilterParam(
     where_clause: str,
     repeat_arg: int = 1,
-    render_arg: Callable[[Any], Any] = lambda v: v,
+    template: str | None = None,
     special_case: tuple | None = None,
-    join_on: str | None = None,
     *args,
     **kwargs,
 ):
@@ -83,6 +82,6 @@ def FilterParam(
             "where_clause": where_clause,
             "repeat_arg": repeat_arg,
             "special_case": special_case,
+            "template": template,
         },
-        render_arg=render_arg,
     )

@@ -25,7 +25,7 @@ class TicketParams(QueryParams):
         default=None,
         where_clause="(tickets.description LIKE ? OR tickets.title LIKE ?)",
         repeat_arg=2,
-        render_arg=lambda v: f"%{v}%",
+        template="%{}%",
     )
     created_after: Optional[datetime] = FilterParam(
         default=None, where_clause="tickets.created_at >= ?"

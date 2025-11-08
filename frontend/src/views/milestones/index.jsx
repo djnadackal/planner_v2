@@ -36,10 +36,11 @@ const MilestoneView = () => {
           }}
         />
       }
-      <TicketList
-        tickets={hooks.ticketData || []}
-        ticketsLoading={hooks.ticketLoading}
-        selectTicket={hooks.selectTicket} />
+      {hooks.milestoneId &&
+        <TicketList
+          tickets={hooks.ticketData || []}
+          ticketsLoading={hooks.ticketLoading}
+          selectTicket={hooks.selectTicket} />}
     </Flex>
     <MilestoneModal
       open={hooks.addMilestoneModalOpen}
@@ -92,7 +93,11 @@ const useMilestoneViewHooks = () => {
   const mutateMilestone = useMutateMilestone();
 
   const selectMilestone = (id) => {
-    navigate(`/milestones/${id}`);
+    if (id == milestoneId) {
+      navigate(`/milestones/`);
+    } else {
+      navigate(`/milestones/${id}`);
+    }
   }
   const selectTicket = (id) => {
     navigate(`/tickets/${id}`);
