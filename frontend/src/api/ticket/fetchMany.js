@@ -86,7 +86,7 @@ const useFetchTickets = (
     { lazy },
   );
 
-  return { data, count, loading, error, refetch: fetchData };
+  return { data, count, loading, error, fetchData };
 };
 
 export default useFetchTickets;

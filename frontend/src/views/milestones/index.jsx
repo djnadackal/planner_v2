@@ -9,74 +9,46 @@ const {
 } = components;
 
 const MilestoneView = () => {
-  const hooks = useMilestoneViewHooks();
+  const {
+    milestoneId,
+    api,
+    select,
+    modalControl,
+    mutateMilestone,
+  } = useMilestoneViewHooks();
   return (<>
     <Flex style={{ height: '100%' }} gap="10px">
       <MilestoneList
-        milestoneId={hooks.milestoneId}
-        milestones={hooks.milestonesData || []}
-        loading={hooks.milestonesLoading}
-        createLoading={hooks.createMilestoneLoading}
-        createCallback={() => hooks.setAddMilestoneModalOpen(true)}
-        selectMilestone={(milestoneId) => hooks.selectMilestone(milestoneId)} />
-      {hooks.milestoneId &&
+        milestoneId={milestoneId}
+        milestones={api.milestone.list.data || []}
+        loading={api.milestone.list.loading}
+        createLoading={api.milestone.create.loading}
+        createCallback={() => modalControl.add.open()}
+        selectMilestone={(milestoneId) => select.milestone(milestoneId)} />
+      {milestoneId &&
         <MilestoneDetails
-          milestone={hooks.milestoneData}
-          editCallback={() => {
-            // set the mutateMilestone to the current milestone data
-            hooks.mutateMilestone.set.name(hooks.milestoneData.name);
-            hooks.mutateMilestone.set.description(hooks.milestoneData.description);
-            hooks.mutateMilestone.set.due_date(hooks.milestoneData.due_date);
-            // then open the modal
-            hooks.setEditMilestoneModalOpen(true);
-          }}
+          milestone={api.milestone.selected.data}
+          editCallback={modalControl.edit.open}
         />
       }
-      {hooks.milestoneId &&
+      {milestoneId &&
         <TicketList
-          tickets={hooks.ticketData || []}
-          ticketsLoading={hooks.ticketLoading}
-          selectTicket={hooks.selectTicket} />}
+          tickets={api.ticket.list.data || []}
+          ticketsLoading={api.ticket.list.loading}
+          selectTicket={select.ticket} />}
     </Flex>
     <MilestoneModal
       title="New Milestone"
-      open={hooks.addMilestoneModalOpen}
-      onOk={async () => {
-        await hooks.createMilestone({
-          name: hooks.mutateMilestone.name,
-          description: hooks.mutateMilestone.description,
-          due_date: hooks.mutateMilestone.due_date,
-        });
-        hooks.fetchMilestones();
-        hooks.mutateMilestone.reset();
-        hooks.refreshMilestone();
-        hooks.setAddMilestoneModalOpen(false)
-      }}
-      onCancel={() => {
-        hooks.mutateMilestone.reset();
-        hooks.setAddMilestoneModalOpen(false)
-      }}
-      milestone={hooks.mutateMilestone} />
+      open={modalControl.add.isOpen}
+      onOk={modalControl.add.submit}
+      onCancel={modalControl.add.close}
+      milestone={mutateMilestone} />
     <MilestoneModal
       title="Edit Milestone"
-      open={hooks.editMilestoneModalOpen}
-      onOk={async () => {
-        await hooks.updateMilestone({
-          id: hooks.milestoneId,
-          name: hooks.mutateMilestone.name,
-          description: hooks.mutateMilestone.description,
-          due_date: hooks.mutateMilestone.due_date,
-        });
-        hooks.fetchMilestones();
-        hooks.mutateMilestone.reset();
-        hooks.refreshMilestone();
-        hooks.setEditMilestoneModalOpen(false)
-      }}
-      onCancel={() => {
-        hooks.mutateMilestone.reset();
-        hooks.setEditMilestoneModalOpen(false)
-      }}
-      milestone={hooks.mutateMilestone} />
+      open={modalControl.edit.isOpen}
+      onOk={modalControl.edit.submit}
+      onCancel={modalControl.edit.close}
+      milestone={mutateMilestone} />
   </>)
 }
 
