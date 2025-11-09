@@ -152,7 +152,7 @@ const useThingViewHooks = () => {
   const selectTicket = (newTicketId) => {
     if (thingId) {
       if (!newTicketId || newTicketId === ticketId) {
-        navigate(`/${thingId}`);
+        navigate(`/things/${thingId}`);
         return;
       }
       navigate(`/things/${thingId}/tickets/${newTicketId}`);

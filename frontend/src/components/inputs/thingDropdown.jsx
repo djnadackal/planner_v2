@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import useApi from "../../api/";
 
 const ThingDropdown = ({ selectedThingId, setSelectedThingId, filters }) => {
-  const { data, loading, error, refetch } = useApi.thing.fetchMany(filters);
+  const { data, loading, error, refetch } = useApi.thing.fetchMany({ ...filters, page_size: filters?.page_size || 10000 });
 
   const handleChange = (value) => {
     console.log("value selected in ThingDropdown:", value);

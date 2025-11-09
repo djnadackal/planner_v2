@@ -1,9 +1,6 @@
 import { Flex } from "antd";
-import useApi from "../../api";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import components from "../../components";
-import useMutateMilestone from "../../components/details/milestoneModal/mutateMilestoneHooks";
+import useMilestoneViewHooks from "./hooks";
 
 
 const {
@@ -30,7 +27,6 @@ const MilestoneView = () => {
             hooks.mutateMilestone.set.name(hooks.milestoneData.name);
             hooks.mutateMilestone.set.description(hooks.milestoneData.description);
             hooks.mutateMilestone.set.due_date(hooks.milestoneData.due_date);
-            hooks.setMutateMilestoneMode('update');
             // then open the modal
             hooks.setEditMilestoneModalOpen(true);
           }}
@@ -82,102 +78,6 @@ const MilestoneView = () => {
       }}
       milestone={hooks.mutateMilestone} />
   </>)
-}
-
-
-const useMilestoneViewHooks = () => {
-  const { milestoneId } = useParams();
-  const navigate = useNavigate();
-
-  const [addMilestoneModalOpen, setAddMilestoneModalOpen] = useState(false);
-  const [editMilestoneModalOpen, setEditMilestoneModalOpen] = useState(false);
-  const [mutateMilestoneMode, setMutateMilestoneMode] = useState('create'); // 'create' | 'update'
-  const mutateMilestone = useMutateMilestone();
-
-  const selectMilestone = (id) => {
-    if (id == milestoneId) {
-      navigate(`/milestones/`);
-    } else {
-      navigate(`/milestones/${id}`);
-    }
-  }
-  const selectTicket = (id) => {
-    navigate(`/tickets/${id}`);
-  }
-  const {
-    data: milestoneData,
-    loading: milestoneLoading,
-    error: milestoneError,
-    fetchOne: fetchMilestone,
-  } = useApi.milestone.fetchOne(milestoneId);
-  const refreshMilestone = () => {
-    if (milestoneId) {
-      fetchMilestone(milestoneId);
-    }
-  }
-  const {
-    data: ticketData,
-    loading: ticketLoading,
-    error: ticketError,
-    refetch: fetchTickets,
-  } = useApi.ticket.fetchMany({ milestone_id: milestoneId });
-  useEffect(() => {
-    if (milestoneId) {
-      fetchMilestone(milestoneId);
-      fetchTickets({ milestone_id: milestoneId });
-    }
-  }, [milestoneId]);
-  const {
-    data: milestonesData,
-    loading: milestonesLoading,
-    error: milestonesError,
-    fetchData: fetchMilestones,
-  } = useApi.milestone.fetchMany();
-  const {
-    data: createMilestoneData,
-    loading: createMilestoneLoading,
-    error: createMilestoneError,
-    create: createMilestone,
-  } = useApi.milestone.create();
-  const {
-    data: updateMilestoneData,
-    loading: updateMilestoneLoading,
-    error: updateMilestoneError,
-    update: updateMilestone,
-  } = useApi.milestone.update();
-  return {
-    milestoneId,
-    selectMilestone,
-    selectTicket,
-    addMilestoneModalOpen,
-    editMilestoneModalOpen,
-    setAddMilestoneModalOpen,
-    setEditMilestoneModalOpen,
-    mutateMilestoneMode,
-    setMutateMilestoneMode,
-    mutateMilestone,
-    milestoneData,
-    milestoneLoading,
-    milestoneError,
-    fetchMilestone,
-    refreshMilestone,
-    milestonesData,
-    milestonesLoading,
-    milestonesError,
-    fetchMilestones,
-    ticketData,
-    ticketLoading,
-    ticketError,
-    fetchTickets,
-    createMilestoneData,
-    createMilestoneLoading,
-    createMilestoneError,
-    createMilestone,
-    updateMilestoneData,
-    updateMilestoneLoading,
-    updateMilestoneError,
-    updateMilestone,
-  };
 }
 
 

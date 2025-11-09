@@ -69,7 +69,7 @@ const detailsHooks = (ticket = {}, refreshTicket = () => { }, addMode = false, s
       setAddMode(false);
       resetChanges();
       if (thingId) {
-        navigate(`/${thingId}/tickets/${createData.id}`);
+        navigate(`/things/${thingId}/tickets/${createData.id}`);
         refreshTicket();
         return;
       }
