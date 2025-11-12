@@ -6,7 +6,7 @@ const TICKET_CREATE_URL = "/api/tickets/";
 
 const useCreateTicket = () => {
   const { data, loading, error, create } = useCreate(TICKET_CREATE_URL);
-  return { data, loading, error, createTicket: create };
+  return { data, loading, error, create };
 };
 
 export default useCreateTicket;
