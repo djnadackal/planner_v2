@@ -39,13 +39,12 @@ const TicketTable = ({
     tableMode,
     selectedTicketId,
   );
-
   return (
     <Card
       title={`Tickets (${count ? count : 0})`}
       style={{
         marginTop: "10px",
-        width: tableMode === "compact" ? 450 : 1100
+        width: tableMode === "compact" ? 450 : 1100,
       }}
       extra={beginAddTicket && <Flex gap="10px">
         {tableMode !== "compact" && <>
@@ -74,14 +73,14 @@ const TicketTable = ({
           Add Ticket
         </Button>
       </Flex>}>
-      <Flex vertical flex={1} style={{ minHeight: 0 }}>
+      <Flex vertical flex={1} >
         <Table
           dataSource={data ? data : []}
           columns={getColumns(tableMode)}
           pagination={pagination}
-          scroll={{ y: scrollHeight ? scrollHeight : 1000 }}
           rowClassName={getRowClassName}
           rowHoverable={false}
+          scroll={{ y: scrollHeight ? scrollHeight : 400 }}
           loading={loading}
           error={error}
           onRow={onRow}

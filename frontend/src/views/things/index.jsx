@@ -58,7 +58,7 @@ const ThingView = () => {
           tableMode={ticketId || thingId ? "compact" : "full"}
           selectedTicketId={ticketId}
           beginAddTicket={ticketModalControl.add.open}
-          scrollHeight={400}
+          scrollHeight={500}
           onRow={(record) => ({
             onClick: () => {
               select.ticket(record.id);

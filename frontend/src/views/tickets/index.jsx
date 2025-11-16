@@ -29,7 +29,7 @@ const TicketView = () => {
           tableMode={ticketId ? "compact" : "full"}
           selectedTicketId={ticketId}
           beginAddTicket={modalControl.add.open}
-          scrollHeight={400}
+          scrollHeight={500}
           onRow={(record) => {
             return {
               onClick: () => select.ticket(record.id)
