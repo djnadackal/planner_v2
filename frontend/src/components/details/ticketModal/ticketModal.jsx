@@ -7,6 +7,12 @@ import UserDropdown from "../../inputs/userDropdown";
 const TicketModal = ({ modalControl }) => {
   const { isOpen, close, submit } = modalControl[modalControl.mode];
   const { ticket, error } = modalControl;
+  const submitOnEnter = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submit();
+    }
+  }
   return (
     <Modal
       title={modalControl.mode === "add" ? "Add Ticket" : "Edit Ticket"}
@@ -23,6 +29,7 @@ const TicketModal = ({ modalControl }) => {
           <Input
             placeholder="Title"
             value={ticket.title}
+            onKeyDown={submitOnEnter}
             onChange={(e) => ticket.set.title(e.target.value)} />
         </Descriptions.Item>
         <Descriptions.Item label="Open" >
@@ -38,6 +45,7 @@ const TicketModal = ({ modalControl }) => {
         <Descriptions.Item label="Description" >
           <Input.TextArea
             value={ticket.description}
+            onKeyDown={submitOnEnter}
             onChange={(e) => ticket.set.description(e.target.value)}
             autoSize={{ minRows: 3, maxRows: 5 }} />
         </Descriptions.Item>

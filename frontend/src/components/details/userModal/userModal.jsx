@@ -3,6 +3,12 @@ import { Flex, Input, Modal } from "antd";
 const UserModal = ({ modalControl }) => {
   const { title, isOpen, close, submit } = modalControl[modalControl.mode];
   const { user, loading, error } = modalControl;
+  const submitOnEnter = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submit();
+    }
+  }
   return (
     <Modal
       title={title}
@@ -15,6 +21,7 @@ const UserModal = ({ modalControl }) => {
         <Input
           placeholder="User Name"
           value={user?.username}
+          onKeyDown={submitOnEnter}
           onChange={(e) => user?.set?.username(e.target.value)} />
       </Flex>
     </Modal>

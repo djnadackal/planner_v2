@@ -8,6 +8,12 @@ const ThingModal = ({
 }) => {
   const { isOpen, close, submit } = modalControl[modalControl.mode];
   const { thing, error, loading } = modalControl;
+  const submitOnEnter = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submit();
+    }
+  }
   return (
     <Modal
       title={modalControl.mode === "add" ? "Add Thing" : "Edit Thing"}
@@ -24,6 +30,7 @@ const ThingModal = ({
         <Descriptions.Item label="Name" >
           <Input
             value={thing?.name}
+            onKeyDown={submitOnEnter}
             onChange={(e) => thing?.set?.name(e.target.value)} />
         </Descriptions.Item>
         <Descriptions.Item label="Category" >
@@ -39,6 +46,7 @@ const ThingModal = ({
         <Descriptions.Item label="Description" >
           <Input.TextArea
             value={thing?.description}
+            onKeyDown={submitOnEnter}
             onChange={(e) => thing?.set?.description(e.target.value)}
             autoSize={{ minRows: 3, maxRows: 5 }} />
         </Descriptions.Item>
