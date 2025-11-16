@@ -5,3 +5,12 @@
 .selected-row {
   background-color: #bef2f7; /* Light blue background for selected row */
 }
+
+
+
+.ant-table-cell {
+  padding: 2px !important; /* Removes cell padding */
+  padding-left: 10px !important; /* Adds left padding of 10px */
+  padding-right: 10px !important; /* Adds right padding of 10px */
+}
+

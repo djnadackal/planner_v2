@@ -16,7 +16,7 @@ const useTicketTableHooks = (
   const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [search, setSearch] = useState(null);
-  const page_size = tableMode === "compact" ? 5 : 10;
+  const page_size = 25;
   const queryParams = {
     thing_ids: selectedThingId
       ? [selectedThingId]

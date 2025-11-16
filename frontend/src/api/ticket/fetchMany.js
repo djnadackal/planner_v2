@@ -5,7 +5,7 @@ const { useFetch } = apiUtils;
 const TICKETS_URL = "/api/tickets/";
 
 const useFetchTickets = (
-  { parent_id, include, thing_ids } = {},
+  { parent_id, include, thing_ids, open } = {},
   { lazy = false } = {},
 ) => {
   const urlBuilder = (url, params) => {

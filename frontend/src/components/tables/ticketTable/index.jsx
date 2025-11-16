@@ -45,7 +45,7 @@ const TicketTable = ({
       title={`Tickets (${count ? count : 0})`}
       style={{
         marginTop: "10px",
-        width: tableMode === "compact" ? 500 : 1100
+        width: tableMode === "compact" ? 450 : 1100
       }}
       extra={beginAddTicket && <Flex gap="10px">
         {tableMode !== "compact" && <>
@@ -74,17 +74,18 @@ const TicketTable = ({
           Add Ticket
         </Button>
       </Flex>}>
-      <Table
-        dataSource={data ? data : []}
-        columns={getColumns(tableMode)}
-        scroll={{ y: scrollHeight ? scrollHeight : 600 }}
-        rowClassName={getRowClassName}
-        pagination={pagination}
-        rowHoverable={false}
-        loading={loading}
-        error={error}
-        onRow={onRow}
-        rowKey="id" />
+      <Flex vertical flex={1} style={{ minHeight: 0 }}>
+        <Table
+          dataSource={data ? data : []}
+          columns={getColumns(tableMode)}
+          scroll={{ y: scrollHeight ? scrollHeight : 1000 }}
+          rowClassName={getRowClassName}
+          rowHoverable={false}
+          loading={loading}
+          error={error}
+          onRow={onRow}
+          rowKey="id" />
+      </Flex>
     </Card>
   )
 }

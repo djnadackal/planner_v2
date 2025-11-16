@@ -44,7 +44,7 @@ const TicketView = () => {
               beginEdit={modalControl.edit.open} />
             <Card
               title="Milestones"
-              style={{ width: '300px', height: '100%' }}
+              style={{ width: '250px', height: '100%' }}
               extra={<MilestoneDropdown
                 setSelectedMilestoneId={(milestoneId) => api.ticket.addMilestone.addMilestone(ticketId, milestoneId)}
                 placeholder="Add" />}

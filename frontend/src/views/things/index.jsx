@@ -24,14 +24,9 @@ const ThingView = () => {
     thingModalControl
   } = useThingViewHooks()
 
-  const tickeTableBeginAddTicket = () => {
-    setBeginAddTicket(true);
-  }
-
   return (<>
     <Flex gap="10px" style={{ overflowY: 'hidden', height: '100%' }}>
       <ThingTree
-        rorderable={true}
         checkedThingIds={checkedThingIds}
         setCheckedThingIds={setCheckedThingIds}
         selectedThingId={thingId}

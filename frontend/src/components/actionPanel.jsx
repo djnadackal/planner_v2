@@ -27,7 +27,7 @@ const ActionPanel = ({ ticketId }) => {
   const [newActionTypeId, setNewActionTypeId] = useState(null);
 
   return (
-    <Card title="Actions" style={{ height: '325px', width: '500px' }}>
+    <Card title="Actions" style={{ height: '325px', width: '450px' }}>
       <Flex vertical justify="space-between">
         <Flex vertical style={{ overflowY: 'auto', flex: 1 }}>
           <Table

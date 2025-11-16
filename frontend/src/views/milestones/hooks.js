@@ -26,6 +26,7 @@ const useMilestoneViewHooks = () => {
       navigate(`/tickets/${id}`);
     },
   };
+  const ticketParams = { milestone_id: milestoneId, open: true };
   // API object
   const api = {
     milestone: {
@@ -35,7 +36,7 @@ const useMilestoneViewHooks = () => {
       update: useApi.milestone.update(),
     },
     ticket: {
-      list: useApi.ticket.fetchMany({ milestone_id: milestoneId }),
+      list: useApi.ticket.fetchMany(ticketParams),
     },
   };
   api.refreshAll = () => {
@@ -44,7 +45,7 @@ const useMilestoneViewHooks = () => {
     }
     api.milestone.list.fetchData();
     if (milestoneId) {
-      api.ticket.list.fetchData({ milestone_id: milestoneId });
+      api.ticket.list.fetchData(ticketParams);
     }
   };
   // Modal Control

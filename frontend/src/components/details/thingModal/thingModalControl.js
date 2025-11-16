@@ -35,7 +35,7 @@ const useThingModalControl = (api) => {
           category_id: thingBuffer.categoryId,
           parent_id: thingBuffer.parentId,
         });
-        api.fefreshAll();
+        api.refreshAll();
         thingBuffer.reset();
         setAddThingModalOpen(false);
       },
@@ -63,7 +63,7 @@ const useThingModalControl = (api) => {
           category_id: thingBuffer.categoryId,
           parent_id: thingBuffer.parentId,
         });
-        api.fefreshAll();
+        api.refreshAll();
         thingBuffer.reset();
         setEditThingModalOpen(false);
       },

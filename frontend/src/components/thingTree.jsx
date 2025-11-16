@@ -11,7 +11,6 @@ const ThingTree = ({
   selectedThingId,
   setSelectedThingId,
   refreshTrigger,
-  rorderable
 }) => {
   const [createThingModalOpen, setCreateThingModalOpen] = useState(false);
   const [expandedKeys, setExpandedKeys] = useState([]);
@@ -45,27 +44,6 @@ const ThingTree = ({
     treeDataRefetch();
   }, [refreshTrigger]);
 
-  const onDrop = async (info) => {
-    const { dragNode, node: dropNode, dropToGap } = info;
-    const dropKey = dropNode.key;
-
-    // Determine new parent ID: null for root, dropKey for child drop
-    const newParentId = dropKey ? dropKey : null;
-
-    try {
-      // Update thing's parent via API
-      const updatedThing = {
-        ...dragNode.thing,
-        parent_id: newParentId, // Assuming thing has parentId field
-      };
-      await updateThing(updatedThing);
-
-      // Refetch tree data to reflect server state
-      await treeDataRefetch();
-    } catch (err) {
-    }
-  };
-
   const onSelect = (selectedKeys) => {
     const newSelectedThingId = selectedKeys[selectedKeys.length - 1]
     setSelectedThingId(newSelectedThingId);
@@ -79,6 +57,7 @@ const ThingTree = ({
       style={{
         padding: "10px 0 0 10px",
         height: "100%",
+        width: "250px",
       }}>
       <Flex justify='end'>
         {(checkedThingIds?.length > 0 || selectedThingId !== null) &&
@@ -97,14 +76,13 @@ const ThingTree = ({
       </Flex>
       <Tree
         checkable={checkedThingIds !== undefined && setCheckedThingIds !== undefined}
-        draggable={rorderable}
-        onDrop={onDrop}
         checkedKeys={checkedThingIds}
         onCheck={onCheck}
         expandedKeys={expandedKeys}
         onExpand={setExpandedKeys}
         selectedKeys={thingId !== null ? [Number(thingId)] : []}
         onSelect={onSelect}
+        height={600}
         multiple
         error={treeDataError}
         treeData={treeData}
