@@ -78,6 +78,7 @@ const TicketTable = ({
         <Table
           dataSource={data ? data : []}
           columns={getColumns(tableMode)}
+          pagination={pagination}
           scroll={{ y: scrollHeight ? scrollHeight : 1000 }}
           rowClassName={getRowClassName}
           rowHoverable={false}
