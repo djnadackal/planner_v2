@@ -15,6 +15,9 @@ class TicketParams(QueryParams):
     category_id: Optional[int] = FilterParam(
         default=None, where_clause="tickets.category_id = ?"
     )
+    category_ids: Optional[list[int]] = FilterParam(
+        default=None, where_clause="tickets.category_id IN ({})"
+    )
     parent_id: Optional[int] = FilterParam(
         default=None, where_clause="tickets.parent_id = ?"
     )

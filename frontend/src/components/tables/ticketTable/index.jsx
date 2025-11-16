@@ -21,6 +21,7 @@ const TicketTable = ({
     count,
     loading,
     error,
+    navigation,
     search,
     onSearchChange,
     selectedTicketCategoryId,
@@ -51,17 +52,17 @@ const TicketTable = ({
           <Input
             placeholder="Search"
             style={{ width: 100 }}
-            value={search}
+            value={navigation.getQueryParam.search || ''}
             onChange={onSearchChange} />
           <UserDropdown
-            selectedUserId={selectedUserId}
-            setSelectedUserId={setSelectedUserId} />
+            selectedUserId={navigation.getQueryParam.userId}
+            setSelectedUserId={navigation.setQueryParam.userId} />
           <MilestoneDropdown
-            selectedMilestoneId={selectedMilestoneId}
-            setSelectedMilestoneId={setSelectedMilestoneId} />
+            selectedMilestoneId={navigation.getQueryParam.milestoneId}
+            setSelectedMilestoneId={navigation.setQueryParam.milestoneId} />
           <TicketCategoryDropdown
-            selectedCategoryId={selectedTicketCategoryId}
-            setSelectedCategoryId={setSelectedTicketCategoryId} />
+            selectedCategoryId={navigation.getQueryParam.ticketCategoryId}
+            setSelectedCategoryId={navigation.setQueryParam.ticketCategoryId} />
         </>}
         <Button
           onClick={handleShowClosedToggle}>
