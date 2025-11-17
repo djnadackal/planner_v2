@@ -9,11 +9,12 @@ else
       source venv/bin/activate
 fi
 
+# alias for easy database access
 alias db="sqlite3 data/database.db"
 
 
 ########
-# Uncomment the below function, and paste in bashrc for easy setup. 
+# Uncomment the below function, and paste in ~/.bashrc for easy setup. 
 # Change the the path on the first line to the correct location of your planner project.
 
 # function to set up the planner project

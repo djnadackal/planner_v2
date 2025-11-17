@@ -23,6 +23,11 @@ sudo apt install nginx uvicorn npm
    python3 -m venv venv
    source venv/bin/activate
    ```
+   alternatively, sourcing the bashrc file will do the same
+
+   ```bash
+   source bashrc
+   ```
 
 2. install dependencies
 

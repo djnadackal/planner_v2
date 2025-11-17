@@ -1,7 +1,9 @@
 import { Button, Card, List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
-const MilestoneList = ({ milestoneId, milestones, loading, createLoading, createCallback, selectMilestone }) => {
+const MilestoneList = (
+  { milestoneId, milestones, loading, createLoading, createCallback, selectMilestone }
+) => {
   return (
     <Card
       title="Milestones"

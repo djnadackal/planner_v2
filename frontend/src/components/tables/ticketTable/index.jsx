@@ -21,18 +21,7 @@ const TicketTable = ({
     count,
     loading,
     error,
-    navigation,
-    search,
-    onSearchChange,
-    selectedTicketCategoryId,
-    setSelectedTicketCategoryId,
-    selectedMilestoneId,
-    setSelectedMilestoneId,
-    selectedUserId,
-    setSelectedUserId,
     pagination,
-    showClosedToggleText,
-    handleShowClosedToggle,
     getRowClassName,
   } = useTicketTableHooks(
     checkedThingIds,
@@ -40,6 +29,7 @@ const TicketTable = ({
     tableMode,
     selectedTicketId,
   );
+
   return (
     <Card
       title={`Tickets (${count ? count : 0})`}
