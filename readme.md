@@ -24,7 +24,7 @@ and goals. It is suitable for a household with multiple users.
    ```
 2. Install dependencies:
 
-  on mac/linux:
+   on mac/linux:
 
    ```bash
    python3 -m venv venv
@@ -32,7 +32,7 @@ and goals. It is suitable for a household with multiple users.
    pip install -r requirements.txt
    ```
 
-  on windows:
+   on windows:
 
    ```bash
     python -m venv venv
