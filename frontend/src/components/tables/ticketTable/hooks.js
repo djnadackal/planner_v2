@@ -39,6 +39,7 @@ const useTicketTableHooks = (tableMode) => {
     }
   };
 
+  // pagination config
   const pagination = {
     pageSize,
     simple: true,
@@ -50,12 +51,16 @@ const useTicketTableHooks = (tableMode) => {
     },
   };
 
+  // handler for search input change
   const onSearchChange = (e) => {
     const value = e.target.value;
     navigation.setQueryParam.search(value);
   };
 
-  const queryParamDeps = [
+  // on mount and when checkedThingIds or selectedThingId changes, refetch data
+  useEffect(() => {
+    doRefetch();
+  }, [
     navigation.getQueryParam.thingIds,
     navigation.getQueryParam.showClosed,
     navigation.getQueryParam.milestoneId,
@@ -64,13 +69,9 @@ const useTicketTableHooks = (tableMode) => {
     navigation.getQueryParam.ticketCategoryIds,
     pageNumber,
     pageSize,
-  ];
+  ]);
 
-  // on mount and when checkedThingIds or selectedThingId changes, refetch data
-  useEffect(() => {
-    doRefetch();
-  }, queryParamDeps);
-
+  // helper to get row class names in the table
   const getRowClassName = (record) => {
     // if its selected, highlight it
     if (record.id == navigation.urlParams.ticketId) return "selected-row";

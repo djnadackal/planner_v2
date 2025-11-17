@@ -24,7 +24,7 @@ and goals. It is suitable for a household with multiple users.
    ```
 2. Install dependencies:
 
-  on mac/linux:
+   on mac/linux:
 
    ```bash
    python3 -m venv venv
@@ -32,7 +32,7 @@ and goals. It is suitable for a household with multiple users.
    pip install -r requirements.txt
    ```
 
-  on windows:
+   on windows:
 
    ```bash
     python -m venv venv
@@ -46,13 +46,13 @@ and goals. It is suitable for a household with multiple users.
    python seed_database.db
    ```
 
-  This creates a development database with some sample data.
-  If you want to start fresh with just the default categories,
-  pass a --fresh flag:
+   This creates a development database with some sample data.
+   If you want to start fresh with just the default categories,
+   pass a --fresh flag:
 
-  ```bash
-  python seed_database.db --fresh
-    ```
+   ```bash
+   python seed_database.db --fresh
+   ```
 
 4. Run the application:
 

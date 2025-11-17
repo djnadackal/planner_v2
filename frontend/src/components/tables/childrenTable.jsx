@@ -1,7 +1,7 @@
+// DEPRECATED, Probably delete in future
 import { useEffect } from "react";
 import { Table } from "antd";
 import useApi from "../../api";
-
 
 
 const ChilrenTable = ({ selectedThingId, setSelectedThingId }) => {
