@@ -5,9 +5,11 @@ on a linux server.
 
 ## Install server utils
 
-Need Nginx to serve the static files (frontend)
-Need Uvicorn to serve the REST server (backend)
-Need npm to build the frontend 
+ - Need Nginx to serve the static files (frontend)
+
+ - Need Uvicorn to serve the REST server (backend)
+
+ - Need npm to build the frontend 
 
 ```bash
 sudo apt install nginx uvicorn npm
