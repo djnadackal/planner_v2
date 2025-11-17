@@ -24,6 +24,8 @@ const useViewNavigation = () => {
       ticketCategoryIds: searchParams.get("ticketCategoryIds"),
       ticketCategoryId:
         urlParams.ticketCategoryId || searchParams.get("ticketCategoryId"),
+      pageNumber: parseInt(searchParams.get("pageNumber")) || 1,
+      pageSize: parseInt(searchParams.get("pageSize")) || 25,
     }),
     [
       urlParams,
@@ -108,6 +110,26 @@ const useViewNavigation = () => {
           return prev;
         }
         prev.set("search", search);
+        return prev;
+      });
+    },
+    pageNumber: (pageNumber) => {
+      setSearchParms((prev) => {
+        if (!pageNumber) {
+          prev.delete("pageNumber");
+          return prev;
+        }
+        prev.set("pageNumber", pageNumber);
+        return prev;
+      });
+    },
+    pageSize: (pageSize) => {
+      setSearchParms((prev) => {
+        if (!pageSize) {
+          prev.delete("pageSize");
+          return prev;
+        }
+        prev.set("pageSize", pageSize);
         return prev;
       });
     },
