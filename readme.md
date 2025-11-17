@@ -50,9 +50,9 @@ and goals. It is suitable for a household with multiple users.
   If you want to start fresh with just the default categories,
   pass a --fresh flag:
 
-    ```bash
+   ```bash
     python seed_database.db --fresh
-    ```
+   ```
 
 4. Run the application:
 
