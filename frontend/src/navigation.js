@@ -13,6 +13,7 @@ const useViewNavigation = () => {
   const location = useLocation();
   const getQueryParam = useMemo(
     () => ({
+      search: searchParams.get("search"),
       ticketId: urlParams.ticketId || searchParams.get("ticketId"),
       thingIds: urlParams.thingId
         ? [urlParams.thingId]

@@ -10,12 +10,14 @@ const Filters = () => {
 
   const onSearchChange = (e) => {
     const value = e.target.value;
+    console.log("new search value:", navigation.getQueryParam.search, "->", value);
+    console.log("Setting search to", value);
     navigation.setQueryParam.search(value);
   };
 
   const handleShowClosedToggle = () => {
-    console.log("Setting showClosed to", !showClosed);
-    if (!showClosed) {
+    console.log("Setting showClosed to", !navigation.getQueryParam.showClosed);
+    if (!navigation.getQueryParam.showClosed) {
       setShowToggleText("Hide Closed");
       navigation.setQueryParam.showClosed(true);
     } else {
