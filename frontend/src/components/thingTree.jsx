@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react';
 import { Button, Flex, Tree } from 'antd';
 import useApi from '../api/';
 import { useParams } from 'react-router-dom';
+import useViewNavigation from '../navigation';
 
 
 const ThingTree = ({
-  checkedThingIds,
-  setCheckedThingIds,
-  selectedThingId,
-  setSelectedThingId,
   refreshTrigger,
   beginAddThing,
 }) => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [initialLoad, setInitialLoad] = useState(true);
-  const { thingId } = useParams();
-
+  const navigation = useViewNavigation();
+  const { thingId } = navigation.urlParams;
+  // helper for selecting a thing
+  const selectThing = (newThingId) => {
+    if (newThingId && newThingId != thingId) {
+      navigation.navigate(`/things/${newThingId}`);
+    } else {
+      navigation.navigate(`/`);
+    }
+  }
   const {
     data: treeData,
     allIds,
@@ -24,8 +29,17 @@ const ThingTree = ({
     refetch: treeDataRefetch
   } = useApi.thing.fetchTree();
 
+  console.log("query params: ", navigation.getQueryParam);
+
+  const checkedThingIds = navigation.getQueryParam.thingIds
+
   const onCheck = (checkedKeys) => {
-    setCheckedThingIds(checkedKeys);
+    if (checkedKeys.length === 0) {
+      navigation.setQueryParam.thingIds(null);
+    } else {
+      navigation.setQueryParam.thingIds(checkedKeys);
+    }
+
   };
 
   useEffect(() => {
@@ -41,9 +55,8 @@ const ThingTree = ({
 
   const onSelect = (selectedKeys) => {
     const newSelectedThingId = selectedKeys[selectedKeys.length - 1]
-    setSelectedThingId(newSelectedThingId);
+    selectThing(newSelectedThingId);
   }
-
 
   return (<>
     <Flex
@@ -55,11 +68,11 @@ const ThingTree = ({
         width: "250px",
       }}>
       <Flex justify='end'>
-        {(checkedThingIds?.length > 0 || selectedThingId !== null) &&
+        {(checkedThingIds?.length > 0 || thingId !== null) &&
           <Button
             style={{ marginRight: '10px' }}
             onClick={() => {
-              setCheckedThingIds([]);
+              navigation.setQueryParam.thingIds(null);
               setSelectedThingId(null);
             }}>
             Clear Selection
@@ -70,7 +83,7 @@ const ThingTree = ({
         </Button>
       </Flex>
       <Tree
-        checkable={checkedThingIds !== undefined && setCheckedThingIds !== undefined}
+        checkable={true}
         checkedKeys={checkedThingIds}
         onCheck={onCheck}
         expandedKeys={expandedKeys}

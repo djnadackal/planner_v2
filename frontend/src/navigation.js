@@ -17,7 +17,7 @@ const useViewNavigation = () => {
       ticketId: urlParams.ticketId || searchParams.get("ticketId"),
       thingIds: urlParams.thingId
         ? [urlParams.thingId]
-        : searchParams.getAll("thingId"),
+        : searchParams.getAll("thingIds")?.[0]?.split(",")?.map(Number),
       showClosed: searchParams.get("showClosed") === "true",
       milestoneId: urlParams.milestoneId || searchParams.get("milestoneId"),
       userId: urlParams.userId || searchParams.get("userId"),
@@ -46,10 +46,10 @@ const useViewNavigation = () => {
     thingIds: (thingIds) => {
       setSearchParms((prev) => {
         if (!thingIds) {
-          prev.delete("thingId");
+          prev.delete("thingIds");
           return prev;
         }
-        prev.set("thingId", thingIds);
+        prev.set("thingIds", thingIds);
         return prev;
       });
     },

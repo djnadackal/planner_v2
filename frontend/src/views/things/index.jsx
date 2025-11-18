@@ -27,12 +27,8 @@ const ThingView = () => {
   return (<>
     <Flex gap="10px" style={{ overflowY: 'hidden', height: '100%' }}>
       <ThingTree
-        checkedThingIds={checkedThingIds}
-        setCheckedThingIds={setCheckedThingIds}
-        selectedThingId={thingId}
         refreshTrigger={ticketId}
-        beginAddThing={thingModalControl.add.open}
-        setSelectedThingId={select.thing} />
+        beginAddThing={thingModalControl.add.open} />
       <Flex gap="10px" style={{
         height: '100%',
         minHeight: 0,
