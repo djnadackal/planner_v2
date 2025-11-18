@@ -1,6 +1,6 @@
 import { Button, Card, Flex, Input, Table } from "antd";
 import useApi from "../api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ActionTypeDropdown from "./inputs/actionTypeDropdown";
 import { formatDate } from "../util/formatting";
 
@@ -22,6 +22,10 @@ const ActionPanel = ({ ticketId }) => {
     error: createError,
     create: createAction
   } = useApi.action.create();
+
+  useEffect(() => {
+    refetch(fetchParams);
+  }, [ticketId]);
 
   const [newActionText, setNewActionText] = useState("");
   const [newActionTypeId, setNewActionTypeId] = useState(null);
