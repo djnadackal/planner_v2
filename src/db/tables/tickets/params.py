@@ -64,7 +64,9 @@ class TicketParams(QueryParams):
         default=None, where_clause="tickets.id NOT IN ({})"
     )
     include: list[
-        Literal["thing", "category", "parent", "children", "user"]
+        Literal[
+            "thing", "category", "parent", "children", "user", "schedule"
+        ]
     ] = []
     page_number: Optional[int] = Field(default=1, ge=1)
     page_size: Optional[int] = Field(default=10, ge=1)
