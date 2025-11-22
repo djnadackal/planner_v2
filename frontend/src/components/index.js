@@ -8,12 +8,14 @@ import CommentPanel from "./commentPanel";
 import ActionPanel from "./actionPanel";
 import PlannerTitle from "./plannerTitle";
 import Filters from "./filters";
+import Charts from "./charts";
 
 const components = {
   inputs,
   details,
   tables,
   Filters,
+  Charts,
   NavBar,
   NewThingModal,
   ThingTree,
