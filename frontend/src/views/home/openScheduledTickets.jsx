@@ -12,7 +12,6 @@ const OpenScheduledTicketTable = () => {
   const { data, count, loading, error, fetchData } = useApi.ticket.fetchMany(
     queryParams,
   );
-  console.log("data in OpenScheduledTicketTable:", data);
 
   return (
     <Card

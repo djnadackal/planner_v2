@@ -1,6 +1,7 @@
-import { Button, Card, Table, Flex, Input } from "antd";
+import { Button, Card, Table, Flex } from "antd";
 import "../../../App.css";
 import useTicketTableHooks from "./hooks";
+import getColumns from "../../../tableColumns/getTicketTableColumns"
 
 
 const TicketTable = ({
@@ -23,6 +24,10 @@ const TicketTable = ({
     refreshTrigger
   );
 
+  const cols = tableMode === "compact" ?
+    ["Title", "Thing", "Category"] :
+    ["Title", "Thing", "Category", "Assigned User", "Updated"];
+
   return (
     <Card
       title={`Tickets (${count ? count : 0})`}
@@ -42,7 +47,7 @@ const TicketTable = ({
       <Flex vertical flex={1} >
         <Table
           dataSource={data ? data : []}
-          columns={getColumns(tableMode)}
+          columns={getColumns(cols)}
           pagination={pagination}
           rowClassName={getRowClassName}
           rowHoverable={false}
@@ -57,59 +62,7 @@ const TicketTable = ({
 }
 
 
-const getColumns = (mode = "full") => {
 
-  const formatDate = (dateString) => {
-    const options = {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  }
-
-  const columns = [
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-    },
-    {
-      title: 'Thing',
-      dataIndex: ['thing', 'name'],
-      key: 'thing_name',
-    },
-    {
-      title: 'Category',
-      dataIndex: ['category', 'name'],
-      key: 'category_name',
-    },
-  ]
-  if (mode === "compact") return columns;
-  const createdColumn = {
-    title: 'Created',
-    dataIndex: 'created_at',
-    key: 'created_at',
-    render: (text) => formatDate(text),
-  }
-  const userColumn = {
-    title: 'Assigned User',
-    dataIndex: ['user', 'username'],
-    key: 'user',
-  }
-  const updatedColumn = {
-    title: 'Updated',
-    dataIndex: 'updated_at',
-    key: 'updated_at',
-    render: (text) => formatDate(text),
-  }
-  //columns.push(createdColumn);
-  columns.push(userColumn);
-  columns.push(updatedColumn);
-  return columns;
-}
 
 
 

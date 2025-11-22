@@ -12,6 +12,7 @@ from .delete import delete
 from .get_count import get_count
 from .add_milestone import add_milestone
 from .remove_milestone import remove_milestone
+from .populate_milestones import populate_milestones
 
 
 # attach CRUD functions to Ticket class
@@ -25,6 +26,7 @@ setattr(Ticket, "get_count", as_staticmethod(get_count))
 setattr(Ticket, "delete", as_staticmethod(delete))
 setattr(Ticket, "add_milestone", add_milestone)
 setattr(Ticket, "remove_milestone", remove_milestone)
+setattr(Ticket, "populate_milestones", populate_milestones)
 Ticket.__params_class__ = TicketParams
 Ticket.__table_name__ = "tickets"
 

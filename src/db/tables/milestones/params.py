@@ -18,5 +18,11 @@ class MilestoneParams(QueryParams):
         default=None,
         where_clause="milestones.id in (SELECT milestone_id FROM ticket_milestones WHERE ticket_id = ?)",
     )
+    due_date_before: Optional[str] = FilterParam(
+        default=None, where_clause="milestones.due_date < ?"
+    )
+    due_date_after: Optional[str] = FilterParam(
+        default=None, where_clause="milestones.due_date > ?"
+    )
     page_number: Optional[int] = Field(1, ge=1)
     page_size: Optional[int] = Field(10, ge=1, le=100)
