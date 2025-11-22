@@ -18,14 +18,15 @@ def match_and_reopen_tickets():
     scheduler.reopen_scheduled_tickets()
 
 
-while True:
-    now = datetime.now()
-    # if the hour is 3am (run the job)
-    if now.hour == 3 and now.minute == 0:
-        print(f"Running scheduled ticket reopening at {now}")
-        match_and_reopen_tickets()
-        # Sleep for 61 seconds to avoid running multiple times in the same minute
-        time.sleep(61)
-    else:
-        # Sleep for 30 seconds before checking again
-        time.sleep(30)
+if __name__ == "__main__":
+    while True:
+        now = datetime.now()
+        # if the hour is 3am (run the job)
+        if now.hour == 3 and now.minute == 0:
+            print(f"Running scheduled ticket reopening at {now}")
+            match_and_reopen_tickets()
+            # Sleep for 61 seconds to avoid running multiple times in the same minute
+            time.sleep(61)
+        else:
+            # Sleep for 30 seconds before checking again
+            time.sleep(30)
