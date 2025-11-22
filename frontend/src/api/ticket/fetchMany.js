@@ -16,6 +16,7 @@ const useFetchTickets = (
     search,
     milestone_id,
     schedule_id,
+    scheduled,
     user_id,
   } = {},
   { lazy = false } = {},
@@ -32,6 +33,7 @@ const useFetchTickets = (
       search,
       milestone_id,
       schedule_id,
+      scheduled,
       user_id,
     } = params;
     if (parent_id !== undefined) {
@@ -86,6 +88,12 @@ const useFetchTickets = (
       url.searchParams.append("schedule_id", schedule_id);
     }
 
+    // set scheduled filter if provided
+    if (scheduled !== undefined) {
+      console.log("Adding scheduled param:", scheduled);
+      url.searchParams.append("scheduled", scheduled);
+    }
+
     // set pagination params if provided
     if (page_number !== undefined) {
       url.searchParams.append("page_number", page_number);
@@ -93,6 +101,7 @@ const useFetchTickets = (
     if (page_size !== undefined) {
       url.searchParams.append("page_size", page_size);
     }
+    console.log("Built URL:", url.toString());
 
     return url;
   };
@@ -111,6 +120,7 @@ const useFetchTickets = (
       search,
       milestone_id,
       schedule_id,
+      scheduled,
       user_id,
     },
     { lazy },

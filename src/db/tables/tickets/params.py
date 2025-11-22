@@ -56,6 +56,11 @@ class TicketParams(QueryParams):
         default=None,
         where_clause="tickets.schedule_id = ?",
     )
+    scheduled: Optional[bool] = FilterParam(
+        default=None,
+        where_clause="(tickets.schedule_id IS NOT NULL and ? = TRUE)",
+        special_case=(False, "tickets.schedule_id IS NULL"),
+    )
     user_id: Optional[int] = FilterParam(
         default=None,
         where_clause="tickets.user_id = ?",

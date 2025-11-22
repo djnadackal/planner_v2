@@ -2,6 +2,7 @@ import { Card, Flex } from "antd";
 import components from "../../components";
 import useHomeViewHooks from "./hooks";
 import useApi from "../../api";
+import OpenScheduledTicketTable from "./openScheduledTickets";
 
 
 const {
@@ -23,6 +24,7 @@ const HomeView = () => {
         style={{ minHeight: "400px" }}>
         <TopThingTicketsPie />
       </Card>
+      <OpenScheduledTicketTable />
     </Flex>
   );
 }

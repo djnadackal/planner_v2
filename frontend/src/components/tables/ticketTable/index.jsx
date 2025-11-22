@@ -1,9 +1,6 @@
 import { Button, Card, Table, Flex, Input } from "antd";
 import "../../../App.css";
 import useTicketTableHooks from "./hooks";
-import TicketCategoryDropdown from "../../inputs/ticketCategoryDropdown";
-import MilestoneDropdown from "../../inputs/milestoneDropdown";
-import UserDropdown from "../../inputs/userDropdown";
 
 
 const TicketTable = ({
@@ -101,6 +98,11 @@ const getColumns = (mode = "full") => {
     key: 'created_at',
     render: (text) => formatDate(text),
   }
+  const userColumn = {
+    title: 'Assigned User',
+    dataIndex: ['user', 'username'],
+    key: 'user',
+  }
   const updatedColumn = {
     title: 'Updated',
     dataIndex: 'updated_at',
@@ -108,19 +110,8 @@ const getColumns = (mode = "full") => {
     render: (text) => formatDate(text),
   }
   //columns.push(createdColumn);
-  //columns.push(updatedColumn);
-  const userColumn = {
-    title: 'Assigned User',
-    dataIndex: ['user', 'username'],
-    key: 'user',
-  }
-  const thingColumn = {
-    title: 'Thing',
-    dataIndex: ['thing', 'name'],
-    key: 'thing_name',
-  }
   columns.push(userColumn);
-  columns.push(thingColumn);
+  columns.push(updatedColumn);
   return columns;
 }
 
