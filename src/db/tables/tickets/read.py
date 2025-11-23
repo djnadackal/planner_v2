@@ -38,4 +38,7 @@ def read(
     if query_params and "children" in query_params.include:
         for ticket in tickets:
             ticket.populate_children()
+    if query_params and "milestones" in query_params.include:
+        for ticket in tickets:
+            ticket.populate_milestones(ticket)
     return ReadTicketsResponse(data=tickets, count=count)

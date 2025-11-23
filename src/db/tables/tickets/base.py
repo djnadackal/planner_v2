@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from ..categories import TicketCategory
     from ..users import User
     from ..schedules import Schedule
+    from ..milestones import Milestone
 
 
 # Pydantic model for Ticket
@@ -43,6 +44,7 @@ class Ticket(TableModel):
         table_model="Schedule"
     )
     children: Optional[List["Ticket"]] = None
+    milestones: Optional[List["Milestone"]] = None
 
     class Config:
         from_attributes = True

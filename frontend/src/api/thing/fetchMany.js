@@ -9,7 +9,6 @@ const useFetchThings = (
   { lazy = false } = {},
 ) => {
   const urlBuilder = (url, params) => {
-    console.log("building URL with params:", params);
     const { parent_id, include, page_number, page_size } = params;
     if (parent_id !== undefined) {
       url.searchParams.append("parent_id", parent_id);
@@ -30,7 +29,6 @@ const useFetchThings = (
     if (page_size !== undefined) {
       url.searchParams.append("page_size", page_size);
     }
-    console.log("Built URL:", url.toString());
     return url;
   };
 

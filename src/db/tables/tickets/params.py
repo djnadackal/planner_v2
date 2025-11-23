@@ -52,6 +52,10 @@ class TicketParams(QueryParams):
         default=None,
         where_clause="tickets.id in (SELECT ticket_id FROM ticket_milestones WHERE milestone_id = ?)",
     )
+    milestone_ids: Optional[list[int]] = FilterParam(
+        default=None,
+        where_clause="tickets.id in (SELECT ticket_id FROM ticket_milestones WHERE milestone_id IN ({}))",
+    )
     schedule_id: Optional[int] = FilterParam(
         default=None,
         where_clause="tickets.schedule_id = ?",
@@ -71,7 +75,13 @@ class TicketParams(QueryParams):
     )
     include: list[
         Literal[
-            "thing", "category", "parent", "children", "user", "schedule"
+            "thing",
+            "category",
+            "parent",
+            "children",
+            "user",
+            "schedule",
+            "milestones",
         ]
     ] = []
     page_number: Optional[int] = Field(default=1, ge=1)

@@ -35,4 +35,6 @@ def get_by_id(ticket_id: int) -> Optional[Ticket]:
     ticket = core.run_get_by_id(query, ticket_id, Ticket.from_row)
     if ticket:
         ticket.populate_children()
+    if ticket:
+        ticket.populate_milestones()
     return ticket
