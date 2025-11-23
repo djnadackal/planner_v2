@@ -4,7 +4,6 @@ import ScheduleList from "./scheduleList";
 import TicketList from "./ticketList";
 import TicketTable from "./ticketTable";
 import UserList from "./userList";
-import MilestonePastDueTickets from "./milestonePastDueTickets";
 
 const tables = {
   TicketTable,

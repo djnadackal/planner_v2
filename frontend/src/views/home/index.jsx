@@ -1,15 +1,9 @@
 import { Card, Flex } from "antd";
-import components from "../../components";
-import useHomeViewHooks from "./hooks";
-import useApi from "../../api";
 import OpenScheduledTicketTable from "./openScheduledTickets";
+import MilestonePastDueTickets from "./milestonePastDueTickets";
+import UserTicketsPie from "./userTicketsPie";
+import TopThingTicketsPie from "./topThingTicketsPie";
 
-
-const {
-  tables: { MilestonePastDueTickets },
-  details: { MilestoneDetails, MilestoneModal },
-  Charts: { UserTicketsPie, TopThingTicketsPie }
-} = components;
 
 const HomeView = () => {
   return (

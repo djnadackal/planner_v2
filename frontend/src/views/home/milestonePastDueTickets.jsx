@@ -1,7 +1,8 @@
+import { Card, Flex, Table } from 'antd';
 import useApi from '../../api';
 import { useEffect, useState } from 'react';
 import getColumns from '../../tableColumns/getTicketTableColumns';
-import { Card, Flex, Table } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const MilestonePastDueTickets = () => {
   const [milestoneIds, setMilestoneIds] = useState([]);
@@ -14,6 +15,7 @@ const MilestonePastDueTickets = () => {
     open: true,
     milestone_ids: [], // to be filled after fetching past due milestones
     include: ['thing', 'user', 'category'],
+    page_size: 10000,
   };
 
   const api = {
@@ -23,6 +25,18 @@ const MilestonePastDueTickets = () => {
     tickets: {
       pastDue: useApi.ticket.fetchMany(openPastDueTicketParams, { lazy: true }),
     },
+  };
+
+  const navigate = useNavigate();
+
+  // on row click, navigate to ticket detail page
+  const onRow = (record) => {
+    return {
+      onClick: () => {
+        navigate(`/tickets/${record.id}`);
+      },
+      style: { cursor: 'pointer' },
+    };
   };
 
   useEffect(() => {
@@ -48,7 +62,7 @@ const MilestonePastDueTickets = () => {
 
   return (
     <Card
-      title={"Current Todos"}
+      title={`Open Tickets on Past Due Milestones (${api.tickets.pastDue.count || 0})`}
       style={{
         marginTop: "10px",
         width: 500
@@ -57,6 +71,7 @@ const MilestonePastDueTickets = () => {
         <Table
           dataSource={api.tickets.pastDue.data ? api.tickets.pastDue.data : []}
           columns={getColumns(cols)}
+          onRow={onRow}
           pagination={false}
           scroll={{ y: 400 }}
           loading={api.tickets.pastDue.loading}
