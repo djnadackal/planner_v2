@@ -26,4 +26,4 @@ class ActionParams(QueryParams):
     )
     include: list[Literal["ticket", "action_type"]] = []
     page_number: Optional[int] = Field(1, ge=1)
-    page_size: Optional[int] = Field(10, ge=1, le=100)
+    page_size: Optional[int] = Field(10, ge=1)

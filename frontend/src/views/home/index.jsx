@@ -3,6 +3,7 @@ import OpenScheduledTicketTable from "./openScheduledTickets";
 import MilestonePastDueTickets from "./milestonePastDueTickets";
 import UserTicketsPie from "./userTicketsPie";
 import TopThingTicketsPie from "./topThingTicketsPie";
+import CompletedThisWeek from "./completedThisWeek";
 
 
 const HomeView = () => {
@@ -19,9 +20,10 @@ const HomeView = () => {
           style={{ minHeight: "400px" }}>
           <TopThingTicketsPie />
         </Card>
-        <OpenScheduledTicketTable />
+        <CompletedThisWeek />
       </Flex>
       <Flex gap="10px">
+        <OpenScheduledTicketTable />
         <MilestonePastDueTickets />
       </Flex>
     </Flex>

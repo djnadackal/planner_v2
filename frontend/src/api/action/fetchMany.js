@@ -9,9 +9,11 @@ const useFetchActions = (
     ticket_id,
     include,
     action_type_id,
-    action_name_id,
+    action_type_name,
     performed_before,
     performed_after,
+    page_number,
+    page_size,
   } = {},
   { lazy = false } = {},
 ) => {
@@ -20,9 +22,11 @@ const useFetchActions = (
       ticket_id,
       include,
       action_type_id,
-      action_name_id,
+      action_type_name,
       performed_before,
       performed_after,
+      page_number,
+      page_size,
     } = params;
     if (ticket_id !== undefined) {
       url.searchParams.append("ticket_id", ticket_id);
@@ -30,8 +34,8 @@ const useFetchActions = (
     if (action_type_id !== undefined) {
       url.searchParams.append("action_type_id", action_type_id);
     }
-    if (action_name_id !== undefined) {
-      url.searchParams.append("action_name_id", action_name_id);
+    if (action_type_name !== undefined) {
+      url.searchParams.append("aaction_type_name", action_type_name);
     }
     if (performed_before !== undefined) {
       url.searchParams.append("performed_before", performed_before);
@@ -49,6 +53,14 @@ const useFetchActions = (
         url.searchParams.append("include", include);
       }
     }
+
+    if (page_number !== undefined) {
+      url.searchParams.append("page_number", page_number);
+    }
+    if (page_size !== undefined) {
+      url.searchParams.append("page_size", page_size);
+    }
+
     return url;
   };
 
@@ -59,9 +71,11 @@ const useFetchActions = (
       ticket_id,
       include,
       action_type_id,
-      action_name_id,
+      action_type_name,
       performed_before,
       performed_after,
+      page_number,
+      page_size,
     },
     { lazy },
   );

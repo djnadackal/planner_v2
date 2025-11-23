@@ -12,7 +12,6 @@ const tables = {
   ScheduleList,
   TicketList,
   UserList,
-  MilestonePastDueTickets,
 };
 
 export default tables;

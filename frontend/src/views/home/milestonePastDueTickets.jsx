@@ -64,7 +64,6 @@ const MilestonePastDueTickets = () => {
     <Card
       title={`Open Tickets on Past Due Milestones (${api.tickets.pastDue.count || 0})`}
       style={{
-        marginTop: "10px",
         width: 500
       }}>
       <Flex vertical flex={1} >
