@@ -23,6 +23,6 @@ def populate_milestones(ticket: Ticket) -> None:
         "JOIN ticket_milestones tm ON m.id = tm.milestone_id "
         "WHERE tm.ticket_id = ?"
     )
-    ticket.children = core.run_list(
+    ticket.milestones = core.run_list(
         query, (ticket.id,), Milestone.from_row
     )
