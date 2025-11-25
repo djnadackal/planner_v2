@@ -13,12 +13,9 @@ const useTicketTableHooks = (tableMode, refreshTrigger) => {
   const pageSize = navigation.getQueryParam.pageSize || 25;
   const pageNumber = navigation.getQueryParam.pageNumber || 1;
   const queryParams = useTicketQueryParams(navigation.getQueryParam);
-  console.log("queryParams in useTicketTableHooks:", queryParams);
   // initialize state
   const { data, count, loading, error, fetchData } =
     useApi.ticket.fetchMany(queryParams);
-
-  console.log("data in useTicketTableHooks:", data);
 
   // set default table mode
   if (!tableMode) tableMode = "full"; // other option is "compact"
@@ -70,6 +67,7 @@ const useTicketTableHooks = (tableMode, refreshTrigger) => {
     navigation.getQueryParam.thingIds,
     navigation.getQueryParam.showClosed,
     navigation.getQueryParam.milestoneId,
+    navigation.getQueryParam.milestoneIds,
     navigation.getQueryParam.userId,
     navigation.getQueryParam.userIds,
     navigation.getQueryParam.search,
