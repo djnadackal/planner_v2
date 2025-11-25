@@ -14,8 +14,6 @@ const ThingDropdown = ({ selectedThingId, setSelectedThingId, filters }) => {
     error,
     refetch
   } = useApi.thing.fetchMany(params);
-  console.log("data in ThingDropdown:", data);
-  console.log("selectedThingId in ThingDropdown:", selectedThingId);
 
   const handleChange = (value) => {
     console.log("value selected in ThingDropdown:", value);

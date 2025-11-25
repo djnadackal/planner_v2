@@ -5,15 +5,14 @@ const useTicketQueryParams = (queryParams) => {
     thing_ids: queryParams.thingIds,
     include: ["thing", "category", "user"],
     search: queryParams.search || undefined,
-    category_ids: queryParams.ticketCategoryIds || undefined,
     category_id: queryParams.ticketCategoryId || undefined,
+    category_ids: queryParams.ticketCategoryIds,
     open: queryParams.showClosed ? undefined : true,
     milestone_id: queryParams.milestoneId || undefined,
+    milestone_ids: queryParams.milestoneIds,
     schedule_id: queryParams.scheduleId || undefined,
     user_id: queryParams.userId || undefined,
-    user_ids:
-      queryParams.userIds?.[0]?.split(",")?.map((id) => Number(id)) ||
-      undefined,
+    user_ids: queryParams.userIds,
     page_number: pageNumber,
     page_size: pageSize,
   };

@@ -2,30 +2,26 @@ import { Select } from "antd";
 import { useEffect } from "react";
 import useApi from "../../api/";
 
-const UserMultiDropdown = (
-  { selectedUserIds, setSelectedUserIds, filters, placeholder = "Select Users" }
+const MilestoneMultiDropdown = (
+  { selectedMilestoneIds, setSelectedMilestoneIds, filters, placeholder = "Select Milestones" }
 ) => {
-  const {
-    data,
-    loading,
-    error,
-    fetchData
-  } = useApi.user.fetchMany({
+  const params = {
     ...filters,
     page_size: filters?.page_size || 10000,
     page_number: 1
-  });
+  }
+  const { data, loading, error, fetchData } = useApi.milestone.fetchMany(params);
 
   const handleChange = (value) => {
-    console.log("value selected in UserMultiDropdown:", value);
-    setSelectedUserIds(value);
+    console.log("value selected in MilestoneMultiDropdown:", value);
+    setSelectedMilestoneIds(value);
   };
 
   useEffect(() => {
-    fetchData(filters);
+    fetchData(params);
   }, [filters]);
 
-  console.log("selectedUserIds:", selectedUserIds);
+  console.log("selectedMilestoneIds:", selectedMilestoneIds);
 
   return (
     <Select
@@ -37,17 +33,17 @@ const UserMultiDropdown = (
       onClear={() => handleChange(null)}
       error={error}
       onChange={handleChange}
-      value={selectedUserIds || []}
+      value={selectedMilestoneIds || []}
       filterOption={(input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
       }
-      options={data ? [...data, { username: "No User", id: 0 }].map(user => ({
-        label: user.username,
-        value: user.id
+      options={data ? data.map(milestone => ({
+        label: milestone.name,
+        value: milestone.id
       })) : []}
     />
   );
 }
 
 
-export default UserMultiDropdown;
+export default MilestoneMultiDropdown;

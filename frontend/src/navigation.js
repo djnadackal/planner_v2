@@ -20,14 +20,20 @@ const useViewNavigation = () => {
         : searchParams.getAll("thingIds")?.[0]?.split(",")?.map(Number),
       showClosed: searchParams.get("showClosed") === "true",
       milestoneId: urlParams.milestoneId || searchParams.get("milestoneId"),
+      milestoneIds: urlParams.milestoneId
+        ? [urlParams.milestoneId]
+        : searchParams.getAll("milestoneIds")?.[0]?.split(",")?.map(Number),
       scheduleId: urlParams.scheduleId || searchParams.get("scheduleId"),
       userId: urlParams.userId || searchParams.get("userId"),
       userIds: urlParams.userId
         ? [urlParams.userId]
-        : searchParams.getAll("userIds"),
-      ticketCategoryIds: searchParams.get("ticketCategoryIds"),
+        : searchParams.getAll("userIds")?.[0]?.split(",")?.map(Number),
       ticketCategoryId:
         urlParams.ticketCategoryId || searchParams.get("ticketCategoryId"),
+      ticketCategoryIds: searchParams
+        .getAll("ticketCategoryIds")?.[0]
+        ?.split(",")
+        ?.map(Number),
       pageNumber: parseInt(searchParams.get("pageNumber")) || 1,
       pageSize: parseInt(searchParams.get("pageSize")) || 25,
     }),
@@ -51,7 +57,7 @@ const useViewNavigation = () => {
     thingIds: (thingIds) => {
       setSearchParms((prev) => {
         prev.delete("pageNumber");
-        if (!thingIds) {
+        if (!thingIds || thingIds.length === 0) {
           prev.delete("thingIds");
           return prev;
         }
@@ -78,6 +84,17 @@ const useViewNavigation = () => {
           return prev;
         }
         prev.set("milestoneId", milestoneId);
+        return prev;
+      });
+    },
+    milestoneIds: (milestoneIds) => {
+      setSearchParms((prev) => {
+        prev.delete("pageNumber");
+        if (!milestoneIds || milestoneIds.length === 0) {
+          prev.delete("milestoneIds");
+          return prev;
+        }
+        prev.set("milestoneIds", milestoneIds);
         return prev;
       });
     },
@@ -108,10 +125,11 @@ const useViewNavigation = () => {
     ticketCategoryIds: (ticketCategoryIds) => {
       setSearchParms((prev) => {
         prev.delete("pageNumber");
-        if (!ticketCategoryIds) {
+        if (!ticketCategoryIds || ticketCategoryIds.length === 0) {
           prev.delete("ticketCategoryIds");
           return prev;
         }
+        console.log("setting ticketCategoryIds to:", ticketCategoryIds);
         prev.set("ticketCategoryIds", ticketCategoryIds);
         return prev;
       });

@@ -13,6 +13,7 @@ const useFetchTickets = (
     page_number,
     page_size,
     category_id,
+    category_ids,
     search,
     milestone_id,
     milestone_ids,
@@ -32,6 +33,7 @@ const useFetchTickets = (
       page_number,
       page_size,
       category_id,
+      category_ids,
       search,
       milestone_id,
       milestone_ids,
@@ -89,6 +91,17 @@ const useFetchTickets = (
       url.searchParams.append("category_id", category_id);
     }
 
+    // set category_ids filter if provided
+    if (category_ids !== undefined) {
+      if (Array.isArray(category_ids)) {
+        category_ids.forEach((id) =>
+          url.searchParams.append("category_ids", id),
+        );
+      } else {
+        url.searchParams.append("category_ids", category_ids);
+      }
+    }
+
     // set milestone_id filter if provided
     if (milestone_id !== undefined) {
       url.searchParams.append("milestone_id", milestone_id);
@@ -137,6 +150,7 @@ const useFetchTickets = (
       page_number,
       page_size,
       category_id,
+      category_ids,
       search,
       milestone_id,
       milestone_ids,

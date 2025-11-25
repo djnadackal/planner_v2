@@ -5,7 +5,6 @@ import UserMultiDropdown from "../inputs/userMultiDropdown";
 import useViewNavigation from "../../navigation";
 import { useState } from "react";
 import MilestoneMultiDropdown from "../inputs/milestoneMultiDropdown";
-import TicketCategoryMultiDropdown from "../inputs/ticketCategoryMultiDropdown";
 
 const Filters = () => {
   const navigation = useViewNavigation();
@@ -32,6 +31,8 @@ const Filters = () => {
     navigation.getQueryParam.showClosed ? "Hide Closed" : "Show Closed",
   );
 
+  console.log("queryparams: ", navigation.getQueryParam);
+
   return (
     <Flex gap="10px">
       <Input
@@ -45,9 +46,9 @@ const Filters = () => {
       <MilestoneMultiDropdown
         selectedMilestoneIds={navigation.getQueryParam.milestoneIds}
         setSelectedMilestoneIds={navigation.setQueryParam.milestoneIds} />
-      <TicketCategoryMultiDropdown
-        selectedCategoryIds={navigation.getQueryParam.ticketCategoryIds}
-        setSelectedCategoryIds={navigation.setQueryParam.ticketCategoryIds} />
+      <TicketCategoryDropdown
+        selectedCategoryId={navigation.getQueryParam.ticketCategoryId}
+        setSelectedCategoryId={navigation.setQueryParam.ticketCategoryId} />
       <Button
         onClick={handleShowClosedToggle}>
         {showClosedToggleText}
