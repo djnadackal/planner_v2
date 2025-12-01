@@ -12,8 +12,7 @@ import ScheduleView from './views/schedules';
 import UserView from './views/users';
 import Filters from './components/filters';
 import HomeView from './views/home';
-
-const { PlannerTitle } = components;
+import PlannerTitle from './components/plannerTitle';
 
 const App = () => {
 
@@ -30,7 +29,6 @@ const App = () => {
             alignItems: 'center'
           }}>
             <PlannerTitle />
-            <NavBar />
             <Filters />
           </Header>
           <Content style={{
