@@ -25,8 +25,8 @@ def create(ticket: Ticket) -> int:
         ticket.category_id,
         ticket.description,
         ticket.open,
-        ticket.schedule_id,
         ticket.user_id,
+        ticket.schedule_id,
     )
     exception_package = ExceptionPackage(
         foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}"
