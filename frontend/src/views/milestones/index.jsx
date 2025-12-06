@@ -5,7 +5,8 @@ import useMilestoneViewHooks from "./hooks";
 
 const {
   tables: { MilestoneList, TicketList },
-  details: { MilestoneDetails, MilestoneModal },
+  details: { MilestoneDetails },
+  modals: { MilestoneModal }
 } = components;
 
 const MilestoneView = () => {

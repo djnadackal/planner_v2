@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Flex, Layout } from 'antd';
 
 const { Header, Content } = Layout;
-import components from './components';
-import NavBar from './components/navbar';
 import TicketView from './views/tickets';
 import ThingView from './views/things';
 import MilestoneView from './views/milestones';

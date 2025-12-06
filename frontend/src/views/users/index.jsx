@@ -5,7 +5,7 @@ import useUserViewHooks from "./hooks";
 
 const {
   tables: { TicketList, UserList },
-  details: { UserModal },
+  modals: { UserModal },
 } = components;
 
 const UserView = () => {

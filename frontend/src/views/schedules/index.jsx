@@ -5,7 +5,8 @@ import useScheduleViewHooks from "./hooks";
 
 const {
   tables: { ScheduleList, TicketList },
-  details: { ScheduleDetails, ScheduleModal },
+  details: { ScheduleDetails },
+  modals: { ScheduleModal }
 } = components;
 
 const ScheduleView = () => {

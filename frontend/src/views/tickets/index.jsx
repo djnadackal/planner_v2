@@ -7,7 +7,8 @@ const {
   CommentPanel,
   ActionPanel,
   tables: { TicketTable },
-  details: { TicketDetails, TicketModal },
+  details: { TicketDetails },
+  modals: { TicketModal },
   inputs: { MilestoneDropdown }
 } = components;
 

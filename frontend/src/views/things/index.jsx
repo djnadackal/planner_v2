@@ -8,7 +8,8 @@ const {
   CommentPanel,
   ActionPanel,
   tables: { TicketTable },
-  details: { ThingDetails, TicketDetails, TicketModal, ThingModal }
+  details: { ThingDetails, TicketDetails },
+  modals: { TicketModal, ThingModal }
 } = components;
 
 const ThingView = () => {
