@@ -1,4 +1,10 @@
 import { Menu } from "antd";
+import {
+  SettingOutlined,
+  UserOutlined,
+  ScheduleOutlined,
+
+} from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useViewNavigation from "../navigation";
@@ -29,13 +35,21 @@ const getItems = (searchParams) => {
     {
       label: 'Schedules',
       key: 'schedules',
-      href: '/schedules' + paramStr
+      href: '/schedules' + paramStr,
+      // icon: <ScheduleOutlined />
     },
     {
       label: 'Users',
       key: 'users',
-      href: '/users' + paramStr
-    }
+      href: '/users' + paramStr,
+      // icon: <UserOutlined />
+    },
+    {
+      label: 'Config',
+      key: 'config',
+      href: '/config',
+      icon: <SettingOutlined />
+    },
   ]
 }
 

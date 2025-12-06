@@ -1,10 +1,13 @@
 import { Dropdown, Typography } from "antd";
-import { useNavigate } from "react-router-dom";
 import { useNavBarProps } from "./navbar";
+import useViewNavigation from "../navigation";
 
 const PlannerTitle = () => {
-  const navigate = useNavigate();
+  const navigation = useViewNavigation();
   const navBarProps = useNavBarProps();
+
+  const pageName = navigation.location.pathname.split('/')[1] || 'home';
+
   return (
     <Dropdown
       menu={navBarProps}
@@ -18,9 +21,9 @@ const PlannerTitle = () => {
           cursor: 'pointer',
         }}
         level={3}
-        onClick={() => navigate('/')}
+        onClick={() => navigation.navigate('/')}
       >
-        Planner
+        {"Planner - " + pageName.charAt(0).toUpperCase() + pageName.slice(1)}
       </Typography.Title>
     </Dropdown>
   )
