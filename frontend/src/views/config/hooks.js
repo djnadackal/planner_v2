@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import useApi from "../../api";
 import components from "../../components";
@@ -7,71 +7,51 @@ import useViewNavigation from "../../navigation";
 
 const {
   modals: {
-    controllers: { useMilestoneModalControl },
+    controllers: { useCategoryModalControl },
   },
 } = components;
 
-const useMilestoneViewHooks = () => {
+const useCategoryViewHooks = () => {
   // URL State
   const navigation = useViewNavigation();
-  const { milestoneId } = navigation.getQueryParam;
-  const select = {
-    milestone: (id) => {
-      if (id == milestoneId) {
-        navigation.navigate(`/milestones/`);
-      } else {
-        navigation.navigate(`/milestones/${id}`);
-      }
-    },
-    ticket: (id) => {
-      navigation.navigate(`/tickets/${id}`);
-    },
-  };
-  const ticketParams = useTicketQueryParams(navigation.getQueryParam);
+  // id for the selected category
+  const [categoryId, setCategoryId] = useState(null);
+  // category names, actionType, ticketCategory, thingCategory
+  const [categoryName, setCategoryName] = useState("actionType");
   // API object
   const api = {
-    milestone: {
-      selected: useApi.milestone.fetchOne(milestoneId),
-      list: useApi.milestone.fetchMany(),
-      create: useApi.milestone.create(),
-      update: useApi.milestone.update(),
+    actionType: {
+      list: useApi.action.fetchTypes(),
+      create: useApi.action.createType(),
+      update: useApi.action.updateType(),
     },
-    ticket: {
-      list: useApi.ticket.fetchMany(ticketParams),
+    ticketCategory: {
+      list: useApi.ticket.fetchCategories(),
+      create: useApi.ticket.createCategory(),
+      update: useApi.ticket.updateCategory(),
+    },
+    thingCategory: {
+      list: useApi.thing.fetchCategories(),
+      create: useApi.thing.createCategory(),
+      update: useApi.thing.updateCategory(),
     },
   };
   api.refreshAll = () => {
-    if (milestoneId) {
-      api.milestone.selected.fetchOne(milestoneId);
-    }
-    api.milestone.list.fetchData();
-    if (milestoneId) {
-      api.ticket.list.fetchData(ticketParams);
-    }
+    api.actionType.list.fetchData();
+    api.ticketCategory.list.fetchData();
+    api.thingCategory.list.fetchData();
   };
   // Modal Control
-  const modalControl = useMilestoneModalControl(api, milestoneId);
-
-  // refresh all on milestoneId change
-  useEffect(() => {
-    if (milestoneId) {
-      api.refreshAll();
-    }
-  }, [
-    navigation.getQueryParam.thingIds,
-    navigation.getQueryParam.showClosed,
-    navigation.getQueryParam.milestoneId,
-    navigation.getQueryParam.userId,
-    navigation.getQueryParam.search,
-    navigation.getQueryParam.ticketCategoryIds,
-  ]);
+  const modalControl = useCategoryModalControl(api, categoryName, categoryId);
 
   return {
-    milestoneId,
+    categoryId,
+    setCategoryId,
+    categoryName,
+    setCategoryName,
     api,
-    select,
     modalControl,
   };
 };
 
-export default useMilestoneViewHooks;
+export default useCategoryViewHooks;
