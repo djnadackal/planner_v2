@@ -9,8 +9,6 @@ const CategoryModal = ({ modalControl }) => {
       submit();
     }
   }
-  console.log("modal control:", modalControl);
-  console.log("title in modal:", title);
   return (
     <Modal
       title={title}
@@ -26,8 +24,9 @@ const CategoryModal = ({ modalControl }) => {
           onKeyDown={submitOnEnter}
           onChange={(e) => category.set.name(e.target.value)} />
         <ColorPicker
-          defaultValue="#ffffff"
           showText={(color) => <span>Select Color ({color.toHexString()})</span>}
+          value={category?.color}
+          onChange={(color) => category.set.color(color.toHexString())}
         />
         <Input.TextArea
           placeholder="Description"

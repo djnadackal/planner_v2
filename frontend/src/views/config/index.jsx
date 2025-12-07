@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from "antd";
+import { Button, Flex, Select, Typography } from "antd";
 import useCategoryViewHooks from "./hooks";
 import components from "../../components";
 
@@ -9,8 +9,6 @@ const {
 
 const ConfigView = () => {
   const {
-    categoryId,
-    setCategoryId,
     categoryName,
     setCategoryName,
     api,
@@ -18,7 +16,16 @@ const ConfigView = () => {
   } = useCategoryViewHooks();
   return (<>
     <Flex vertical gap="10px">
-      <Flex justify="right">
+      <Flex justify="space-between">
+        <Select
+          value={categoryName}
+          onChange={(value) => setCategoryName(value)}
+          style={{ width: '200px' }}
+          options={[
+            { label: 'Action Types', value: 'actionType' },
+            { label: 'Ticket Categories', value: 'ticketCategory' },
+            { label: 'Thing Categories', value: 'thingCategory' },
+          ]} />
         <Button
           href="https://github.com/topper3418/planner_v2/issues"
           target="_blank"

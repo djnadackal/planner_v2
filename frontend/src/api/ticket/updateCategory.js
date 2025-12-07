@@ -2,7 +2,7 @@ import apiUtils from "../util";
 
 const { useUpdate } = apiUtils;
 
-const UPDATE_TICKET_CATEGORY_URL = "/api/tickets/ticket_categories";
+const UPDATE_TICKET_CATEGORY_URL = "/api/tickets/categories";
 
 const useUpdateTicketCategory = () => {
   const { data, loading, error, update } = useUpdate(

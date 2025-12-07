@@ -9,6 +9,7 @@ def update(cls, category: Category) -> None:
     core.logger = cls.__logger__
     if category.id is None:
         raise ValueError(f"{cls.__class__} ID is required for update")
+    print("Updating category in DB:", category)
     query = f"""
     UPDATE {cls.__table_name__} 
     SET 

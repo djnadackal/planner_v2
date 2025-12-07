@@ -2,7 +2,7 @@ import apiUtils from "../util";
 
 const { useCreate } = apiUtils;
 
-const TICKET_CATEGORY_CREATE_URL = "/api/tickets/ticket_categories/";
+const TICKET_CATEGORY_CREATE_URL = "/api/tickets/categories/";
 
 const useCreateTicketCategory = () => {
   const { data, loading, error, create } = useCreate(

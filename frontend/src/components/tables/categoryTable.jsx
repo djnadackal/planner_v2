@@ -1,4 +1,5 @@
-import { Button, Card, Table, Flex } from "antd";
+import { Button, Card, Table, Flex, Modal } from "antd";
+import { useState } from "react";
 
 
 const CategoryTable = ({
@@ -7,6 +8,7 @@ const CategoryTable = ({
   modalControl,
   scrollHeight
 }) => {
+  const [isDefaultModalOpen, setIsDefaultModalOpen] = useState(false);
 
   const categoryApi = api[categoryName];
 
@@ -17,7 +19,12 @@ const CategoryTable = ({
     return {
       onDoubleClick: () => {
         console.log("Editing record:", record);
-        modalControl.edit.open(record);
+        if (record.is_default) {
+          setIsDefaultModalOpen(true);
+        } else {
+          modalControl.edit.open(record);
+
+        }
       },
     };
   }
@@ -50,15 +57,21 @@ const CategoryTable = ({
     }
   ]
 
-  return (
+  const categoryTitle = {
+    actionType: "Action Type",
+    ticketCategory: "Ticket Category",
+    thingCategory: "Thing Category",
+  }[categoryName]
+
+  return (<>
     <Card
-      title={`${categoryName} (${count ? count : 0})`}
+      title={`${categoryTitle} (${count ? count : 0})`}
       extra={
         <Flex gap="10px">
           <Button
             type="primary"
             onClick={modalControl.add.open}>
-            {`Add ${categoryName}`}
+            {`Add ${categoryTitle}`}
           </Button>
         </Flex>
       }>
@@ -73,7 +86,13 @@ const CategoryTable = ({
           rowKey="id" />
       </Flex>
     </Card>
-  )
+    <Modal
+      type="warning"
+      title="Cannot Edit Default Category"
+      open={isDefaultModalOpen}
+      footer={null}
+      onCancel={() => setIsDefaultModalOpen(false)} />
+  </>)
 }
 
 

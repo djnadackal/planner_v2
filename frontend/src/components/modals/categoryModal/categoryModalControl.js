@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useCategoryBuffer from "./categoryBuffer";
 
-const useCategoryModalControl = (api, categoryName, categoryId) => {
+const useCategoryModalControl = (api, categoryName) => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [mode, setMode] = useState("add"); // "add" or "edit"

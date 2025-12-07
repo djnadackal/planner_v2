@@ -12,10 +12,6 @@ const {
 } = components;
 
 const useCategoryViewHooks = () => {
-  // URL State
-  const navigation = useViewNavigation();
-  // id for the selected category
-  const [categoryId, setCategoryId] = useState(null);
   // category names, actionType, ticketCategory, thingCategory
   const [categoryName, setCategoryName] = useState("actionType");
   // API object
@@ -42,11 +38,9 @@ const useCategoryViewHooks = () => {
     api.thingCategory.list.fetchData();
   };
   // Modal Control
-  const modalControl = useCategoryModalControl(api, categoryName, categoryId);
+  const modalControl = useCategoryModalControl(api, categoryName);
 
   return {
-    categoryId,
-    setCategoryId,
     categoryName,
     setCategoryName,
     api,
