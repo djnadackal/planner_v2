@@ -62,7 +62,7 @@ const MilestonePastDueTickets = () => {
     <Card
       title={`Open Tickets on Past Due Milestones (${api.tickets.pastDue.count || 0})`}
       style={{
-        width: 500
+        width: 600
       }}>
       <Flex vertical flex={1} >
         <Table
@@ -70,7 +70,7 @@ const MilestonePastDueTickets = () => {
           columns={getColumns(cols)}
           onRow={onRow}
           pagination={false}
-          scroll={{ y: 400 }}
+          scroll={{ y: 300 }}
           loading={api.tickets.pastDue.loading}
           error={api.tickets.pastDue.error}
           rowKey="id" />

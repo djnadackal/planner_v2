@@ -37,7 +37,7 @@ const OpenScheduledTicketTable = () => {
     <Card
       title={`Open Scheduled Tickets (${count ? count : 0})`}
       style={{
-        width: 450,
+        width: 550,
       }}>
       <Flex vertical flex={1} >
         <Table
@@ -48,7 +48,7 @@ const OpenScheduledTicketTable = () => {
           }
           onRow={onRow}
           rowHoverable={false}
-          scroll={{ y: 400 }}
+          scroll={{ y: 300 }}
           pagination={false}
           loading={loading}
           error={error}
