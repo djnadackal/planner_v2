@@ -7,7 +7,7 @@ Thing = Controller.Tables.Thing
 Ticket = Controller.Tables.Ticket
 
 
-def seed_tickets(thing_id_lookup, dev=True):
+def seed_tickets(thing_id_lookup={}):
     # Seed Ticket Categories
     ticket_categories = [
         TicketCategory(name="Improvement"),
@@ -27,9 +27,6 @@ def seed_tickets(thing_id_lookup, dev=True):
         return ticket_category_id_lookup.get(name)
 
     ticket_id_lookup = {}
-
-    if not dev:
-        return ticket_id_lookup
 
     def add_ticket(
         title: str,
