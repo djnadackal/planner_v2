@@ -26,7 +26,6 @@ const getColumns = (cols = ["Title", "Thing", "Category"]) => {
       dataIndex: ["category", "name"],
       key: "category_name",
       render: (text, record) => {
-        console.log("Rendering category:", record);
         return (
           <span
             style={{
