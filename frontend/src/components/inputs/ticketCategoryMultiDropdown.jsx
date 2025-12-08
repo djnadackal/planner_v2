@@ -10,8 +10,6 @@ const TicketCategoryMultiDropdown = ({ selectedCategoryIds, setSelectedCategoryI
     setSelectedCategoryIds(value);
   };
 
-  console.log("selectedCategoryIds:", selectedCategoryIds);
-
   return (
     <Select
       showSearch

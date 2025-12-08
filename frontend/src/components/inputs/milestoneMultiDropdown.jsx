@@ -21,8 +21,6 @@ const MilestoneMultiDropdown = (
     fetchData(params);
   }, [filters]);
 
-  console.log("selectedMilestoneIds:", selectedMilestoneIds);
-
   return (
     <Select
       showSearch

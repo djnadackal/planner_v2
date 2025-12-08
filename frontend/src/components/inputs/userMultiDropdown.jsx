@@ -25,8 +25,6 @@ const UserMultiDropdown = (
     fetchData(filters);
   }, [filters]);
 
-  console.log("selectedUserIds:", selectedUserIds);
-
   return (
     <Select
       showSearch
