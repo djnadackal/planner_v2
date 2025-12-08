@@ -1,6 +1,4 @@
 import { Button, Card, Dropdown, Flex, Input } from "antd";
-import TicketCategoryDropdown from "../inputs/ticketCategoryDropdown";
-import MilestoneDropdown from "../inputs/milestoneDropdown";
 import { FilterOutlined } from "@ant-design/icons";
 import UserMultiDropdown from "../inputs/userMultiDropdown";
 import useViewNavigation from "../../navigation";
@@ -10,12 +8,17 @@ import TicketCategoryMultiDropdown from "../inputs/ticketCategoryMultiDropdown";
 
 const Filters = () => {
   const navigation = useViewNavigation();
+  const [searchValue, setSearchValue] = useState(navigation.getQueryParam.search || '');
 
   const onSearchChange = (e) => {
     const value = e.target.value;
-    console.log("new search value:", navigation.getQueryParam.search, "->", value);
-    console.log("Setting search to", value);
-    navigation.setQueryParam.search(value);
+    setSearchValue(value);
+  };
+
+  const onSearchBlur = (e) => {
+    const value = e.target.value;
+    console.log("Search input blurred, setting search to", value);
+    navigation.setQueryParam.search(value || null);
   };
 
   const handleShowClosedToggle = () => {
@@ -33,34 +36,34 @@ const Filters = () => {
     navigation.getQueryParam.showClosed ? "Hide Closed" : "Show Closed",
   );
 
-  const Overlay = () => (
-    <Card title="Filters">
-      <Flex vertical gap="10px">
-        <Input
-          placeholder="Search"
-          style={{ width: 100 }}
-          value={navigation.getQueryParam.search || ''}
-          onChange={onSearchChange} />
-        <UserMultiDropdown
-          selectedUserIds={navigation.getQueryParam.userIds}
-          setSelectedUserIds={navigation.setQueryParam.userIds} />
-        <MilestoneMultiDropdown
-          selectedMilestoneIds={navigation.getQueryParam.milestoneIds}
-          setSelectedMilestoneIds={navigation.setQueryParam.milestoneIds} />
-        <TicketCategoryMultiDropdown
-          selectedCategoryIds={navigation.getQueryParam.ticketCategoryIds}
-          setSelectedCategoryIds={navigation.setQueryParam.ticketCategoryIds} />
-        <Button
-          onClick={handleShowClosedToggle}>
-          {showClosedToggleText}
-        </Button>
-      </Flex >
-    </Card>
-  )
 
   return (
     <Dropdown
-      popupRender={() => <Overlay />}
+      overlay={
+        <Card title="Filters">
+          <Flex vertical gap="10px">
+            <Input
+              placeholder="Search"
+              onBlur={onSearchBlur}
+              style={{ width: 100 }}
+              value={searchValue}
+              onChange={onSearchChange} />
+            <UserMultiDropdown
+              selectedUserIds={navigation.getQueryParam.userIds}
+              setSelectedUserIds={navigation.setQueryParam.userIds} />
+            <MilestoneMultiDropdown
+              selectedMilestoneIds={navigation.getQueryParam.milestoneIds}
+              setSelectedMilestoneIds={navigation.setQueryParam.milestoneIds} />
+            <TicketCategoryMultiDropdown
+              selectedCategoryIds={navigation.getQueryParam.ticketCategoryIds}
+              setSelectedCategoryIds={navigation.setQueryParam.ticketCategoryIds} />
+            <Button
+              onClick={handleShowClosedToggle}>
+              {showClosedToggleText}
+            </Button>
+          </Flex >
+        </Card>
+      }
       trigger={['click']}
       placement="bottomLeft"
     >
