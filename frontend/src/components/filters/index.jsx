@@ -40,7 +40,15 @@ const Filters = () => {
   return (
     <Dropdown
       overlay={
-        <Card title="Filters">
+        <Card title="Filters" extra={
+          <Button
+            onClick={() => {
+              setSearchValue('');
+              navigation.clearParams();
+            }}>
+            Clear
+          </Button>
+        }>
           <Flex vertical gap="10px">
             <Input
               placeholder="Search"

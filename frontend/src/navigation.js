@@ -184,6 +184,10 @@ const useViewNavigation = () => {
     navigate(fullPath);
   };
 
+  const clearParams = () => {
+    setSearchParms({});
+  };
+
   return {
     getQueryParam,
     setQueryParam,
@@ -193,6 +197,7 @@ const useViewNavigation = () => {
     searchParams,
     setSearchParms,
     navigate,
+    clearParams,
   };
 };
 
