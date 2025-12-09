@@ -28,7 +28,10 @@ def from_row(cls, **row) -> Ticket:
             parent_id=row.get("thing_parent_id", None),
             category_id=row.get("thing_category_id", None),
         )
-    if "category_name" in row.keys():
+    if (
+        "category_name" in row.keys()
+        and row.get("category_id") is not None
+    ):
         from ..categories import TicketCategory
 
         ticket.category = TicketCategory(
@@ -36,7 +39,7 @@ def from_row(cls, **row) -> Ticket:
             name=row.get("category_name", ""),
             description=row.get("category_description", None),
             is_default=row.get("category_is_default", False),
-            color=row.get("category_color", None),
+            color=row.get("color", None),
         )
     if "user_username" in row.keys():
         from ..users import User
