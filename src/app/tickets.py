@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel
 
@@ -132,8 +132,10 @@ async def get_todo_tickets(date_str: str):
     """
     try:
         year, month, day = map(int, date_str.split("-"))
-        date_in = date(year, month, day)
-        ticket_params = TicketParams(due_date=date_in)
+        date_in = datetime(year, month, day, 0, 0, 0)
+        ticket_params = TicketParams(
+            due_date=date_in, include=["category"]
+        )
         tickets_due = Ticket.read(ticket_params)
         scheduler = Scheduler(date_in)
         scheduler.read()

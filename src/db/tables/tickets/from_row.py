@@ -4,7 +4,6 @@ from .base import Ticket
 def from_row(cls, **row) -> Ticket:
     from pprint import pformat
 
-    print("from_row input:", pformat(row))
     ticket = cls(
         id=row["id"],
         title=row["title"],
