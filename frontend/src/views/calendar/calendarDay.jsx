@@ -15,12 +15,12 @@ const CalendarDay = ({
     performed_before: dayEnd.toISOString(),
     performed_after: dayStart.toISOString(),
   })
+  console.log('completionsApi for day', dayDate, completionsApi);
   const tickets = todosApi?.data || [];
   const displayDate = dayDate.getDate();
   const isCurrentMonth = dayDate.getMonth() === month;
 
   const completedTicketIds = completionsApi?.data?.map((completion) => completion.ticket_id) || [];
-  console.log("tickets for day", dayDate, tickets);
   // filter tickets out if they were created after this day
   const filteredTickets = tickets.filter((ticket) => {
     const createdAt = new Date(ticket.created_at);
