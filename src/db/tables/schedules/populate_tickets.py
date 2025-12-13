@@ -1,7 +1,7 @@
 def populate_tickets(self: "Schedule") -> None:
     from ..tickets import Ticket, TicketParams
 
-    params = TicketParams(schedule_id=self.id)
+    params = TicketParams(schedule_id=self.id, page_size=1000)
 
     ticket_data = Ticket.read(params)
     self.tickets = ticket_data.data
