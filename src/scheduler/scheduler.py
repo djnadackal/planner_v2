@@ -30,7 +30,7 @@ class Scheduler:
     def check_schedules(self) -> list[Schedule]:
         today = self.today
         matching_schedules: list[Schedule] = []
-        schedules: ReadSchedulesResponse = Schedule.read(ScheduleParams())  # type: ignore
+        schedules: ReadSchedulesResponse = Schedule.read(ScheduleParams(page_size=10000))  # type: ignore
         for schedule in schedules.data:
             if today.check_schedule(schedule):
                 matching_schedules.append(schedule)
