@@ -1,4 +1,4 @@
-export const formatDate = (dateString, compact = false) => {
+export const formatDate = (dateString, compact = false, dateOnly = false) => {
   const options = {
     month: "numeric",
     day: "numeric",
@@ -12,5 +12,9 @@ export const formatDate = (dateString, compact = false) => {
   // adjust for tz
   const userTimezoneOffset = date.getTimezoneOffset() * 60000;
   const localDate = new Date(date.getTime() - userTimezoneOffset);
-  return localDate.toLocaleString(undefined, options);
+  const dateStringFormatted = localDate.toLocaleString(undefined, options);
+  if (dateOnly) {
+    return dateStringFormatted.split(",")[0];
+  }
+  return dateStringFormatted;
 };
