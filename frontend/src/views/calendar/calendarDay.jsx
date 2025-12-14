@@ -92,11 +92,18 @@ const CalendarDay = ({
 };
 
 
-const ActionListItem = ({ action }) => {
+const ActionListItem = ({ action, navigation }) => {
   console.log('action in list item', action);
   return (
     <Flex vertical>
-      <Typography.Text strong>{action.ticket?.title || 'No Ticket'}</Typography.Text>
+      <Typography.Text
+        style={{ cursor: 'pointer' }}
+        onClick={() => {
+          window.location.href = `/tickets/${action.ticket_id}`;
+        }}
+        strong>
+        {action.ticket?.title || 'No Ticket'}
+      </Typography.Text>
       <Typography.Paragraph ellipsis={{ rows: 2, expandable: true }}>
         {action.action_text}
       </Typography.Paragraph>
