@@ -4,6 +4,7 @@ import MilestonePastDueTickets from "./milestonePastDueTickets";
 import UserTicketsPie from "./userTicketsPie";
 import TopThingTicketsPie from "./topThingTicketsPie";
 import CompletedThisWeek from "./completedThisWeek";
+import PastDueTickets from "./pastDueTickets";
 
 
 const HomeView = () => {
@@ -13,7 +14,7 @@ const HomeView = () => {
       <Flex gap="10px" style={{ overflowY: 'auto', flexWrap: 'wrap' }}>
         <CompletedThisWeek />
         <OpenScheduledTicketTable />
-        <MilestonePastDueTickets />
+        <PastDueTickets />
         <Card
           title="Open Tickets by User"
           style={{ minHeight: "400px" }}>
