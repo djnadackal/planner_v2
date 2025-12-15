@@ -53,6 +53,16 @@ class TableModel(BaseModel):
         )
 
     @classmethod
+    def get_pk_field(cls) -> Optional[str]:
+        for field_name, field in cls.__fields__.items():
+            if (
+                field.json_schema_extra is not None
+                and field.json_schema_extra.get("primary_key_field", True)
+            ):
+                return field_name
+        return None
+
+    @classmethod
     def get_column_fields(
         cls, exclude_pk: bool = False
     ) -> Dict[str, Field]:
@@ -84,3 +94,20 @@ class TableModel(BaseModel):
             if field.json_schema_extra
             and field.json_schema_extra.get("relationship_field", False)
         }
+
+    def get_update_query(self) -> tuple[str, List]:
+        set_clauses = []
+        params = []
+        for field_name, field in self.get_column_fields(
+            exclude_pk=True
+        ).items():
+            value = getattr(self, field_name)
+            set_clauses.append(f"{field_name} = ?")
+            params.append(value)
+        set_clause_str = ", ".join(set_clauses)
+        pk_field_name = self.get_pk_field()
+        if pk_field_name is None:
+            raise ValueError("Primary key field not found")
+        query = f"UPDATE {self.__table_name__} SET {set_clause_str} WHERE {pk_field_name} = ?"
+        params.append(getattr(self, pk_field_name))
+        return query, params

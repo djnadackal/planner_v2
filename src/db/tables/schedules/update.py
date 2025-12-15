@@ -15,14 +15,7 @@ def update(schedule: Schedule) -> None:
     logger.info(f"Updating schedule: {schedule}")
     if schedule.id is None:
         raise ValueError("Schedule ID is required for update")
-    query = "UPDATE schedules SET name = ?, weekdays = ?, monthdays = ?, yeardays = ? WHERE id = ?"
-    params = (
-        schedule.name,
-        schedule.weekdays,
-        schedule.monthdays,
-        schedule.yeardays,
-        schedule.id,
-    )
+    query, params = schedule.get_update_query()
     exception_package = ExceptionPackage(
         not_found_error=f"Schedule with ID {schedule.id} not found"
     )
