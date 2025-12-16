@@ -7,7 +7,7 @@ from ..table_model import TableModel
 logger = logging.getLogger(__name__)
 
 
-def get_insert_query(table_model: Type[TableModel]) -> tuple[str, tuple]:
+def get_insert_query(table_model: TableModel) -> tuple[str, tuple]:
     """Constructs the full SQL insert query."""
     columns = []
     placeholders = []

@@ -2,6 +2,7 @@ import logging
 
 from ...core import DbCore, ExceptionPackage
 
+from .base import Thing
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ core.logger = logger
 
 def delete(thing_id: int) -> None:
     logger.info(f"Deleting Thing with ID: {thing_id}")
-    query = "DELETE FROM things WHERE id = ?"
+    query = Thing.get_delete_query()
     exception_package = ExceptionPackage(
         not_found_error=f"Thing with ID {thing_id} not found",
         foreign_key_constraint_error=f"Cannot delete thing ID {thing_id}: it is referenced by other records",

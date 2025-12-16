@@ -44,7 +44,7 @@ class TableModel(BaseModel):
         raise NotImplementedError("From row method not implemented")
 
     @classmethod
-    def get_pk_field(cls) -> Optional[str]:
+    def get_pk_fieldname(cls) -> Optional[str]:
         for field_name, field in cls.__fields__.items():
             if (
                 field.json_schema_extra is not None
@@ -95,3 +95,9 @@ class TableModel(BaseModel):
         from .sql_builder import get_insert_query
 
         return get_insert_query(self)
+
+    @classmethod
+    def get_delete_query(cls) -> str:
+        from .sql_builder import get_delete_query
+
+        return get_delete_query(cls)
