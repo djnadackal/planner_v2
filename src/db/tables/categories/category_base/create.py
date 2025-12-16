@@ -1,4 +1,4 @@
-from ....core import DbCore, ExceptionPackage
+from ....core import DbCore, ExceptionPackage, InsertBuilder
 
 from .base import Category
 
@@ -7,8 +7,8 @@ def create(self: Category) -> int:
     self.__logger__.info(f"Creating new {self.__class__}: {self}")
     core = DbCore()
     core.logger = self.__logger__
-    query = f"INSERT INTO {self.__table_name__} (name, description, color) VALUES (?, ?, ?)"
-    params = (self.name, self.description, self.color)
+    builder = InsertBuilder(self)
+    query, params = builder.query
     exception_package = ExceptionPackage(
         unique_constraint_error=f"{self.__class__} name '{self.name}' already exists"
     )

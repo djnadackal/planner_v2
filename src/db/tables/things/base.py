@@ -1,12 +1,12 @@
 import logging
 from typing import TYPE_CHECKING, Optional, List
 
-from ..table_model import TableModel
-from ..fields import (
+from ...core import (
     ColumnField,
     ForeignKeyField,
     PrimaryKeyField,
     RelationshipField,
+    TableModel,
 )
 
 

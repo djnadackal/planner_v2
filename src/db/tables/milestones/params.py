@@ -1,8 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from ..fields import FilterParam
-from ..query_params import QueryParams
+from ...core import QueryParams, FilterParam
 
 
 class MilestoneParams(QueryParams):

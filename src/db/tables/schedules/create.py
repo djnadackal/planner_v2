@@ -1,6 +1,6 @@
 import logging
 
-from ...core import DbCore, ExceptionPackage
+from ...core import DbCore, ExceptionPackage, InsertBuilder
 
 from .base import Schedule
 
@@ -12,13 +12,7 @@ core.logger = logger
 
 def create(schedule: Schedule) -> int:
     logger.info(f"Creating new schedule: {schedule}")
-    query = "INSERT INTO schedules (name, weekdays, monthdays, yeardays) VALUES (?, ?, ?, ?);"
-    params = (
-        schedule.name,
-        schedule.weekdays,
-        schedule.monthdays,
-        schedule.yeardays,
-    )
+    query, params = InsertBuilder(schedule).query
     logger.info(f"Schedule Create Query: {query} \n Params: {params}")
     exception_package = ExceptionPackage()
     last_row_id = core.run_create(query, params, exception_package)

@@ -19,7 +19,7 @@ def get_count(
     query_params: Optional[TicketParams] = None,
 ) -> List[Ticket]:
     logger.debug(f"Listing tickets with filters: {query_params}")
-    from ..query_builder import QueryBuilder
+    from ...core import QueryBuilder
 
     builder = QueryBuilder(Ticket, query_params)
     builder.build_full()

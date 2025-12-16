@@ -3,8 +3,10 @@ from typing import Literal, Optional
 
 from pydantic import Field
 
-from ..fields import FilterParam
-from ..query_params import QueryParams
+from ...core import (
+    QueryParams,
+    FilterParam,
+)
 
 
 class ActionParams(QueryParams):

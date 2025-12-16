@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from ..table_model import TableModel
-from ..fields import (
+from ...core import (
+    TableModel,
     ColumnField,
     ForeignKeyField,
     RelationshipField,

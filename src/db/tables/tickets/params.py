@@ -1,8 +1,8 @@
 from pydantic import Field
 from typing import Literal, Optional
-from datetime import date, datetime
-from ..fields import FilterParam
-from ..query_params import QueryParams
+from datetime import datetime
+
+from ...core import QueryParams, FilterParam
 
 
 # TODO: merge thing id and thing ids, should be easy

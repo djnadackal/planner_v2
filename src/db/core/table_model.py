@@ -43,15 +43,6 @@ class TableModel(BaseModel):
     def from_row(_: dict) -> "TableModel":
         raise NotImplementedError("From row method not implemented")
 
-    def populate_children(
-        self,
-        recursive: Optional[bool] = False,
-        get_count: Optional[bool] = False,
-    ) -> None:
-        raise NotImplementedError(
-            "Populate children method not implemented"
-        )
-
     @classmethod
     def get_pk_field(cls) -> Optional[str]:
         for field_name, field in cls.__fields__.items():
