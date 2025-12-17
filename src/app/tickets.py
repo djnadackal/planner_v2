@@ -134,10 +134,12 @@ async def get_todo_tickets(date_str: str):
         # get the date as a datetime object
         year, month, day = map(int, date_str.split("-"))
         date_in = datetime(year, month, day, 0, 0, 0)
+        print("Fetching todo tickets for date:", date_in)
         # fetch tickets due that day
         ticket_params = TicketParams(
-            due_date=date_in, include=["category"], page_size=1000
+            due_date=date_str, include=["category"], page_size=1000
         )
+
         tickets_due = Ticket.read(ticket_params)
         # now get scheduled tickets
         scheduler = Scheduler(date_in)

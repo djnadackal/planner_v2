@@ -15,34 +15,7 @@ core.logger = logger
 def update(ticket: Ticket) -> None:
     if ticket.id is None:
         raise ValueError("Ticket ID is required for update")
-    query = (
-        "UPDATE tickets SET"
-        " title = ?,"
-        " thing_id = ?,"
-        " category_id = ?,"
-        " description = ?,"
-        " open = ?,"
-        " overdue = ?,"
-        " updated_at = CURRENT_TIMESTAMP,"
-        " completed_at = ?,"
-        " due_date = ?,"
-        " user_id = ?,"
-        " schedule_id = ?"
-        " WHERE id = ?"
-    )
-    params = (
-        ticket.title,
-        ticket.thing_id,
-        ticket.category_id,
-        ticket.description,
-        ticket.open,
-        ticket.overdue,
-        ticket.completed_at,
-        ticket.due_date,
-        ticket.user_id,
-        ticket.schedule_id,
-        ticket.id,
-    )
+    query, params = ticket.get_update_query()
     exception_package = ExceptionPackage(
         foreign_key_constraint_error=f"Invalid thing_id: {ticket.thing_id} or category_id: {ticket.category_id}",
         not_found_error=f"Ticket with ID {ticket.id} not found",

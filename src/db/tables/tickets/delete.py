@@ -2,6 +2,7 @@ import logging
 
 from ...core import DbCore, ExceptionPackage
 
+from .base import Ticket
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +11,7 @@ core.logger = logger
 
 
 def delete(ticket_id: int) -> None:
-    query = "DELETE FROM tickets WHERE id = ?"
+    query = Ticket.get_delete_query()
     exception_package = ExceptionPackage(
         not_found_error=f"Ticket with ID {ticket_id} not found"
     )

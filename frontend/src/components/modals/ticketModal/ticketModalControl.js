@@ -13,35 +13,44 @@ const useTicketModalControl = (
   const [mode, setMode] = useState("add"); // "add" or "edit"
   const ticketBuffer = useTicketBuffer();
   useEffect(() => {
-    if (api.ticket.create.data) {
-      config?.afterCreate?.(api.ticket.create.data);
+    if (api.ticket?.create?.data) {
+      config?.afterCreate?.(api.ticket?.create?.data);
     }
-  }, [api.ticket.create.loading]);
+  }, [api.ticket?.create?.loading]);
   useEffect(() => {
-    if (api.ticket.update.data) {
-      config?.afterUpdate?.(api.ticket.update.data);
+    if (api.ticket?.update?.data) {
+      config?.afterUpdate?.(api.ticket?.update?.data);
     }
-  }, [api.ticket.update.loading]);
+  }, [api.ticket?.update?.loading]);
   const ticketModalControl = {
     error:
-      api.ticket.selected.error ||
-      api.ticket.create.error ||
-      api.ticket.update.error,
+      api.ticket?.selected?.error ||
+      api.ticket?.create?.error ||
+      api.ticket?.update?.error,
     mode,
     ticket: ticketBuffer,
     add: {
       isOpen: addTicketModalOpen,
-      open: () => {
+      open: (manualValues = {}) => {
         setMode("add");
         ticketBuffer.reset();
         if (thingId) {
           ticketBuffer.set.thingId(Number(thingId));
         }
+        if (manualValues.title) {
+          ticketBuffer.set.title(manualValues.title);
+        }
+        if (manualValues.description) {
+          ticketBuffer.set.description(manualValues.description);
+        }
+        if (manualValues.dueDate) {
+          ticketBuffer.set.dueDate(manualValues.dueDate);
+        }
         setAddTicketModalOpen(true);
       },
       close: () => setAddTicketModalOpen(false),
       submit: async () => {
-        await api.ticket.create.create({
+        await api.ticket?.create?.create({
           title: ticketBuffer.title,
           description: ticketBuffer.description,
           open: ticketBuffer.scheduleId ? false : true,
@@ -51,7 +60,7 @@ const useTicketModalControl = (
           schedule_id: ticketBuffer.scheduleId,
           due_date: ticketBuffer.dueDate,
         });
-        api.refreshAll();
+        api?.refreshAll();
         ticketBuffer.reset();
         setAddTicketModalOpen(false);
       },
@@ -60,20 +69,20 @@ const useTicketModalControl = (
       isOpen: editTicketModalOpen,
       open: () => {
         setMode("edit");
-        console.log("moving to edit mode", api.ticket.selected.data);
-        ticketBuffer.set.title(api.ticket.selected.data?.title);
-        ticketBuffer.set.description(api.ticket.selected.data?.description);
+        console.log("moving to edit mode", api.ticket?.selected?.data);
+        ticketBuffer.set.title(api.ticket?.selected?.data?.title);
+        ticketBuffer.set.description(api.ticket?.selected?.data?.description);
         ticketBuffer.set.open(api.ticket.selected.data?.open);
-        ticketBuffer.set.thingId(api.ticket.selected.data?.thing_id);
-        ticketBuffer.set.categoryId(api.ticket.selected.data?.category_id);
-        ticketBuffer.set.userId(api.ticket.selected.data?.user_id);
-        ticketBuffer.set.scheduleId(api.ticket.selected.data?.schedule_id);
-        ticketBuffer.set.dueDate(api.ticket.selected.data?.due_date);
+        ticketBuffer.set.thingId(api.ticket?.selected?.data?.thing_id);
+        ticketBuffer.set.categoryId(api.ticket?.selected?.data?.category_id);
+        ticketBuffer.set.userId(api.ticket?.selected?.data?.user_id);
+        ticketBuffer.set.scheduleId(api.ticket?.selected?.data?.schedule_id);
+        ticketBuffer.set.dueDate(api.ticket?.selected?.data?.due_date);
         setEditTicketModalOpen(true);
       },
       close: () => setEditTicketModalOpen(false),
       submit: async () => {
-        await api.ticket.update.update({
+        await api.ticket?.update?.update({
           id: ticketId,
           title: ticketBuffer.title,
           description: ticketBuffer.description,
@@ -84,7 +93,7 @@ const useTicketModalControl = (
           schedule_id: ticketBuffer.scheduleId,
           due_date: ticketBuffer.dueDate,
         });
-        api.refreshAll();
+        api?.refreshAll();
         ticketBuffer.reset();
         setEditTicketModalOpen(false);
       },

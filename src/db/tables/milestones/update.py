@@ -15,21 +15,7 @@ def update(milestone: Milestone) -> None:
     logger.info(f"Updating Milestone: {milestone}")
     if milestone.id is None:
         raise ValueError("Milestone ID is required for update")
-    query = (
-        "UPDATE milestones SET "
-        "name = ?, "
-        "description = ?, "
-        "due_date = ?, "
-        "start_date = ? "
-        "WHERE id = ?"
-    )
-    params = (
-        milestone.name,
-        milestone.description,
-        milestone.due_date,
-        milestone.start_date,
-        milestone.id,
-    )
+    query, params = milestone.get_update_query()
     exception_package = ExceptionPackage(
         not_found_error=f"Milestone with ID {milestone.id} not found"
     )

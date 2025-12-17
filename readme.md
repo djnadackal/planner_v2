@@ -45,7 +45,7 @@ and goals. It is suitable for a household with multiple users.
 3. Set up the database:
 
    ```bash
-   python seed_database.db
+   python seed_db.db
    ```
 
    This creates a development database with some sample data.

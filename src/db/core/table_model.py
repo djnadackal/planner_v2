@@ -43,14 +43,15 @@ class TableModel(BaseModel):
     def from_row(_: dict) -> "TableModel":
         raise NotImplementedError("From row method not implemented")
 
-    def populate_children(
-        self,
-        recursive: Optional[bool] = False,
-        get_count: Optional[bool] = False,
-    ) -> None:
-        raise NotImplementedError(
-            "Populate children method not implemented"
-        )
+    @classmethod
+    def get_pk_fieldname(cls) -> Optional[str]:
+        for field_name, field in cls.__fields__.items():
+            if (
+                field.json_schema_extra is not None
+                and field.json_schema_extra.get("primary_key_field", True)
+            ):
+                return field_name
+        return None
 
     @classmethod
     def get_column_fields(
@@ -84,3 +85,19 @@ class TableModel(BaseModel):
             if field.json_schema_extra
             and field.json_schema_extra.get("relationship_field", False)
         }
+
+    def get_update_query(self) -> tuple[str, tuple]:
+        from .sql_builder import get_update_query
+
+        return get_update_query(self)
+
+    def get_insert_query(self) -> tuple[str, tuple]:
+        from .sql_builder import get_insert_query
+
+        return get_insert_query(self)
+
+    @classmethod
+    def get_delete_query(cls) -> str:
+        from .sql_builder import get_delete_query
+
+        return get_delete_query(cls)

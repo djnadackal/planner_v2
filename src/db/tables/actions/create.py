@@ -24,12 +24,7 @@ def create(action: Action) -> int:
         raise ValueError(f"Invalid action_type_id: {type_id}")
 
     # insert the action
-    query = "INSERT INTO actions (action_text, ticket_id, action_type_id) VALUES (?, ?, ?)"
-    params = (
-        action.action_text,
-        action.ticket_id,
-        action.action_type_id,
-    )
+    query, params = action.get_insert_query()
     exception_package = ExceptionPackage(
         foreign_key_constraint_error=f"Invalid ticket_id: {action.ticket_id}"
     )

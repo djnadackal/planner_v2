@@ -80,7 +80,7 @@ const useFetchActions = (
     { lazy },
   );
 
-  return { data, loading, error, refetch: fetchData };
+  return { data, loading, error, fetchData };
 };
 
 export default useFetchActions;

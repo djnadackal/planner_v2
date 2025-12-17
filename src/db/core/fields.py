@@ -1,14 +1,30 @@
+from datetime import datetime
 from typing import Any, Callable, Type, Union
 
 from pydantic import Field
 
 
-def ColumnField(default: Any, *args, **kwargs):
+def ColumnField(default: Any, nullable=True, *args, **kwargs):
     """
     Returns A Pydantic Field subclass that indicates the field is intended for ORM use.
     """
 
-    return Field(default=default, *args, **kwargs, column_field=True)  # type: ignore
+    return Field(default=default, *args, **kwargs, column_field=True, nullable=nullable)  # type: ignore
+
+
+def DateTimeField(use_current_timestamp=False, *args, **kwargs):
+    if use_current_timestamp:
+        return ColumnField(
+            default=...,
+            default_factory=lambda: datetime.now(),
+            use_current_timestamp=True,
+            *args,
+            **kwargs,
+        )
+    else:
+        return ColumnField(
+            default=None, use_current_timestamp=False, *args, **kwargs
+        )
 
 
 def PrimaryKeyField(default: Any, *args, **kwargs):

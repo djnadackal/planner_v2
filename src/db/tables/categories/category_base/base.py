@@ -1,8 +1,7 @@
 import logging
 from typing import Optional
 
-from ...table_model import TableModel
-from ...fields import ColumnField, PrimaryKeyField
+from ....core import ColumnField, PrimaryKeyField, TableModel
 
 
 class Category(TableModel):

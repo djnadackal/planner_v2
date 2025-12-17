@@ -12,7 +12,7 @@ from .milestones import Milestone, MilestoneParams, ReadMilestonesResponse
 from .schedules import Schedule, ScheduleParams, ReadSchedulesResponse
 from .users import User, UserParams, ReadUsersResponse
 
-from .query_builder import QueryBuilder
+from ..core import QueryBuilder
 
 
 Thing.model_rebuild()

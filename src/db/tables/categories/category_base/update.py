@@ -10,21 +10,7 @@ def update(cls, category: Category) -> None:
     if category.id is None:
         raise ValueError(f"{cls.__class__} ID is required for update")
     print("Updating category in DB:", category)
-    query = f"""
-    UPDATE {cls.__table_name__} 
-    SET 
-        name = ?, 
-        description = ?, 
-        is_default = ?, 
-        color = ? 
-    WHERE id = ?"""
-    params = (
-        category.name,
-        category.description,
-        category.is_default,
-        category.color,
-        category.id,
-    )
+    query, params = category.get_update_query()
     exception_package = ExceptionPackage(
         unique_constraint_error=f"{cls.__class__} name '{category.name}' already exists",
         not_found_error=f"{cls.__class__} with ID {category.id} not found",

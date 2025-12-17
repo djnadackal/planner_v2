@@ -1,8 +1,8 @@
 from pydantic import Field
 from typing import Literal, Optional
-from datetime import date, datetime
-from ..fields import FilterParam
-from ..query_params import QueryParams
+from datetime import datetime
+
+from ...core import QueryParams, FilterParam
 
 
 # TODO: merge thing id and thing ids, should be easy
@@ -54,8 +54,10 @@ class TicketParams(QueryParams):
     due_date_after: Optional[datetime] = FilterParam(
         default=None, where_clause="tickets.due_date >= ?"
     )
-    due_date: Optional[datetime] = FilterParam(
-        default=None, where_clause="tickets.due_date = ?"
+    due_date: Optional[str] = FilterParam(
+        default=None,
+        where_clause="tickets.due_date like ?",
+        template="{}%",
     )
     milestone_id: Optional[int] = FilterParam(
         default=None,
