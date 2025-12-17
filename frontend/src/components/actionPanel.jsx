@@ -17,7 +17,7 @@ const ActionPanel = ({ ticketId, refreshAll }) => {
     data,
     loading,
     error,
-    refetch
+    fetchData
   } = useApi.action.fetchMany(fetchParams);
   const {
     data: createData,
@@ -27,7 +27,7 @@ const ActionPanel = ({ ticketId, refreshAll }) => {
   } = useApi.action.create();
 
   useEffect(() => {
-    refetch(fetchParams);
+    fetchData(fetchParams);
   }, [ticketId]);
 
   const [newActionText, setNewActionText] = useState("");
@@ -86,7 +86,7 @@ const ActionPanel = ({ ticketId, refreshAll }) => {
                 if (newActionText.trim() === "") return;
                 await createAction({ ticket_id: Number(ticketId), action_text: newActionText, action_type_id: newActionTypeId });
                 setNewActionText("");
-                refetch(fetchParams);
+                fetchData(fetchParams);
                 refreshAll();
               }} >
               Add Action

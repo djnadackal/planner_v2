@@ -1,21 +1,46 @@
-import { Col, Flex, List, Popover, Typography } from "antd";
+import { Button, Col, Flex, List, Popover, Typography } from "antd";
 import useApi from "../../api";
+import components from "../../components";
+
+const { TicketModal, controllers: { useTicketModalControl } } = components.modals;
 
 const CalendarDay = ({
   dayDate, month, currentDate,
 }) => {
-  const todosApi = useApi.ticket.fetchTodos({ date: dayDate });
   // get locale-adjusted start and end stamps for the day
   const dayStart = new Date(dayDate);
   dayStart.setHours(0, 0, 0, 0);
   const dayEnd = new Date(dayDate);
   dayEnd.setHours(23, 59, 59, 999);
-  const completionsApi = useApi.action.fetchMany({
+  const todosParams = {
+    date: dayDate,
+    page_size: 1000,
+  }
+  const todosApi = useApi.ticket.fetchTodos(todosParams);
+  const completionsParams = {
     action_type_name: 'Completed',
     include: ['ticket'],
     performed_before: dayEnd.toISOString(),
     performed_after: dayStart.toISOString(),
-  })
+  }
+  const completionsApi = useApi.action.fetchMany(completionsParams);
+  const api = {
+    ticket: {
+      todos: todosApi,
+      create: useApi.ticket.create(),
+    },
+    actions: {
+      completions: completionsApi,
+    },
+    refreshAll: () => {
+      todosApi.fetchData(todosParams);
+      completionsApi.fetchData(completionsParams);
+    }
+  }
+  // debug print if it's the 12th day of the month
+  if (dayDate.getDate() === 12) {
+    console.log("todosApi data", todosApi?.data);
+  }
   const tickets = (todosApi?.data || []).map((todo) => {
     const isCompletedTicket = todo?.open === false && todo.schedule_id === null;
     return { ...todo, isCompletedTicket };
@@ -27,8 +52,9 @@ const CalendarDay = ({
   const completedTicketIds = completionsApi?.data?.map((completion) => completion.ticket_id) || [];
   const filteredTickets = tickets.filter((ticket) => {
     // filter tickets out if they were created after this day
+    // and it doesn't have a due date on this day
     const createdAt = new Date(ticket.created_at);
-    if (createdAt > dayEnd) {
+    if (createdAt > dayEnd && !ticket.due_date) {
       return false;
     }
     // filter tickets out if they are completed and this day is in the past
@@ -37,31 +63,39 @@ const CalendarDay = ({
     }
     return true;
   });
-  return (
+  const ticketModalControl = useTicketModalControl(api);
+  return (<>
     <Col span={3} style={{ minHeight: '100px', border: '1px solid #f0f0f0', padding: '8px' }}>
       <Flex justify="space-between">
         <Typography.Text style={{ color: isCurrentMonth ? 'white' : 'gray' }}>
           {displayDate}
         </Typography.Text>
-        <Popover
-          content={
-            <List
-              size="small"
-              dataSource={completionsApi?.data || []}
-              renderItem={(action) => (
-                <List.Item>
-                  <ActionListItem action={action} />
-                </List.Item>
-              )}
-              style={{ maxHeight: '200px', overflowY: 'auto', width: '250px' }} />
-          }
-          placement="bottom"
-          trigger="hover"
-        >
-          <Typography.Text style={{ color: '#52c41a' }}>
-            {completedTicketIds.length}
-          </Typography.Text>
-        </Popover>
+        <Flex gap="5px">
+          <Button
+            size="small"
+            onClick={() => ticketModalControl.add.open({ dueDate: dayDate.toISOString() })}>
+            +
+          </Button>
+          <Popover
+            content={
+              <List
+                size="small"
+                dataSource={completionsApi?.data || []}
+                renderItem={(action) => (
+                  <List.Item>
+                    <ActionListItem action={action} />
+                  </List.Item>
+                )}
+                style={{ maxHeight: '200px', overflowY: 'auto', width: '250px' }} />
+            }
+            placement="bottom"
+            trigger="hover"
+          >
+            <Typography.Text style={{ color: '#52c41a' }}>
+              {completedTicketIds.length}
+            </Typography.Text>
+          </Popover>
+        </Flex>
       </Flex>
       <Flex vertical gap="4px" style={{ marginTop: '4px' }}>
         {filteredTickets.map((ticket) => (
@@ -87,12 +121,12 @@ const CalendarDay = ({
         ))}
       </Flex>
     </Col>
-  );
+    <TicketModal modalControl={ticketModalControl} />
+  </>);
 };
 
 
 const ActionListItem = ({ action, navigation }) => {
-  console.log('action in list item', action);
   return (
     <Flex vertical>
       <Typography.Text

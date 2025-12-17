@@ -54,8 +54,10 @@ class TicketParams(QueryParams):
     due_date_after: Optional[datetime] = FilterParam(
         default=None, where_clause="tickets.due_date >= ?"
     )
-    due_date: Optional[datetime] = FilterParam(
-        default=None, where_clause="tickets.due_date = ?"
+    due_date: Optional[str] = FilterParam(
+        default=None,
+        where_clause="tickets.due_date like ?",
+        template="{}%",
     )
     milestone_id: Optional[int] = FilterParam(
         default=None,
